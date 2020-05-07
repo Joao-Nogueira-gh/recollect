@@ -5,55 +5,22 @@ variables:
   MAVEN_OPTS: "-Dmaven.repo.local=.m2" 
 
 stages:
-  - test
   - build
+  - test
   - deploy
+
+compile:
+  stage: build
+  script:
+    - mvn clean compile
 
 unit_test:
   stage: test
   script:
     - mvn clean test -B
 
-check_style:
-  stage: test
-  script:
-    - mvn clean checkstyle:check -B
-
-.build: &build_template
-  stage: build
-  script:
-    - mvn package -B
-
-develop_build:
-  <<: *build_template
-  only:
-    - branches
-  except:
-    - master
-  artifacts:
-    expire_in: 1 day
-    paths:      
-      - target/*.jar
-
-master_build:
-  <<: *build_template
-  only:
-    - master
-    - tags
-  artifacts:
-    expire_in: 1 month
-    paths:
-      - target/*.jar
-
-build_image:
+package:
   stage: deploy
-  image: docker:latest
-  only:
-    - tags
-  script: 
-    - mkdir -p target/docker/
-    - cp src/main/docker/* target/docker/
-    - unzip -oq target/*.jar -d target/docker/
-    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
-    - docker build -t $CI_REGISTRY_IMAGE:$CI_BUILD_TAG target/docker/
-    - docker push $CI_REGISTRY_IMAGE:$CI_BUILD_TAG
+  script:
+    - mvn package
+
