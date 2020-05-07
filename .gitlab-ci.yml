@@ -4,6 +4,9 @@ image: maven:3.3-jdk-8-alpine
 variables: 
   MAVEN_OPTS: "-Dmaven.repo.local=.m2" 
 
+before_script:
+  - cd ReCollect/
+
 stages:
   - build
   - test
