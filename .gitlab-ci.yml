@@ -1,57 +1,115 @@
-# This file is a template, and might need editing before it works on your project.
-# Build JAVA applications using Apache Maven (http://maven.apache.org)
-# For docker image tags see https://hub.docker.com/_/maven/
-#
-# For general lifecycle information see https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html
+image: maven:3.3-jdk-8-alpine
 
-# This template will build and test your projects
-# * Caches downloaded dependencies and plugins between invocation.
-# * Verify but don't deploy merge requests.
-# * Deploy built artifacts from master branch only.
-
-variables:
-  # This will suppress any download for dependencies and plugins or upload messages which would clutter the console log.
-  # `showDateTime` will show the passed time in milliseconds. You need to specify `--batch-mode` to make this work.
-  MAVEN_OPTS: "-Dhttps.protocols=TLSv1.2 -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=WARN -Dorg.slf4j.simpleLogger.showDateTime=true -Djava.awt.headless=true"
-  # As of Maven 3.3.0 instead of this you may define these options in `.mvn/maven.config` so the same config is used
-  # when running from the command line.
-  # `installAtEnd` and `deployAtEnd` are only effective with recent version of the corresponding plugins.
-  MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=true -DdeployAtEnd=true"
-
-# This template uses jdk8 for verifying and deploying images
-image: maven:3.3.9-jdk-8
-
-# Cache downloaded dependencies and plugins between builds.
-# To keep cache across branches add 'key: "$CI_JOB_NAME"'
 cache:
+  key: "$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME"
   paths:
-    - .m2/repository
+    - .m2/
 
-# For merge requests do not `deploy` but only run `verify`.
-# See https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html
-.verify: &verify
+variables: 
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2" 
+
+before_script:
+  - mkdir -p $HOME/.m2/
+  - echo '<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+                          https://maven.apache.org/xsd/settings-1.0.0.xsd">
+            <servers>
+              <server>
+                <id>private-maven</id>
+                <username>${MAVEN_USER}</username>
+                <password>${MAVEN_PASS}</password>
+              </server>
+            </servers>
+            <profiles>
+              <profile>
+                <id>default</id>
+                <repositories>
+                  <repository>
+                    <id>nexus-snapshots</id>
+                    <url>https://example.com/repository/maven-snapshots/</url>
+                    <releases>
+                        <enabled>false</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                  </repository>
+                  <repository>
+                    <id>nexus-releases</id>
+                    <url>https://example.com/repository/maven-releases/</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                  </repository>
+                </repositories>
+              </profile>
+            </profiles>
+            <activeProfiles>
+              <activeProfile>default</activeProfile>
+            </activeProfiles>
+            <mirrors>
+              <mirror>
+                <id>nexus-maven</id>
+                <url>https://example.com/repository/maven-public/</url>
+                <mirrorOf>*</mirrorOf>
+              </mirror>
+            </mirrors>
+          </settings>' > $HOME/.m2/settings.xml
+
+stages:
+  - test
+  - build
+  - deploy
+
+unit_test:
   stage: test
   script:
-    - 'mvn $MAVEN_CLI_OPTS verify'
+    - mvn clean test -B
+
+check_style:
+  stage: test
+  script:
+    - mvn clean checkstyle:check -B
+
+.build: &build_template
+  stage: build
+  script:
+    - mvn package -B
+
+develop_build:
+  <<: *build_template
+  only:
+    - branches
   except:
     - master
+  artifacts:
+    expire_in: 1 day
+    paths:      
+      - target/*.jar
 
-# Verify merge requests using JDK8
-verify:jdk8:
-  <<: *verify
+master_build:
+  <<: *build_template
+  only:
+    - master
+    - tags
+  artifacts:
+    expire_in: 1 month
+    paths:
+      - target/*.jar
 
-
-
-# To deploy packages from CI, create a ci_settings.xml file
-# For deploying packages to GitLab's Maven Repository: See https://docs.gitlab.com/ee/user/project/packages/maven_repository.html#creating-maven-packages-with-gitlab-cicd for more details.
-# Please note: The GitLab Maven Repository is currently only available in GitLab Premium / Ultimate.
-# For `master` branch run `mvn deploy` automatically.
-# deploy:jdk8:
-#   stage: deploy
-#   script:
-#     - if [ ! -f ci_settings.xml ];
-#         then echo "CI settings missing\! If deploying to GitLab Maven Repository, please see https://docs.gitlab.com/ee/user/project/packages/maven_repository.html#creating-maven-packages-with-gitlab-cicd for instructions.";
-#       fi
-#     - 'mvn $MAVEN_CLI_OPTS deploy -s ci_settings.xml'
-#   only:
-#     - master
+build_image:
+  stage: deploy
+  image: docker:latest
+  only:
+    - tags
+  script: 
+    - mkdir -p target/docker/
+    - cp src/main/docker/* target/docker/
+    - unzip -oq target/*.jar -d target/docker/
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+    - docker build -t $CI_REGISTRY_IMAGE:$CI_BUILD_TAG target/docker/
+    - docker push $CI_REGISTRY_IMAGE:$CI_BUILD_TAG
