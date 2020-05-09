@@ -1,11 +1,18 @@
-image: maven:3.3-jdk-8-alpine
-
+image: docker:latest
+services:
+  - docker:dind
 
 variables: 
   MAVEN_OPTS: "-Dmaven.repo.local=.m2" 
 
 before_script:
   - cd ReCollect/
+  - docker info
+  - apk update
+  - apk upgrade
+  - apk add python python-dev py-pip build-base
+  - pip install docker-compose
+  - docker-compose up -d
 
 stages:
   - build
@@ -13,6 +20,7 @@ stages:
   - deploy
 
 compile:
+  image: maven:3.3-jdk-8-alpine
   stage: build
   script:
     - mvn clean compile
