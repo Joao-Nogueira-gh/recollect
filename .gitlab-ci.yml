@@ -7,12 +7,6 @@ variables:
 
 before_script:
   - cd ReCollect/
-  - docker info
-  - apk update
-  - apk upgrade
-  - apk add python python-dev py-pip build-base
-  - pip install docker-compose
-  - docker-compose up -d
 
 stages:
   - build
@@ -23,6 +17,12 @@ compile:
   image: maven:3.3-jdk-8-alpine
   stage: build
   script:
+    - docker info
+    - apk update
+    - apk upgrade
+    - apk add python python-dev py-pip build-base
+    - pip install docker-compose
+    - docker-compose up -d
     - mvn clean compile
 
 unit_test:
