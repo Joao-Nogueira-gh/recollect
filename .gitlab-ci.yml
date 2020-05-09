@@ -17,8 +17,7 @@ compile:
   image: maven:3.3-jdk-8-alpine
   stage: build
   script:
-    - apk add --no-cache py-pip python-dev libffi-dev openssl-dev gcc libc-dev make
-    - pip install docker-compose
+    - apt-get install docker-ce docker-ce-cli containerd.io
     - docker-compose up -d
     - mvn clean compile
 
