@@ -17,7 +17,6 @@ compile:
   image: maven:3.3-jdk-8-alpine
   stage: build
   script:
-    - docker info
     - apk update
     - apk upgrade
     - apk add python python-dev py-pip build-base
