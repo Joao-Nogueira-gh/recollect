@@ -1,4 +1,4 @@
-package ua.tqs.ReCollect;
+package ua.tqs.ReCollect.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,15 +18,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import ua.tqs.ReCollect.service.ReCollectService;
+
 @Controller
 public class ReCollectController {
 
     @Autowired
     private ReCollectService rcService;
 
-	@RequestMapping("/home")
-	public String index(Model model) {
-		
+	@RequestMapping("")
+	public String index(Model model) throws IOException {
 		return "index";
 	}
     

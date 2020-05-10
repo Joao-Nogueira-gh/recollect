@@ -1,14 +1,16 @@
-package ua.tqs.ReCollect;
+package ua.tqs.ReCollect.repository;
 
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import ua.tqs.ReCollect.model.Item;
+
 @Repository
-public interface ReCollectRepository extends JpaRepository<Product, Long> {
+public interface ReCollectRepository extends JpaRepository<Item, Long> {
 
     //public Product findByX();
-    public List<Product> findAll();
+    public List<Item> findAll();
 
 }
