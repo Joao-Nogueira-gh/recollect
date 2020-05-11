@@ -13,7 +13,7 @@ before_script:
   - pip install --no-cache-dir docker-compose==1.12.0
   - docker-compose -v
   - chmod +x start.sh
-  - ./start.sh &&
+  - ./start.sh
 
 stages:
   - build
@@ -24,17 +24,20 @@ compile:
   image: maven:3.3-jdk-8-alpine
   stage: build
   script:
+    - ./wait-for-mysql.sh mysql-recollect:3306
     - mvn clean compile
 
 unit_test:
   image: maven:3.3-jdk-8-alpine
   stage: test
   script:
+    - ./wait-for-mysql.sh mysql-recollect:3306
     - mvn clean test -B
 
 package:
   image: maven:3.3-jdk-8-alpine
   stage: deploy
   script:
+    - ./wait-for-mysql.sh mysql-recollect:3306
     - mvn package
 
