@@ -4,7 +4,7 @@
 
 Marketplace for collectors, ReCollect™️, using the Spring Boot framework and applying consistent SQA methods.
 
---concise project description to fill in after initial draft version is written--
+ReCollect is a platform that allows users to sell their old collections, from simple things such as figurines sold some years ago in stores to rarer items like limited editions of a certain product (book, game, etc.). Here, the buyers can find items they need in order to complete their collections or even start brand new ones!
 
 ## Team
 
