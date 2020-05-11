@@ -30,6 +30,7 @@ unit_test:
   image: maven:3.3-jdk-8-alpine
   stage: test
   script:
+    - docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' recollect_mysql-recollect_1
     - mvn clean test
 
 package:
