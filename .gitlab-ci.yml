@@ -4,6 +4,8 @@ services:
 
 variables: 
   MAVEN_OPTS: "-Dmaven.repo.local=.m2" 
+  DOCKER_HOST: "tcp://docker:2375"
+
 
 before_script:
   - cd ReCollect/
