@@ -11,9 +11,9 @@ services:
       - mysql-recollect
       - adminer
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-recollect/reCollect?serverTimezone=Europe/London
-      - SPRING_DATASOURCE_USERNAME=adminrc
-      - SPRING_DATASOURCE_PASSWORD=admin
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-recollect:3306/reCollect?serverTimezone=Europe/London
+      SPRING_DATASOURCE_USERNAME: adminrc
+      SPRING_DATASOURCE_PASSWORD: admin
 
   mysql-recollect:
     image: mysql
