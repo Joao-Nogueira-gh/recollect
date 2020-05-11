@@ -14,7 +14,6 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-recollect/reCollect?serverTimezone=Europe/London
       - SPRING_DATASOURCE_USERNAME=adminrc
       - SPRING_DATASOURCE_PASSWORD=admin
-    command: ["/wait-for-mysql.sh", "mysql-recollect:3306", "--", "java", "-jar", "app.jar"]
 
   mysql-recollect:
     image: mysql
