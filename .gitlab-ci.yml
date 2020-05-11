@@ -31,7 +31,7 @@ unit_test:
   stage: test
   script:
     - ./start.sh    
-    - sleep 120
+    - sleep 60
     - mvn clean test
 
 package:
@@ -39,6 +39,6 @@ package:
   stage: deploy
   script:
     - ./start.sh   
-    - sleep 120 
+    - sleep 60 
     - mvn package
 
