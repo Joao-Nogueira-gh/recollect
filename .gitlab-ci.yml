@@ -27,16 +27,14 @@ compile:
     - mvn clean compile
 
 unit_test:
-  # image: maven:3.3-jdk-8-alpine
+  image: maven:3.3-jdk-8-alpine
   stage: test
   script:
-    - ./start.sh
     - mvn clean test
 
 package:
-  # image: maven:3.3-jdk-8-alpine
+  image: maven:3.3-jdk-8-alpine
   stage: deploy
   script:
-    - sleep 60
     - mvn package
 
