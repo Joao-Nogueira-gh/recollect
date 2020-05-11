@@ -12,6 +12,8 @@ before_script:
   - apk add --no-cache python py2-pip
   - pip install --no-cache-dir docker-compose==1.12.0
   - docker-compose -v
+  - chmod +x start.sh
+  - ./start.sh
 
 stages:
   - build
@@ -22,16 +24,16 @@ compile:
   image: maven:3.3-jdk-8-alpine
   stage: build
   script:
-    - chmod +x start.sh
-    - ./start.sh
     - mvn clean compile
 
 unit_test:
+  image: maven:3.3-jdk-8-alpine
   stage: test
   script:
     - mvn clean test -B
 
 package:
+  image: maven:3.3-jdk-8-alpine
   stage: deploy
   script:
     - mvn package
