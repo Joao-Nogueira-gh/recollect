@@ -31,12 +31,14 @@ unit_test:
   stage: test
   script:
     - ./start.sh    
+    - sleep 120
     - mvn clean test
 
 package:
   image: maven:3.3-jdk-8-alpine
   stage: deploy
   script:
-    - ./start.sh    
+    - ./start.sh   
+    - sleep 120 
     - mvn package
 
