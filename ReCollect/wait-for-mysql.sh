@@ -19,5 +19,4 @@ while ! mysql --protocol TCP -u"$MYSQL_USER" -p"$MYSQL_PASSWORD" -e "show databa
     fi;
 done
   
-exec $cmd &
->&2 echo "Finished."
+exec $cmd
