@@ -1,10 +1,8 @@
-image: openjdk:11-stretch
-
 services:
-  - mysql:latest
+  - mysql
 
 variables: 
-  MAVEN_OPTS: "-Dmaven.repo.local=.m2" 
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository" 
   DOCKER_HOST: "tcp://docker:2375"
   MYSQL_DATABASE: 'reCollect'
   MYSQL_USER: 'adminrc'
@@ -15,9 +13,21 @@ before_script:
   - cd ReCollect/
 
 stages:
+  - connect
   - build
   - test
   - deploy
+
+connect:
+  stage: connect
+  image: mysql
+  before_script:
+    - mysql --version
+  script:
+    - echo "create database $MYSQL_DATABASE;" | mysql --user=root --password="$MYSQL_ROOT_PASSWORD" --host=mysql
+    - mysql --user=root --password="$MYSQL_ROOT_PASSWORD" --host=mysql $MYSQL_DATABASE_NAME < $MYSQL_DATABASE_SCHEMA
+    - mysql --user=root --password="$MYSQL_ROOT_PASSWORD" --host=mysql -e "show databases; use $MYSQL_DATABASE_NAME; show tables;"
+
 
 compile:
   image: maven:3.3-jdk-8-alpine
@@ -28,8 +38,9 @@ compile:
 unit_test:
   image: maven:3.3-jdk-8-alpine
   stage: test
+  before_script:
+    - mysql --version
   script:
-    - sleep 60
     - mvn clean test
 
 package:
