@@ -21,13 +21,8 @@ stages:
 connect:
   stage: connect
   image: mysql
-  before_script:
-    - mysql --version
   script:
-    - echo "create database $MYSQL_DATABASE;" | mysql --user=root --password="$MYSQL_ROOT_PASSWORD" --host=mysql
-    - mysql --user=root --password="$MYSQL_ROOT_PASSWORD" --host=mysql $MYSQL_DATABASE_NAME < $MYSQL_DATABASE_SCHEMA
-    - mysql --user=root --password="$MYSQL_ROOT_PASSWORD" --host=mysql -e "show databases; use $MYSQL_DATABASE_NAME; show tables;"
-
+    - mysql --version
 
 compile:
   image: maven:3.3-jdk-8-alpine
