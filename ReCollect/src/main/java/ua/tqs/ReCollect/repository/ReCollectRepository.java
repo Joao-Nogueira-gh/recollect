@@ -12,5 +12,4 @@ public interface ReCollectRepository extends JpaRepository<Item, Long> {
 
     //public Product findByX();
     public List<Item> findAll();
-
 }

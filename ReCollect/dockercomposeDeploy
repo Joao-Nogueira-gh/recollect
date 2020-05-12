@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+
+  server:
+    build: .
+    restart: always
+    ports:
+      - 9192:8080
+    depends_on:
+      - mysql-recollect
+      - adminer
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-recollect:3306/reCollect?serverTimezone=Europe/London
+      SPRING_DATASOURCE_USERNAME: adminrc
+      SPRING_DATASOURCE_PASSWORD: admin
+
+  mysql-recollect:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'reCollect'
+      MYSQL_USER: 'adminrc'
+      MYSQL_PASSWORD: 'admin'
+      MYSQL_ROOT_PASSWORD: 'password'
+    ports:
+      - "3306:3306"
+    expose:
+      - "3306"
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "8081:8080"
