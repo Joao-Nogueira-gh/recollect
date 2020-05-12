@@ -1,4 +1,4 @@
-version: '3'
+version: '2'
 
 services:
 
@@ -11,9 +11,13 @@ services:
       - mysql-recollect
       - adminer
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-recollect:3306/reCollect?serverTimezone=Europe/London
-      SPRING_DATASOURCE_USERNAME: adminrc
-      SPRING_DATASOURCE_PASSWORD: admin
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-recollect:3306/reCollect
+    networks:
+      cool_network:
+        aliases:
+          - server
+    links:
+      - "mysql-recollect:mysql-recollect"
 
   mysql-recollect:
     image: mysql
@@ -27,9 +31,22 @@ services:
       - "3306:3306"
     expose:
       - "3306"
+    networks:
+      cool_network:
+        aliases:
+          - mysql-recollect
+        ipv4_address: 10.5.0.6
 
   adminer:
     image: adminer
     restart: always
     ports:
       - "8081:8080"
+
+networks:
+  cool_network:
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 10.5.0.0/16
+         gateway: 10.5.0.1
