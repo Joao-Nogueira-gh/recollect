@@ -39,7 +39,7 @@ unit_test:
   image: othon2000/maven-mysql
   stage: test
   script:
-    - mysql --user=root --password="$MYSQL_ROOT_PASSWORD" --host=localhost -e "show databases; use $MYSQL_DATABASE; show tables;"
+    - mysql --user=root --password="$MYSQL_ROOT_PASSWORD" --host=10.5.0.6 -e "show databases; use $MYSQL_DATABASE; show tables;"
     - mvn clean test
 
 package:
