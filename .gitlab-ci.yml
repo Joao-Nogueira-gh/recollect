@@ -1,5 +1,4 @@
-image:
-  - mysql
+image: mysql
 
 services:
   - mysql
