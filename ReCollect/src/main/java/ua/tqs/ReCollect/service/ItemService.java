@@ -16,8 +16,6 @@ import java.util.Optional;
 @Transactional
 public class ItemService {
 
-    @Autowired
-    CategoryService categoryService;
 
     @Autowired
     private ItemRepository itemRepository;

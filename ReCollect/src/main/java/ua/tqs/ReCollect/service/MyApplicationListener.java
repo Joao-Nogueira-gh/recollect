@@ -1,33 +1,35 @@
 package ua.tqs.ReCollect.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.ApplicationListener;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
 import ua.tqs.ReCollect.entity.Category;
 import ua.tqs.ReCollect.repository.CategoryRepository;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.logging.Logger;
 
-
-@Service
-@Transactional
-public class CategoryService {
+@Component
+@Order(0)
+public class MyApplicationListener implements ApplicationListener<ApplicationReadyEvent> {
 
 
     @Autowired
     private CategoryRepository categoryRepository;
 
+    private static final Logger logger = Logger.getLogger("ApplicationListener#onApplicationEvent()");
 
-    public List<Category> getAllCateogories(){
-        return categoryRepository.findAll();
+    @Override
+    public void onApplicationEvent(ApplicationReadyEvent event) {
+        logger.info("ApplicationListener#onApplicationEvent()");
+        List<Category> categoriesList = initSomeCategories();
+        System.err.println("categorias: " + categoriesList.toString());
+        logger.info("categorias: " + categoriesList.toString());
     }
 
-    public Category getCategoryByName(String name){
-        Optional<Category> result = categoryRepository.findById(name);
 
-        return result.orElse(null);
-    }
 
     private List<Category> initSomeCategories(){
         Category books = new Category("Books", "fa-book-open");
@@ -46,9 +48,7 @@ public class CategoryService {
         categoryRepository.save(art);
         categoryRepository.save(misc);
 
-        return getAllCateogories();
+        return categoryRepository.findAll();
 
     }
-
-
 }

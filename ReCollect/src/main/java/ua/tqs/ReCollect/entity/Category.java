@@ -49,4 +49,12 @@ public class Category {
     public int hashCode() {
         return Objects.hash(name, iconClass);
     }
+
+    @Override
+    public String toString() {
+        return "Category{" +
+                "name='" + name + '\'' +
+                ", iconClass='" + iconClass + '\'' +
+                '}';
+    }
 }

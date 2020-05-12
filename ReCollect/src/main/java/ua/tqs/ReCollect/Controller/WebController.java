@@ -1,10 +1,12 @@
 package ua.tqs.ReCollect.controller;
 
 
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import ua.tqs.ReCollect.entity.Item;
+
 
 @Controller
 public class WebController {
