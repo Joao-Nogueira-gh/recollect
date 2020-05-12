@@ -17,5 +17,10 @@ public class ReCollectService {
     public List<Item> getAll(){
         return rcRepo.findAll();
     }
-    
+    public void save(Item item){
+        rcRepo.save(item);
+    }
+    public void deleteAll(){
+        rcRepo.deleteAll();
+    }
 }

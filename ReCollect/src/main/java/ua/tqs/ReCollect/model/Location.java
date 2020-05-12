@@ -3,15 +3,24 @@ package ua.tqs.ReCollect.model;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "location",uniqueConstraints={
+    @UniqueConstraint(columnNames = {"county", "district"})
+}) 
 public class Location {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name="id")
     private Long id;
 
+    @Column(name="county")
     private String county;
 
+    @Column(name="district")
     private String district;
+
+    @OneToOne(mappedBy = "location")
+    private User user;
     
     public Location(){
     }
@@ -39,6 +48,14 @@ public class Location {
 
     public void setDistrict(String district) {
         this.district = district;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
     
 }
