@@ -29,7 +29,6 @@ connect:
   script:
     - mysql --user=root --password="$MYSQL_ROOT_PASSWORD" --host=mysql -e "show databases; use $MYSQL_DATABASE; show tables;"
 
-
 compile:
   image: othon2000/maven-mysql
   stage: build
@@ -40,6 +39,7 @@ unit_test:
   image: othon2000/maven-mysql
   stage: test
   script:
+    - mysql --user=root --password="$MYSQL_ROOT_PASSWORD" --host=mysql -e "show databases; use $MYSQL_DATABASE; show tables; show global variables like 'port'; show global variables like 'host';"
     - mvn clean test
 
 package:
