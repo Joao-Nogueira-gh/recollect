@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en">
 <head>
 
   <!-- SITE TITTLE -->
@@ -117,17 +117,14 @@
 			<div class="col-md-12">
 				<!-- Advance Search -->
 				<div class="advance-search">
-					<form th:action="@{/category}" th:object="${searchparams}" method="POST">
+					<form>
 						<div class="form-row">
 							<div class="form-group col-md-4">
 								<input type="text" class="form-control my-2 my-lg-0" id="inputtext4" placeholder="What are you looking for">
 							</div>
-                            <select class="form-control col-md-3" th:field="*{category}">
-                                <option th:value="'category'" th:text="Category"></option>
-                                <option th:value="'books'" th:text="Books"></option>
-                                <option th:value="'coins'" th:text="Coins" ></option>
-                                <option th:value="'electronics'" th:text="Electronics" ></option>
-                            </select>
+							<div class="form-group col-md-3">
+								<input type="text" class="form-control my-2 my-lg-0" id="inputCategory4" placeholder="Category">
+							</div>
 							<div class="form-group col-md-3">
 								<input type="text" class="form-control my-2 my-lg-0" id="inputLocation4" placeholder="Location">
 							</div>
@@ -199,7 +196,13 @@
 						<div class="tab-content" id="pills-tabContent">
 							<div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
 								<h3 class="tab-title">Product Description</h3>
-								<p th:text="${item.descricao}"></p>
+								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officia laudantium beatae quod perspiciatis, neque
+									dolores eos rerum, ipsa iste cum culpa numquam amet provident eveniet pariatur, sunt repellendus quas
+									voluptate dolor cumque autem molestias. Ab quod quaerat molestias culpa eius, perferendis facere vitae commodi
+									maxime qui numquam ex voluptatem voluptate, fuga sequi, quasi! Accusantium eligendi vitae unde iure officia
+									amet molestiae velit assumenda, quidem beatae explicabo dolore laboriosam mollitia quod eos, eaque voluptas
+									enim fuga laborum, error provident labore nesciunt ad. Libero reiciendis necessitatibus voluptates ab
+									excepturi rem non, nostrum aut aperiam? Itaque, aut. Quas nulla perferendis neque eveniet ullam?</p>
 
 								<iframe width="100%" height="400" src="https://www.youtube.com/embed/LUH7njvhydE?rel=0&amp;controls=0&amp;showinfo=0"
 								 frameborder="0" allowfullscreen></iframe>
@@ -255,7 +258,7 @@
 							<div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
 								<h3 class="tab-title">Product Review</h3>
 								<div class="product-review">
-									<div class="media" th:each="comment : ${item.commentsList}">
+									<div class="media">
 										<!-- Avater -->
 										<img src="images/user/user-thumb.jpg" alt="avater">
 										<div class="media-body">
@@ -280,14 +283,15 @@
 												</ul>
 											</div>
 											<div class="name">
-												<h5 th:text="${comment.getnomeAutor()}"></h5>
+												<h5>Jessica Brown</h5>
 											</div>
 											<div class="date">
-												<p th:text="${comment.getData()}"></p>
+												<p>Mar 20, 2018</p>
 											</div>
 											<div class="review-comment">
-												<p th:text="${comment.getConteudo()}">
-
+												<p>
+													Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremqe laudant tota rem ape
+													riamipsa eaque.
 												</p>
 											</div>
 										</div>
@@ -299,7 +303,7 @@
 											<div class="starrr"></div>
 										</div>
 										<div class="review-submit">
-											<form th:action="@{/product}" method="POST" class="row">
+											<form action="#" class="row">
 												<div class="col-lg-6">
 													<input type="text" name="name" id="name" class="form-control" placeholder="Name">
 												</div>
@@ -310,7 +314,7 @@
 													<textarea name="review" id="review" rows="10" class="form-control" placeholder="Message"></textarea>
 												</div>
 												<div class="col-12">
-													<button type="submit" class="btn btn-main">Submit</button>
+													<button type="submit" class="btn btn-main">Sumbit</button>
 												</div>
 											</form>
 										</div>
@@ -340,11 +344,11 @@
 						</ul>
 					</div>
 					<!-- Map Widget -->
-					<!-- <div class="widget map">
+					<div class="widget map">
 						<div class="map">
 							<div id="map_canvas" data-latitude="51.507351" data-longitude="-0.127758"></div>
 						</div>
-					</div> -->
+					</div>
 					<!-- Rate Widget -->
 					<div class="widget rate">
 						<!-- Heading -->
@@ -370,7 +374,7 @@
 						<p>Have a great product to post ? Share it with
 							your fellow users.
 						</p>
-						<!-- Submit button -->
+						<!-- Submii button -->
 						<a href="" class="btn btn-transparent-white">Submit Listing</a>
 					</div>
 

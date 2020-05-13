@@ -2,7 +2,6 @@ package ua.tqs.ReCollect.entity;
 
 
 import javax.persistence.*;
-import java.util.ArrayList;
 
 @Entity
 public class Item {
@@ -18,7 +17,6 @@ public class Item {
     public String descricao;
     public String imageURL;
     public boolean vendido;
-    public ArrayList<Comment> commentsList = new ArrayList<>();
 
     @ManyToOne(targetEntity=Category.class, fetch=FetchType.EAGER, cascade = {CascadeType.ALL})
     public Category category;
@@ -31,22 +29,12 @@ public class Item {
         this.imageURL = imageURL;
         this.vendido = vendido;
         this.category = category;
-        this.commentsList = new ArrayList<>();
     }
 
     public Item(String nome, double preco, int quantidade) {
         this.nome = nome;
         this.preco = preco;
         this.quantidade = quantidade;
-        this.commentsList = new ArrayList<>();
-    }
-
-    public Item(String nome, String descricao, double preco, int quantidade) {
-        this.nome = nome;
-        this.preco = preco;
-        this.quantidade = quantidade;
-        this.descricao = descricao;
-        this.commentsList = new ArrayList<>();
     }
 
     public Item(String nome, double preco, int quantidade, Category category) {
@@ -54,7 +42,6 @@ public class Item {
         this.preco = preco;
         this.quantidade = quantidade;
         this.category = category;
-        this.commentsList = new ArrayList<>();
     }
 
     public String getNome() {
@@ -120,19 +107,6 @@ public class Item {
     public void setCategory(Category category) {
         this.category = category;
     }
-
-    public ArrayList<Comment> getCommentsList() {
-        return commentsList;
-    }
-
-    public void setCommentsList(ArrayList commentsList) {
-        this.commentsList = commentsList;
-    }
-
-    public void addComment(Comment comment) {
-        this.commentsList.add(comment);
-    }
-
 
 
 
