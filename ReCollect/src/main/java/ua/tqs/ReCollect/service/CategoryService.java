@@ -29,26 +29,10 @@ public class CategoryService {
         return result.orElse(null);
     }
 
-    private List<Category> initSomeCategories(){
-        Category books = new Category("Books", "fa-book-open");
-        Category games = new Category("Games", "fa-dice-d6");
-        Category toys = new Category("Toys", "fa-robot");
-        Category tech = new Category("Technology", "fa-camera-retro");
-        Category music = new Category("Music", "fa-guitar");
-        Category art = new Category("Art", "fa-image");
-        Category misc = new Category("Miscellaneous", "fa-box-open");
-
-        categoryRepository.save(books);
-        categoryRepository.save(games);
-        categoryRepository.save(toys);
-        categoryRepository.save(tech);
-        categoryRepository.save(music);
-        categoryRepository.save(art);
-        categoryRepository.save(misc);
-
-        return getAllCateogories();
-
+    public Category saveCategory(Category category){
+        return categoryRepository.save(category);
     }
+
 
 
 }

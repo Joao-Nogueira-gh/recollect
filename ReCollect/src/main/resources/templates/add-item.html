@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 
   <!-- SITE TITTLE -->
@@ -76,13 +76,15 @@
 									<label for="category">Category</label>
 									<select id="category" class="form-control form-control-lg border w-100 my-2">
 										<option value="NA" selected disabled hidden>Category</option>
-										<option value="Books">Books</option>
-										<option value="Games">Games</option>
-										<option value="Toys">Toys</option>
-										<option value="Technology">Technology</option>
-										<option value="Musica">Music</option>
-										<option value="Art">Art</option>
-										<option value="Miscellaneous">Miscellaneous</option>
+										<th:block th:each="category : ${categories}">
+											<option th:value="${category.name}" th:text="${category.name}">Books</option>
+											<!-- <option value="Games">Games</option>
+											<option value="Toys">Toys</option>
+											<option value="Technology">Technology</option>
+											<option value="Musica">Music</option>
+											<option value="Art">Art</option>
+											<option value="Miscellaneous">Miscellaneous</option> -->
+										</th:block>
 									</select>
 								</div>
 								<div class="form-group col-lg-12" style="margin-bottom: 15px">

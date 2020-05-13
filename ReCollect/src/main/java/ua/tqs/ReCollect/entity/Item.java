@@ -2,6 +2,7 @@ package ua.tqs.ReCollect.entity;
 
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 public class Item {
@@ -31,18 +32,21 @@ public class Item {
         this.category = category;
     }
 
+    public Item(String nome, double preco, int quantidade,String descricao, String imageURL) {
+        this.nome = nome;
+        this.preco = preco;
+        this.quantidade = quantidade;
+        this.descricao = descricao;
+        this.imageURL = imageURL;
+    }
+
     public Item(String nome, double preco, int quantidade) {
         this.nome = nome;
         this.preco = preco;
         this.quantidade = quantidade;
     }
 
-    public Item(String nome, double preco, int quantidade, Category category) {
-        this.nome = nome;
-        this.preco = preco;
-        this.quantidade = quantidade;
-        this.category = category;
-    }
+
 
     public String getNome() {
         return nome;
@@ -117,5 +121,25 @@ public class Item {
                 ", preco=" + preco +
                 ", quantidade=" + quantidade +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Item item = (Item) o;
+        return Double.compare(item.preco, preco) == 0 &&
+                quantidade == item.quantidade &&
+                vendido == item.vendido &&
+                Objects.equals(id, item.id) &&
+                Objects.equals(nome, item.nome) &&
+                Objects.equals(descricao, item.descricao) &&
+                Objects.equals(imageURL, item.imageURL) &&
+                Objects.equals(category, item.category);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, nome, preco, quantidade, descricao, imageURL, vendido, category);
     }
 }
