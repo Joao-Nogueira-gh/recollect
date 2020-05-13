@@ -2,10 +2,13 @@ package ua.tqs.ReCollect.model;
 
 import java.math.BigDecimal;
 import java.net.URL;
+import java.sql.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.*;
+
+import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 @Table(name = "item")
@@ -25,6 +28,9 @@ public abstract class Item {
     private String description;
 
     private URL image;
+
+    @CreationTimestamp
+    private Date creationDate;
 
     @ManyToMany(mappedBy = "favoriteItems")
     private Set<User> favedBy;
@@ -95,6 +101,46 @@ public abstract class Item {
 
     public void setImage(URL image) {
         this.image = image;
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public Set<User> getFavedBy() {
+        return favedBy;
+    }
+
+    public void setFavedBy(Set<User> favedBy) {
+        this.favedBy = favedBy;
+    }
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
+
+    public User getSeller() {
+        return seller;
+    }
+
+    public void setSeller(User seller) {
+        this.seller = seller;
+    }
+
+    public Comment getComment() {
+        return comment;
+    }
+
+    public void setComment(Comment comment) {
+        this.comment = comment;
     }
   
 }
