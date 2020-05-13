@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 
   <!-- SITE TITTLE -->
@@ -48,37 +48,37 @@
                 <div class="col-lg-5 col-md-8 align-item-center">
                     <div class="border border">
                         <h3 class="bg-gray p-4">Register Now</h3>
-                        <form action="#">
+                        <form method="post" th:action="@{/register}" th:object="${registo}">
                             <fieldset class="p-4">
-                                <input type="text" placeholder="Name*" class="border p-3 w-100 my-2" required>
-                                <input type="email" placeholder="Email*" class="border p-3 w-100 my-2" required>
-                                <input type="password" placeholder="Password*" class="border p-3 w-100 my-2" required>
-                                <input type="password" placeholder="Confirm Password*" class="border p-3 w-100 my-2" required>
+                                <input th:field="*{name}"  type="text" placeholder="Name*" class="border p-3 w-100 my-2" required>
+                                <input th:field="*{email}" type="email" placeholder="Email*" class="border p-3 w-100 my-2" required>
+                                <input th:field="*{password}" type="password" placeholder="Password*" class="border p-3 w-100 my-2" required>
+                                <!-- <input type="password" placeholder="Confirm Password*" class="border p-3 w-100 my-2" required> -->
                                 <hr/>
                                 <div class="col-lg-12">
                                     <div style="margin-bottom: 15px">
                                         <label for="distritoDropdown">District / State</label>
                                         <div>
-                                            <select id="distritoDropdown" class="form-control form-control-lg border w-100 my-2">
+                                            <select th:field="*{district}" id="distritoDropdown" class="form-control form-control-lg border w-100 my-2">
                                                 <option value="NA" selected disabled hidden>District / State</option>
-                                                <option value="Aveiro">Aveiro</option>
-                                                <option value="Braga">Braga</option>
-                                                <option value="Porto">Porto</option>
-                                                <option value="Leiria">Leiria</option>
-                                                <option value="Coimbra">Coimbra</option>
+                                                <option th:value="Aveiro" th:text="Aveiro">...</option>
+                                                <option th:value="Braga" th:text="Braga">...</option>
+                                                <option th:value="Porto" th:text="Porto">...</option>
+                                                <option th:value="Leiria" th:text="Leiria">...</option>
+                                                <option th:value="Coimbra" th:text="Coimbra">...</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div  style="margin-bottom: 10px">
                                         <label for="concelhoDropdown">Municipality</label>
                                         <div>
-                                            <select id="concelhoDropdown" class="form-control form-control-lg border w-100 my-2">
+                                            <select th:field="*{municipality}" id="concelhoDropdown" class="form-control form-control-lg border w-100 my-2">
                                                 <option value="NA" selected disabled hidden>Municipality</option>
-                                                <option value="Aveiro">Aveiro</option>
-                                                <option value="Ílhavo">Ílhavo</option>
-                                                <option value="Estarreja">Estarreja</option>
-                                                <option value="Águeda">Águeda</option>
-                                                <option value="Albergaria-a-Velha">Albergaria-a-Velha</option>
+                                                <option th:value="Aveiro" th:text="Aveiro">...</option>
+                                                <option th:value="Ílhavo" th:text="Ílhavo">...</option>
+                                                <option th:value="Estarreja" th:text="Estarreja">...</option>
+                                                <option th:value="Águeda" th:text="Águeda">...</option>
+                                                <option th:value="Albergaria-a-Velha" th:text="Albergaria-a-Velha">...</option>
                                             </select>
                                         </div>
                                     </div>

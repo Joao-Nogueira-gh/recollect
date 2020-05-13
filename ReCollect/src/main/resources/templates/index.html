@@ -353,7 +353,20 @@
 					<p>Go right into the type of product you are looking for!</p>
 				</div>
 				<div class="row">
-					<!-- Category list -->
+					<th:block th:each="category : ${categories}">
+						<!-- Category list -->
+						<div class="col-lg-3 offset-lg-0 col-md-5 offset-md-1 col-sm-6 col-6">
+							<div class="category-block">
+								<div class="header">
+									<a href="/category"><i th:class="${category.iconClass}"></i> </a>
+									<h4><a href="/category" th:text="${category.name}">...</a></h4>
+								</div>
+							</div>
+						</div>
+						<!-- /Category List -->
+					</th:block>
+
+					<!--
 					<div class="col-lg-3 offset-lg-0 col-md-5 offset-md-1 col-sm-6 col-6">
 						<div class="category-block">
 							<div class="header">
@@ -361,8 +374,7 @@
 								<h4><a href="/category">Books</a></h4>
 							</div>
 						</div>
-					</div> <!-- /Category List -->
-					<!-- Category list -->
+					</div>
 					<div class="col-lg-3 offset-lg-0 col-md-5 offset-md-1 col-sm-6 col-6">
 						<div class="category-block">
 							<div class="header">
@@ -370,8 +382,7 @@
 								<h4><a href="/category">Games</a></h4>
 							</div>
 						</div>
-					</div> <!-- /Category List -->
-					<!-- Category list -->
+					</div>
 					<div class="col-lg-3 offset-lg-0 col-md-5 offset-md-1 col-sm-6 col-6">
 						<div class="category-block">
 							<div class="header">
@@ -379,8 +390,7 @@
 								<h4><a href="/category">Toys</a></h4>
 							</div>
 						</div>
-					</div> <!-- /Category List -->
-					<!-- Category list -->
+					</div>
 					<div class="col-lg-3 offset-lg-0 col-md-5 offset-md-1 col-sm-6 col-6">
 						<div class="category-block">
 							<div class="header">
@@ -388,8 +398,7 @@
 								<h4><a href="/category">Technology</a></h4>
 							</div>
 						</div>
-					</div> <!-- /Category List -->
-					<!-- Category list -->
+					</div>
 					<div class="col-lg-3 offset-lg-0 col-md-5 offset-md-1 col-sm-6 col-6">
 						<div class="category-block">
 							<div class="header">
@@ -397,8 +406,7 @@
 								<h4><a href="/category">Music</a></h4>
 							</div>
 						</div>
-					</div> <!-- /Category List -->
-					<!-- Category list -->
+					</div>
 					<div class="col-lg-3 offset-lg-0 col-md-5 offset-md-1 col-sm-6 col-6">
 						<div class="category-block">
 							<div class="header">
@@ -406,8 +414,7 @@
 								<h4><a href="/category">Art</a></h4>
 							</div>
 						</div>
-					</div> <!-- /Category List -->
-					<!-- Category list -->
+					</div>
 					<div class="col-lg-3 offset-lg-0 col-md-5 offset-md-1 col-sm-6 col-6">
 						<div class="category-block">
 							<div class="header">
@@ -415,9 +422,9 @@
 								<h4><a href="/category">Miscellaneous</a></h4>
 							</div>
 						</div>
-					</div> <!-- /Category List -->
-					
-					
+					</div>
+					-->
+
 				</div>
 			</div>
 		</div>
