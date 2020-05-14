@@ -15,40 +15,45 @@ public class User {
     @Column(name = "id")
     private Long id;
 
+    @Column(name = "name")
     private String name;
 
     @Email
-    @Column(unique = true)
+    //unique
+    @Column(unique = true, name = "email")
     private String email;
 
+    @Column(name = "password")
     private String password;
 
+    @Column(name = "phone")
     private String phone;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "users_locationid", referencedColumnName = "id")
+    @ManyToOne(fetch=FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name="locationid", referencedColumnName = "id")
     private Location location;
 
     @ManyToMany
     @JoinTable(
     name = "fav_items", 
-    joinColumns = @JoinColumn(name = "user_id"), 
-    inverseJoinColumns = @JoinColumn(name = "item_id"))
+    joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), 
+    inverseJoinColumns = @JoinColumn(name = "item_id", referencedColumnName = "id"))
     private Set<Item> favoriteItems;
 
-    @OneToMany(mappedBy = "owner")
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
     private Set<Item> publishedItems;
 
-    @OneToMany(mappedBy = "seller")
+    @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
     private Set<Item> soldItems;
 
-    @OneToOne(mappedBy = "user")
-    private Comment comment;
+    @OneToMany(mappedBy="user", cascade = CascadeType.ALL)
+    private Set<Comment> comments;
     
     public User(){
         this.favoriteItems=new HashSet<Item>();
         this.publishedItems=new HashSet<Item>();
         this.soldItems=new HashSet<Item>();
+        this.comments=new HashSet<Comment>();
     }
 
     public User(String name, @Email String email, String password, String phone, Location location) {
@@ -60,6 +65,7 @@ public class User {
         this.favoriteItems=new HashSet<Item>();
         this.publishedItems=new HashSet<Item>();
         this.soldItems=new HashSet<Item>();
+        this.comments=new HashSet<Comment>();
     }
     
     public Long getId() {
@@ -130,11 +136,18 @@ public class User {
         this.soldItems = soldItems;
     }
 
-    public Comment getComment() {
-        return comment;
+    public Set<Comment> getComment() {
+        return comments;
     }
 
-    public void setComment(Comment comment) {
-        this.comment = comment;
-    }    
+    public void addComment(Comment comment) {
+        this.comments.add(comment);
+    }
+
+    @Override
+    public String toString() {
+        return "User [comments=" + comments + ", email=" + email + ", favoriteItems=" + favoriteItems + ", id=" + id
+                + ", location=" + location + ", name=" + name + ", password=" + password + ", phone=" + phone
+                + ", publishedItems=" + publishedItems + ", soldItems=" + soldItems + "]";
+    }
 }
