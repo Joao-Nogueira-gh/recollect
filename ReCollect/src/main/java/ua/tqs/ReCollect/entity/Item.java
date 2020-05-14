@@ -18,6 +18,8 @@ public class Item {
     private String descricao;
     private boolean vendido;
     private String categoria;
+    public String imageURL;
+    public ArrayList<Comment> commentsList = new ArrayList<>();
 
     @ElementCollection
     private List<String> imagens;
@@ -28,6 +30,7 @@ public class Item {
     public Item() {
         this.imagens = new ArrayList<>();
         this.vendido = false;
+        this.commentsList = new ArrayList<>();
     }
 
 
@@ -39,6 +42,17 @@ public class Item {
         this.imagens = new ArrayList<>();
         this.categoria = categoria;
         this.vendido = false;
+        this.commentsList = new ArrayList<>();
+    }
+
+    public Item(String nome, String descricao, double preco, int quantidade) {
+        this.nome = nome;
+        this.preco = preco;
+        this.quantidade = quantidade;
+        this.descricao = descricao;
+        this.commentsList = new ArrayList<>();
+        this.imagens = new ArrayList<>();
+        this.vendido = false;
     }
 
 
@@ -47,7 +61,10 @@ public class Item {
         this.nome = nome;
         this.preco = preco;
         this.quantidade = quantidade;
-
+        this.category = category;
+        this.commentsList = new ArrayList<>();
+        this.vendido = false;
+        this.imagens = new ArrayList<>();
     }
 
     public void addImage(String url){
@@ -121,6 +138,19 @@ public class Item {
     public void setImagens(List<String> imagens) {
         this.imagens = imagens;
     }
+    public ArrayList<Comment> getCommentsList() {
+        return commentsList;
+    }
+
+    public void setCommentsList(ArrayList commentsList) {
+        this.commentsList = commentsList;
+    }
+
+    public void addComment(Comment comment) {
+        this.commentsList.add(comment);
+    }
+
+
 
     @Override
     public boolean equals(Object o) {
