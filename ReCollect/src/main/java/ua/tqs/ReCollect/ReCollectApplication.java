@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class ReCollectApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ReCollectApplication.class, args);
+		SpringApplication.run(ReCollectApplication.class);
 	}
 
 }

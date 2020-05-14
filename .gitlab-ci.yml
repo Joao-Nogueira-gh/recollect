@@ -1,29 +1,51 @@
-image: maven:3.3-jdk-8-alpine
+image: mysql
 
+services:
+  - mysql
+  - maven 
 
 variables: 
-  MAVEN_OPTS: "-Dmaven.repo.local=.m2" 
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository" 
+  DOCKER_HOST: "tcp://docker:2375"
+  MYSQL_DATABASE: 'reCollect'
+  MYSQL_USER: 'adminrc'
+  MYSQL_PASSWORD: 'admin'
+  MYSQL_ROOT_PASSWORD: 'password'
 
 before_script:
   - cd ReCollect/
 
 stages:
+  - connect
   - build
   - test
   - deploy
 
+connect:
+  stage: connect
+  image: mysql
+  before_script:
+    - mysql --version
+  script:
+    - mysql --user=root --password="$MYSQL_ROOT_PASSWORD" --host=mysql -e "show databases; use $MYSQL_DATABASE; show tables;"
+
 compile:
+  image: othon2000/maven-mysql
   stage: build
   script:
     - mvn clean compile
 
 unit_test:
+  image: othon2000/maven-mysql
   stage: test
   script:
-    - mvn clean test -B
+    - mysql --user=root --password="$MYSQL_ROOT_PASSWORD" --host=mysql -e "show databases; use $MYSQL_DATABASE; show tables;"
+    - mvn clean test
 
 package:
+  image: othon2000/maven-mysql
   stage: deploy
   script:
+    - sleep 60 
     - mvn package
 

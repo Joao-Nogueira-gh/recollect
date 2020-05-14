@@ -17,3 +17,10 @@ DevOps Master -> João Nogueira 89262 ; Tiago Melo 89005
 ## Relevant Links
 
 Backlog Management -> Trello -> https://trello.com/b/5TPZlqim
+
+## To run
+```bash
+$ ./start.sh
+```
+
+For development and testing the same is ran, to have the DB and Admin containers running and then testing can be done normally.
