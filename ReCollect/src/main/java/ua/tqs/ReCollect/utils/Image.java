@@ -1,4 +1,4 @@
-package ua.tqs.ReCollect;
+package ua.tqs.ReCollect.utils;
 
 public class Image {
 

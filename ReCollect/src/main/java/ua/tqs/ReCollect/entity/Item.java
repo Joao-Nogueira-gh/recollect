@@ -19,7 +19,9 @@ public class Item {
     private boolean vendido;
     private String categoria;
     public String imageURL;
-    public ArrayList<Comment> commentsList = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+    private List<Comment> commentsList;
 
     @ElementCollection
     private List<String> imagens;
@@ -61,7 +63,6 @@ public class Item {
         this.nome = nome;
         this.preco = preco;
         this.quantidade = quantidade;
-        this.category = category;
         this.commentsList = new ArrayList<>();
         this.vendido = false;
         this.imagens = new ArrayList<>();
@@ -138,11 +139,12 @@ public class Item {
     public void setImagens(List<String> imagens) {
         this.imagens = imagens;
     }
-    public ArrayList<Comment> getCommentsList() {
+
+    public List<Comment> getCommentsList() {
         return commentsList;
     }
 
-    public void setCommentsList(ArrayList commentsList) {
+    public void setCommentsList(List commentsList) {
         this.commentsList = commentsList;
     }
 
@@ -150,27 +152,6 @@ public class Item {
         this.commentsList.add(comment);
     }
 
-
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Item item = (Item) o;
-        return Double.compare(item.preco, preco) == 0 &&
-                quantidade == item.quantidade &&
-                vendido == item.vendido &&
-                Objects.equals(id, item.id) &&
-                Objects.equals(nome, item.nome) &&
-                Objects.equals(descricao, item.descricao) &&
-                Objects.equals(categoria, item.categoria) &&
-                Objects.equals(imagens, item.imagens);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, nome, preco, quantidade, descricao, vendido, categoria, imagens);
-    }
 
     @Override
     public String toString() {
@@ -182,6 +163,8 @@ public class Item {
                 ", descricao='" + descricao + '\'' +
                 ", vendido=" + vendido +
                 ", categoria='" + categoria + '\'' +
+                ", imageURL='" + imageURL + '\'' +
+                ", commentsList=" + commentsList +
                 ", imagens=" + imagens +
                 '}';
     }
@@ -197,12 +180,14 @@ public class Item {
                 Objects.equals(id, item.id) &&
                 Objects.equals(nome, item.nome) &&
                 Objects.equals(descricao, item.descricao) &&
+                Objects.equals(categoria, item.categoria) &&
                 Objects.equals(imageURL, item.imageURL) &&
-                Objects.equals(category, item.category);
+                Objects.equals(commentsList, item.commentsList) &&
+                Objects.equals(imagens, item.imagens);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, nome, preco, quantidade, descricao, imageURL, vendido, category);
+        return Objects.hash(id, nome, preco, quantidade, descricao, vendido, categoria, imageURL, commentsList, imagens);
     }
 }

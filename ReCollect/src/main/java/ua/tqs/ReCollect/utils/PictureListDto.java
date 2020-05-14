@@ -1,9 +1,7 @@
-package ua.tqs.ReCollect;
+package ua.tqs.ReCollect.utils;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class PictureListDto {
 

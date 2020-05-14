@@ -9,18 +9,17 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import ua.tqs.ReCollect.Image;
-import ua.tqs.ReCollect.LoginForm;
-import ua.tqs.ReCollect.PictureListDto;
-import ua.tqs.ReCollect.RegisterForm;
+import ua.tqs.ReCollect.utils.Image;
+import ua.tqs.ReCollect.utils.LoginForm;
+import ua.tqs.ReCollect.utils.PictureListDto;
+import ua.tqs.ReCollect.utils.RegisterForm;
 import ua.tqs.ReCollect.entity.Item;
 import ua.tqs.ReCollect.entity.Localizacao;
 import ua.tqs.ReCollect.entity.User;
 import ua.tqs.ReCollect.service.CategoryService;
 import ua.tqs.ReCollect.service.ItemService;
 import ua.tqs.ReCollect.entity.Comment;
-import ua.tqs.ReCollect.entity.Item;
-import ua.tqs.ReCollect.entity.SearchParams;
+import ua.tqs.ReCollect.utils.SearchParams;
 
 
 @Controller
@@ -36,12 +35,12 @@ public class WebController {
     public WebController(CategoryService categoryService,ItemService itemService) {
         this.categoryService = categoryService;
         this.itemService = itemService;
-        //this.registeredUser = null;
+        this.registeredUser = null;
         // TODO: hardoced user para não estar sempre a registar
-        this.registeredUser = new User("Alex","teste","alex@email.pt", new Localizacao("Leiria", "Ansiao"));
+        //this.registeredUser = new User("Alex","teste","alex@email.pt", new Localizacao("Leiria", "Ansiao"));
         // TODO: só para testar, para não estar sempre a fazer login
-        loggedUser = registeredUser;
-        //this.resetLoggedUser();
+       // loggedUser = registeredUser;
+        this.resetLoggedUser();
     }
 
     public void resetLoggedUser(){
@@ -240,7 +239,7 @@ public class WebController {
         Item i = new Item("Hp Dual Core 2gb Ram-Slim Laptop Available In Very Low Price", "Only three of these were made!",2009.99, 1);
         i.addComment(new Comment("André Amarante", "Always wanted one!"));
         i.addComment(new Comment("Joana Silva", "Very high price. Would you be willing to lower it?"));
-        i.addComment(new Comment("André Amarante", "Cool product."));
+        i.addComment(new Comment("Alexandre Lopes", "Cool product."));
         model.addAttribute("item", i);
         model.addAttribute("searchparams", new SearchParams());
 

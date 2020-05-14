@@ -1,6 +1,5 @@
-package ua.tqs.ReCollect.entity;
+package ua.tqs.ReCollect.utils;
 
-import java.util.ArrayList;
 
 public class SearchParams {
 
