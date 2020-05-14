@@ -50,7 +50,7 @@ public class UserServiceTest {
 
         sutRCService.register(user);
 
-        given(rcRepository.findUserByEmail("user@email.com")).willReturn(user);
+        given(rcRepository.findByEmail("user@email.com")).willReturn(user);
         
         assertTrue(sutRCService.emailInUse("user@email.com"));
 
@@ -61,7 +61,7 @@ public class UserServiceTest {
 
         User user = new User("User123", "user@email.com", "password", "123123123", new Location("Viseu", "SCD"));
 
-        given(rcRepository.findUserByEmail("user@email.com")).willReturn(user);
+        given(rcRepository.findByEmail("user@email.com")).willReturn(user);
         
 
         assertThrows(EmailAlreadyInUseException.class, () -> {

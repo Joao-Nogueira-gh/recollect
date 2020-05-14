@@ -24,10 +24,13 @@ public class UserRepositoryTest {
 
     @Test
     public void getUserByEmail() {
-        User savedUser = entityManager.persistAndFlush(
-                new User("User123", "user@email.com", "password", "123123123", new Location("Viseu", "SCD")));
+        Location l = new Location("Viseu", "SCD");
+        entityManager.persistAndFlush(l);
 
-        User user = rcRepo.findUserByEmail("user@email.com");
+        User savedUser = entityManager.persistAndFlush(
+                new User("User123", "user@email.com", "password", "123123123", l));
+
+        User user = rcRepo.findByEmail("user@email.com");
 
         Assertions.assertThat(user.getName()).isEqualTo(savedUser.getName());
     }

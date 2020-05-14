@@ -29,7 +29,7 @@ public class User {
     @Column(name = "phone")
     private String phone;
 
-    @ManyToOne(fetch=FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="locationid", referencedColumnName = "id")
     private Location location;
 

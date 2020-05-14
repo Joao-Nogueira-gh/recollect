@@ -21,7 +21,7 @@ public class Location {
     @Column(name="district")
     private String district;
 
-    @OneToMany(mappedBy = "location", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "location")
     private Set<User> usersloc;
     
     public Location(){

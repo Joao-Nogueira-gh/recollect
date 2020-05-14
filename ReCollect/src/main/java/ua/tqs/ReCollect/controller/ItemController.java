@@ -19,19 +19,21 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import ua.tqs.ReCollect.model.Item;
 import ua.tqs.ReCollect.service.ItemService;
 
-@Controller("/api/items")
+@RestController("/api/items")
 public class ItemController {
 
 	@Autowired
-	private ItemService rcService;
+	private ItemService itemService;
 
-	@RequestMapping("/api/items/index")
-	public String itemIndex(Model model) throws IOException {;
-		return "index";
+	@RequestMapping("/api/items/")
+	@ResponseBody
+	public List<Item> itemIndex(Model model) throws IOException {;
+		return this.itemService.getAll();
 	}
     
 }

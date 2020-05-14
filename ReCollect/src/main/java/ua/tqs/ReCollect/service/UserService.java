@@ -38,7 +38,7 @@ public class UserService {
     
     // Returns if the e-mail is already in use
 	public boolean emailInUse(String email) {
-        return this.rcRepo.findUserByEmail(email) != null;
+        return this.rcRepo.findByEmail(email) != null;
 	}
 
 }
