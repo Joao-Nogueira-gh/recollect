@@ -15,17 +15,19 @@ public class Comment {
     @Column(name = "id")
     private Long id;
 
+    @Column(name = "text")
     private String text;
 
     @CreationTimestamp
+    @Column(name = "timestamp")
     private Timestamp timestamp;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "comment_userid", referencedColumnName = "id")
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="userid")
     private User user;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "comment_itemid", referencedColumnName = "id")
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="item")
     private Item item;
     
     public Comment(){
@@ -71,6 +73,12 @@ public class Comment {
 
     public void setItem(Item item) {
         this.item = item;
+    }
+
+    @Override
+    public String toString() {
+        return "Comment [id=" + id + ", item=" + item + ", text=" + text + ", timestamp=" + timestamp + ", user=" + user
+                + "]";
     }
     
 

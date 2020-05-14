@@ -6,21 +6,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ua.tqs.ReCollect.model.Item;
-import ua.tqs.ReCollect.repository.ReCollectRepository;
+import ua.tqs.ReCollect.repository.ItemRepository;
 
 @Service
-public class ReCollectService {
+public class ItemService {
 
     @Autowired
-    private ReCollectRepository rcRepo;
+    private ItemRepository itemRepo;
 
     public List<Item> getAll(){
-        return rcRepo.findAll();
+        return itemRepo.findAll();
     }
     public void save(Item item){
-        rcRepo.save(item);
+        itemRepo.save(item);
     }
     public void deleteAll(){
-        rcRepo.deleteAll();
+        itemRepo.deleteAll();
     }
 }

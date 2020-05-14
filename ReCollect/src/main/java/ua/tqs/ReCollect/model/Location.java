@@ -1,5 +1,7 @@
 package ua.tqs.ReCollect.model;
 
+import java.util.Set;
+
 import javax.persistence.*;
 
 @Entity
@@ -19,8 +21,8 @@ public class Location {
     @Column(name="district")
     private String district;
 
-    @OneToOne(mappedBy = "location")
-    private User user;
+    @OneToMany(mappedBy = "location")
+    private Set<User> usersloc;
     
     public Location(){
     }
@@ -50,12 +52,9 @@ public class Location {
         this.district = district;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
+    @Override
+    public String toString() {
+        return "Location [county=" + county + ", district=" + district + ", id=" + id + ", usersloc=" + usersloc + "]";
     }
     
 }

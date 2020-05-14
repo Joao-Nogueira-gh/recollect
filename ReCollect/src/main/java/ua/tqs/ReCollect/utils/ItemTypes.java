@@ -13,6 +13,7 @@ import org.springframework.core.io.Resource;
 public class ItemTypes {
 
     public static String readFile() throws IOException {
+        //TODO READ FILE WITH COUNTY/DISTRICT
         String fileName = "cdpt.json";
         Resource resource = new ClassPathResource("classpath:" + fileName);
         File file = resource.getFile();

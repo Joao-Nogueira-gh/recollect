@@ -2,8 +2,10 @@ package ua.tqs.ReCollect.model;
 
 import java.math.BigDecimal;
 import java.net.URL;
-import java.sql.Date;
+import java.util.Date;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.*;
@@ -12,24 +14,31 @@ import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 @Table(name = "item")
-public abstract class Item {
+public class Item {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private Long id;
 
+    @Column(name = "name")
     private String name;
 
+    @Column(name = "quantity")
     private int quantity;
 
+    @Column(name = "price")
     private BigDecimal price;
 
+    @Column(name = "description")
     private String description;
 
-    private URL image;
+    @Column(name = "images")
+    @ElementCollection(targetClass = URL.class)
+    private List<URL> images;
 
     @CreationTimestamp
+    @Column(name = "creationDate")
     private Date creationDate;
 
     @ManyToMany(mappedBy = "favoriteItems")
@@ -43,20 +52,28 @@ public abstract class Item {
     @JoinColumn(name="sellerid")
     private User seller;
 
-    @OneToOne(mappedBy = "item")
-    private Comment comment;
+    @OneToMany(mappedBy="item", cascade = CascadeType.ALL)
+    private Set<Comment> comments;
+
+    @Column(name = "category")
+    private Categories category;
     
     public Item(){
         this.favedBy=new HashSet<User>();
+        this.images=new ArrayList<URL>();
+        this.comments= new HashSet<Comment>();
     }
 
-    public Item(String name, int quantity, BigDecimal price, String description) {
+    public Item(String name, int quantity, BigDecimal price, String description, Categories category) {
         this.name = name;
         this.quantity = quantity;
         this.price = price;
         this.description = description;
+        this.category=category;
 
         this.favedBy=new HashSet<User>();
+        this.images=new ArrayList<URL>();
+        this.comments= new HashSet<Comment>();
     }
 
     public Long getId() {
@@ -95,28 +112,24 @@ public abstract class Item {
         this.description = description;
     }
 
-    public URL getImage() {
-        return image;
+    public List<URL> getImages() {
+        return images;
     }
 
-    public void setImage(URL image) {
-        this.image = image;
+    public void addImage(URL image) {
+        this.images.add(image);
     }
 
     public Date getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
-    }
-
     public Set<User> getFavedBy() {
         return favedBy;
     }
 
-    public void setFavedBy(Set<User> favedBy) {
-        this.favedBy = favedBy;
+    public void addFavedBy(User favedBy) {
+        this.favedBy.add(favedBy);
     }
 
     public User getOwner() {
@@ -135,12 +148,28 @@ public abstract class Item {
         this.seller = seller;
     }
 
-    public Comment getComment() {
-        return comment;
+    public Set<Comment> getComment() {
+        return comments;
     }
 
-    public void setComment(Comment comment) {
-        this.comment = comment;
+    public void addComment(Comment comment) {
+        this.comments.add(comment);
+    }
+
+    public Categories getCategory() {
+        return category;
+    }
+
+    public void setCategory(Categories category) {
+        this.category = category;
+    }
+
+    @Override
+    public String toString() {
+        return "Item [category=" + category + ", comments=" + comments + ", creationDate=" + creationDate
+                + ", description=" + description + ", favedBy=" + favedBy + ", id=" + id + ", images=" + images
+                + ", name=" + name + ", owner=" + owner + ", price=" + price + ", quantity=" + quantity + ", seller="
+                + seller + "]";
     }
   
 }

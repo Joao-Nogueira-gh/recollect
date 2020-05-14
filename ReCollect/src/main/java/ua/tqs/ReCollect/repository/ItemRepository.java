@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import ua.tqs.ReCollect.model.Item;
 
 @Repository
-public interface ReCollectRepository extends JpaRepository<Item, Long> {
+public interface ItemRepository extends JpaRepository<Item, Long> {
 
     //public Product findByX();
     public List<Item> findAll();
