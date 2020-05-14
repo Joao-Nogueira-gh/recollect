@@ -24,14 +24,14 @@ import ua.tqs.ReCollect.model.Item;
 import ua.tqs.ReCollect.model.items.Coin;
 import ua.tqs.ReCollect.service.ReCollectItemService;
 
-@Controller
+@Controller("/api/items")
 public class ReCollectItemController {
 
 	@Autowired
 	private ReCollectItemService rcService;
 
-	@RequestMapping("")
-	public String index(Model model) throws IOException {
+	@RequestMapping("/api/items/index")
+	public String itemIndex(Model model) throws IOException {
 		rcService.deleteAll();
 		rcService.save(new Coin("moeda", 1, new BigDecimal(5.5), "moeda rara"));
 		List<Item> x = rcService.getAll();
