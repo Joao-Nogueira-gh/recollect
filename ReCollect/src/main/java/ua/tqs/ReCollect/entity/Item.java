@@ -18,7 +18,6 @@ public class Item {
     private String descricao;
     private boolean vendido;
     private String categoria;
-    public String imageURL;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     private List<Comment> commentsList;
@@ -163,7 +162,6 @@ public class Item {
                 ", descricao='" + descricao + '\'' +
                 ", vendido=" + vendido +
                 ", categoria='" + categoria + '\'' +
-                ", imageURL='" + imageURL + '\'' +
                 ", commentsList=" + commentsList +
                 ", imagens=" + imagens +
                 '}';
@@ -181,13 +179,12 @@ public class Item {
                 Objects.equals(nome, item.nome) &&
                 Objects.equals(descricao, item.descricao) &&
                 Objects.equals(categoria, item.categoria) &&
-                Objects.equals(imageURL, item.imageURL) &&
                 Objects.equals(commentsList, item.commentsList) &&
                 Objects.equals(imagens, item.imagens);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, nome, preco, quantidade, descricao, vendido, categoria, imageURL, commentsList, imagens);
+        return Objects.hash(id, nome, preco, quantidade, descricao, vendido, categoria, commentsList, imagens);
     }
 }
