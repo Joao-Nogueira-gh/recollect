@@ -24,3 +24,14 @@ $ ./start.sh
 ```
 
 For development and testing the same is ran, to have the DB and Admin containers running and then testing can be done normally.
+
+## Unit Tests
+```bash
+$ mvn test
+```
+
+## Integration tests using cucumber (checking Step Definitions)
+```bash
+$ mvn clean verify -Pacceptance-tests
+```
+
