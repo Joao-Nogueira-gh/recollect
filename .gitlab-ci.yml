@@ -1,18 +1,95 @@
+image: docker:latest
+
+services:
+- docker:dind
+- maven
+- mysql:5.7
+
+
+variables:
+  DOCKER_DRIVER: overlay2
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+
+    
 before_script:
   - cd ReCollect/
 
-variables:
-  SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
-  GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
-sonarcloud-check:
-  image: maven:3.6.3-jdk-11
-  cache:
-    key: "${CI_JOB_NAME}"
-    paths:
-      - .sonar/cache
+stages:
+  - connect
+  - build
+  - test
+  - package
+
+connect:
+  stage: connect
+  variables:
+    MYSQL_DATABASE: "reCollect"
+    MYSQL_USER: "adminrc"
+    MYSQL_PASSWORD: "admin"
+    MYSQL_ROOT_PASSWORD: "root"
+  services:
+    - mysql:5.7
+  before_script:
+    - apk --no-cache add mysql-client
+    - mysql --version
   script:
-    - mvn verify -DskipTests sonar:sonar 
-  only:
-    - merge_requests
-    - master
-    - develop
+    - echo "SELECT 'OK';" | mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql "${MYSQL_DATABASE}"
+
+build:
+  image: maven
+  stage: build
+  variables:
+    MYSQL_DATABASE: "reCollect"
+    MYSQL_USER: "adminrc"
+    MYSQL_PASSWORD: "admin"
+    MYSQL_ROOT_PASSWORD: "root"
+  services:
+    - mysql:5.7
+  script:
+    - mvn clean compile
+
+test:
+  image: maven
+  stage: test
+  variables:
+    MYSQL_DATABASE: "reCollect"
+    MYSQL_USER: "adminrc"
+    MYSQL_PASSWORD: "admin"
+    MYSQL_ROOT_PASSWORD: "root"
+  services:
+    - mysql:5.7
+  script:
+    - mvn clean test
+
+package:
+  image: maven
+  stage: package
+  variables:
+    MYSQL_DATABASE: "reCollect"
+    MYSQL_USER: "adminrc"
+    MYSQL_PASSWORD: "admin"
+    MYSQL_ROOT_PASSWORD: "root"
+  services:
+    - mysql:5.7
+  script:
+    - mvn clean package
+
+
+# before_script:
+#   - cd ReCollect/
+
+# variables:
+#   SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
+#   GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
+# sonarcloud-check:
+#   image: maven:3.6.3-jdk-11
+#   cache:
+#     key: "${CI_JOB_NAME}"
+#     paths:
+#       - .sonar/cache
+#   script:
+#     - mvn verify -DskipTests sonar:sonar 
+#   only:
+#     - merge_requests
+#     - master
+#     - develop
