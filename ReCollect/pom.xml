@@ -17,6 +17,8 @@
 
 	<properties>
 		<java.version>1.8</java.version>
+		<sonar.projectKey>Joao-Nogueira-gh_recollect</sonar.projectKey>
+		<sonar.organization>tqs-recollect</sonar.organization>
 	</properties>
 
 	<dependencies>
@@ -79,17 +81,17 @@
 			<version>5.6.0</version>
 		</dependency>
 		<dependency>
-            <groupId>io.cucumber</groupId>
-            <artifactId>cucumber-junit</artifactId>
-            <version>5.6.0</version>
-            <scope>test</scope>
-        </dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-junit</artifactId>
+			<version>5.6.0</version>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.13</version>
-            <scope>test</scope>
-        </dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.13</version>
+			<scope>test</scope>
+		</dependency>
 
 	</dependencies>
 
