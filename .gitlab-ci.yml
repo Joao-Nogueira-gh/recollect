@@ -11,7 +11,7 @@ sonarcloud-check:
     paths:
       - .sonar/cache
   script:
-    - mvn verify sonar:sonar
+    - mvn verify -DskipTests sonar:sonar 
   only:
     - merge_requests
     - master
