@@ -18,14 +18,12 @@ before_script:
   - cd ReCollect/
 
 stages:
-  - sonar
   - connect
   - build
   - test
   - deploy
 
 sonarcloud-check:
-  stage: sonar
   image: maven:3.6.3-jdk-11
   cache:
     key: "${CI_JOB_NAME}"
