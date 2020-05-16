@@ -59,9 +59,9 @@ public class Item {
     private Categories category;
     
     public Item(){
-        this.favedBy=new HashSet<User>();
-        this.images=new ArrayList<URL>();
-        this.comments= new HashSet<Comment>();
+        this.favedBy=new HashSet<>();
+        this.images=new ArrayList<>();
+        this.comments= new HashSet<>();
     }
 
     public Item(String name, int quantity, BigDecimal price, String description, Categories category) {
@@ -71,9 +71,9 @@ public class Item {
         this.description = description;
         this.category=category;
 
-        this.favedBy=new HashSet<User>();
-        this.images=new ArrayList<URL>();
-        this.comments= new HashSet<Comment>();
+        this.favedBy=new HashSet<>();
+        this.images=new ArrayList<>();
+        this.comments= new HashSet<>();
     }
 
     public Long getId() {
@@ -166,10 +166,9 @@ public class Item {
 
     @Override
     public String toString() {
-        return "Item [category=" + category + ", comments=" + comments + ", creationDate=" + creationDate
-                + ", description=" + description + ", favedBy=" + favedBy + ", id=" + id + ", images=" + images
-                + ", name=" + name + ", owner=" + owner + ", price=" + price + ", quantity=" + quantity + ", seller="
-                + seller + "]";
+        return "Item [category=" + category + ", #comments=" + comments.size() + ", creationDate=" + creationDate
+                + ", description=" + description + ", id=" + id + ", #images=" + images.size()
+                + ", name=" + name + ", owner=" + owner.getName() + ", price=" + price + ", quantity=" + quantity + ", seller="
+                + seller.getName() + "]";
     }
-  
 }

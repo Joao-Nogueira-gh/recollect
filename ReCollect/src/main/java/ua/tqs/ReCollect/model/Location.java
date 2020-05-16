@@ -20,9 +20,16 @@ public class Location {
 
     @Column(name="district")
     private String district;
-
+    
     @OneToMany(mappedBy = "location")
     private Set<User> usersloc;
+
+    @PreRemove
+    private void preRemove() {
+        for (User u : usersloc) {
+            u.setLocation(null);
+        }
+    }
     
     public Location(){
     }
@@ -54,7 +61,6 @@ public class Location {
 
     @Override
     public String toString() {
-        return "Location [county=" + county + ", district=" + district + ", id=" + id + ", usersloc=" + usersloc + "]";
+        return "Location [county=" + county + ", district=" + district + ", id=" + id  + "]";
     }
-    
 }

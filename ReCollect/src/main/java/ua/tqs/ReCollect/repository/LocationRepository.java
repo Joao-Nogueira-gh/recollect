@@ -12,4 +12,5 @@ public interface LocationRepository extends JpaRepository<Location, Long> {
 
     //public Product findByX();
     public List<Location> findAll();
+    public Location findByDistrictAndCounty(String district, String county);
 }
