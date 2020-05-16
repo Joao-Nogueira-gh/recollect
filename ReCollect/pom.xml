@@ -17,9 +17,54 @@
 
 	<properties>
 		<java.version>1.8</java.version>
-		<sonar.projectKey>Joao-Nogueira-gh_recollect</sonar.projectKey>
-		<sonar.organization>tqs-recollect</sonar.organization>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<version.cucumber>1.1.8</version.cucumber>
 	</properties>
+
+	<profiles>
+		<profile>
+			<id>acceptance-tests</id>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-failsafe-plugin</artifactId>
+						<version>2.17</version>
+						<executions>
+							<execution>
+								<goals>
+									<goal>integration-test</goal>
+									<goal>verify</goal>
+								</goals>
+								<configuration>
+									<sources>
+										<source>src/it/java/**/*.java</source>
+									</sources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					
+				</plugins>
+			</build>
+
+			<dependencies>
+				<dependency>
+					<groupId>info.cukes</groupId>
+					<artifactId>cucumber-testng</artifactId>
+					<version>1.2.4</version>
+					<scope>test</scope>
+					<exclusions>
+						<exclusion>
+							<groupId>junit</groupId>
+							<artifactId>junit</artifactId>
+						</exclusion>
+					</exclusions>
+				</dependency>
+			</dependencies>
+		</profile>
+	</profiles>
 
 	<dependencies>
 		<dependency>
@@ -67,12 +112,12 @@
 			<groupId>info.cukes</groupId>
 			<artifactId>cucumber-java</artifactId>
 			<scope>test</scope>
-			<version>1.0.11</version>
+			<version>1.1.8</version>
 		</dependency>
 		<dependency>
 			<groupId>info.cukes</groupId>
 			<artifactId>cucumber-jvm</artifactId>
-			<version>1.0.11</version>
+			<version>1.1.8</version>
 			<type>pom</type>
 		</dependency>
 		<dependency>
@@ -92,7 +137,6 @@
 			<version>4.13</version>
 			<scope>test</scope>
 		</dependency>
-
 	</dependencies>
 
 	<build>
