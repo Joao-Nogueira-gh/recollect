@@ -4,11 +4,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import ua.tqs.ReCollect.service.UserService;
 import ua.tqs.ReCollect.utils.Image;
 import ua.tqs.ReCollect.utils.LoginForm;
 import ua.tqs.ReCollect.utils.PictureListDto;
@@ -21,21 +19,30 @@ import ua.tqs.ReCollect.service.ItemService;
 import ua.tqs.ReCollect.entity.Comment;
 import ua.tqs.ReCollect.utils.SearchParams;
 
+import java.util.List;
+import java.util.Set;
+
 
 @Controller
 public class WebController {
 
+
     CategoryService categoryService;
     ItemService itemService;
+    UserService userService;
 
 
     private User registeredUser;
     private User loggedUser;
 
-    public WebController(CategoryService categoryService,ItemService itemService) {
+    private List<User> allUsers;
+
+    public WebController(CategoryService categoryService,ItemService itemService, UserService userService) {
         this.categoryService = categoryService;
         this.itemService = itemService;
+        this.userService = userService;
         this.registeredUser = null;
+        this.allUsers = userService.getAllUsers();
         // TODO: hardoced user para não estar sempre a registar
         //this.registeredUser = new User("Alex","teste","alex@email.pt", new Localizacao("Leiria", "Ansiao"));
         // TODO: só para testar, para não estar sempre a fazer login
@@ -58,7 +65,7 @@ public class WebController {
     @GetMapping(value = "/")
     public String home(Model model) {
         model.addAttribute("item", new Item("Moeda", 9.99, 2));
-        model.addAttribute("categories", categoryService.getAllCateogories());
+        model.addAttribute("categories", categoryService.getAllCategories());
         return "index";
     }
 
@@ -89,7 +96,6 @@ public class WebController {
         model.addAttribute("showError", showError);
         model.addAttribute("loginForm", new LoginForm());
         if(success){
-            this.loggedUser = this.registeredUser;
             return "redirect:/profile";
         }
         else{
@@ -102,10 +108,16 @@ public class WebController {
     public String login(@ModelAttribute LoginForm loginForm, RedirectAttributes ra) {
         String providedEmail = loginForm.getEmail();
         String providedPassword = loginForm.getPassword();
+        System.err.println("providedEmail -> " + providedEmail);
+        System.err.println("providedPassword -> " + providedPassword);
 
-        if(this.registeredUser!=null){
-            if(providedEmail.trim().equals(registeredUser.getEmail()) && providedPassword.trim().equals(registeredUser.getPassword())){
+        User userFromDB = userService.getUserByEmail(providedEmail);
+        System.err.println("userfromDB -> " + userFromDB);
+
+        if(userFromDB!=null){
+            if(providedPassword.trim().equals(userFromDB.getPassword())){
                 System.err.println("login success!");
+                this.loggedUser = userFromDB;
                 ra.addAttribute("success", true);
             }
             else{
@@ -161,8 +173,41 @@ public class WebController {
     }
 
     @GetMapping(value = "/profile")
-    public String userProfile() {
+    public String userProfile(Model model) {
+
+        Set<Item> allItems = this.loggedUser.getItensPublicados();
+
+        model.addAttribute("userItems", allItems);
+        model.addAttribute("loggedUser", this.loggedUser);
+
         return "dashboard-my-ads";
+    }
+
+    @GetMapping(value = "/profile/delete/{id}")
+    public String postItem(Model model, @PathVariable(name = "id") Long id, RedirectAttributes ra) {
+
+        // TODO: verificar se o loggedUser está logged in
+
+
+
+        System.err.println("ID para delete: " + id);
+
+        this.loggedUser.removeItemPublicado(id);
+        System.err.println("1. loggedUser: " + this.loggedUser);
+        userService.updateUser(this.loggedUser);
+        System.err.println("2.-----");
+        itemService.deleteItem(id);
+        System.err.println("3.-----");
+
+        Set<Item> allItems = this.loggedUser.getItensPublicados();
+
+        System.err.println("-------- Atributos atualizados --------");
+        model.addAttribute("userItems", allItems);
+        model.addAttribute("loggedUser", this.loggedUser);
+        System.err.println("userItems: " + model.getAttribute("userItems"));
+        System.err.println("user: " + model.getAttribute("loggedUser"));
+
+        return "redirect:/profile";
     }
 
     @GetMapping(value = "/about")
@@ -178,7 +223,7 @@ public class WebController {
 
 
         model.addAttribute("submitted", submitted);
-        model.addAttribute("categories", categoryService.getAllCateogories());
+        model.addAttribute("categories", categoryService.getAllCategories());
 
         PictureListDto pictureListForm = new PictureListDto();
 
@@ -195,14 +240,20 @@ public class WebController {
     @PostMapping(value = "/announce")
     public String postItem(@ModelAttribute Item newItem, @ModelAttribute PictureListDto imagesList, RedirectAttributes ra) {
 
+        System.err.println("1!");
         for(Image im : imagesList.getImages()){
             newItem.addImage(im.getUrl());
         }
-
+        System.err.println("2!");
         //System.err.println("newItem recebido: "+ newItem.toString());
         //System.err.println("imagesList: " + imagesList.toString());
-
-        loggedUser.addItem(newItem);
+        System.err.println("loggerUser antes do add: " + this.loggedUser.toString());
+        itemService.save(newItem);
+        System.err.println("3!");
+        this.loggedUser.addItem(newItem);
+        System.err.println("4!");
+        userService.updateUser(this.loggedUser);
+        System.err.println("5!");
         ra.addAttribute("submitted", true);
 
         System.err.println("Item submetido: " + newItem.toString());

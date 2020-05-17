@@ -16,13 +16,14 @@ public class Item {
     private double preco;
     private int quantidade;
     private String descricao;
-    private boolean vendido;
     private String categoria;
 
+    // usei Set porque nao podem ser repetidos e por que com List<> não
+    // dá para usar FetchType.EAGER em mais do que uma
     @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
-    private List<Comment> commentsList;
+    private Set<Comment> commentsList;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<String> imagens;
 
     // TODO
@@ -30,8 +31,7 @@ public class Item {
 
     public Item() {
         this.imagens = new ArrayList<>();
-        this.vendido = false;
-        this.commentsList = new ArrayList<>();
+        this.commentsList = new HashSet<>();
     }
 
 
@@ -42,8 +42,7 @@ public class Item {
         this.descricao = descricao;
         this.imagens = new ArrayList<>();
         this.categoria = categoria;
-        this.vendido = false;
-        this.commentsList = new ArrayList<>();
+        this.commentsList = new HashSet<>();
     }
 
     public Item(String nome, String descricao, double preco, int quantidade) {
@@ -51,9 +50,8 @@ public class Item {
         this.preco = preco;
         this.quantidade = quantidade;
         this.descricao = descricao;
-        this.commentsList = new ArrayList<>();
+        this.commentsList = new HashSet<>();
         this.imagens = new ArrayList<>();
-        this.vendido = false;
     }
 
 
@@ -62,8 +60,7 @@ public class Item {
         this.nome = nome;
         this.preco = preco;
         this.quantidade = quantidade;
-        this.commentsList = new ArrayList<>();
-        this.vendido = false;
+        this.commentsList = new HashSet<>();
         this.imagens = new ArrayList<>();
     }
 
@@ -113,16 +110,6 @@ public class Item {
         this.descricao = descricao;
     }
 
-
-    public boolean isVendido() {
-        return vendido;
-    }
-
-    public void setVendido(boolean vendido) {
-        this.vendido = vendido;
-    }
-
-
     public String getCategoria() {
         return categoria;
     }
@@ -139,11 +126,11 @@ public class Item {
         this.imagens = imagens;
     }
 
-    public List<Comment> getCommentsList() {
+    public Set<Comment> getCommentsList() {
         return commentsList;
     }
 
-    public void setCommentsList(List commentsList) {
+    public void setCommentsList(Set commentsList) {
         this.commentsList = commentsList;
     }
 
@@ -160,7 +147,6 @@ public class Item {
                 ", preco=" + preco +
                 ", quantidade=" + quantidade +
                 ", descricao='" + descricao + '\'' +
-                ", vendido=" + vendido +
                 ", categoria='" + categoria + '\'' +
                 ", commentsList=" + commentsList +
                 ", imagens=" + imagens +
@@ -174,7 +160,6 @@ public class Item {
         Item item = (Item) o;
         return Double.compare(item.preco, preco) == 0 &&
                 quantidade == item.quantidade &&
-                vendido == item.vendido &&
                 Objects.equals(id, item.id) &&
                 Objects.equals(nome, item.nome) &&
                 Objects.equals(descricao, item.descricao) &&
@@ -185,6 +170,6 @@ public class Item {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, nome, preco, quantidade, descricao, vendido, categoria, commentsList, imagens);
+        return Objects.hash(id, nome, preco, quantidade, descricao, categoria, commentsList, imagens);
     }
 }

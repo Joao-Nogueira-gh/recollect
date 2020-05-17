@@ -121,6 +121,20 @@ public class User {
         this.itensPublicados.add(item);
     }
 
+    public void removeItemPublicado(Long id){
+        Item temp = null;
+        for (Item i : itensPublicados){
+            if(i.getId().equals(id)){
+                temp = i;
+                break;
+            }
+        }
+
+        if(temp!=null){
+            itensPublicados.remove(temp);
+        }
+    }
+
     public void addSoldItem(Item item){
         this.itensVendidos.add(item);
     }
@@ -138,8 +152,8 @@ public class User {
                 ", password='" + password + '\'' +
                 ", localizacao=" + localizacao +
                 ", itensVendidos=" + itensVendidos +
-                ", itensFavoritos=" + "itensFavoritos" +
-                ", itensPublicados=" + "itensPublicados" +
+                ", itensFavoritos=" + itensFavoritos +
+                ", itensPublicados=" + itensPublicados +
                 '}';
     }
 }

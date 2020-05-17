@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 
   <!-- SITE TITTLE -->
@@ -117,6 +117,39 @@
 							</tr>
 						</thead>
 						<tbody>
+							<th:block th:each="item : ${userItems}">
+								<tr>
+									<td class="product-thumb">
+										<img width="80px" height="auto" th:src="${item.getImagens().get(0)}" alt="image description"></td>
+									<td class="product-details">
+										<h3 class="title" th:text="${item.nome}">....</h3>
+										<span class="add-id"><strong>Ad ID: </strong><time th:text="${item.id}"></time> </span>
+										<span><strong>Posted on: </strong><time>TODO: Jun 27, 2017</time> </span>
+									</td>
+									<td class="product-category"><span class="categories" th:text="${item.categoria}">...</span></td>
+									<td class="action" data-title="Action">
+										<div class="">
+											<ul class="list-inline justify-content-center">
+												<li class="list-inline-item">
+													<a data-toggle="tooltip" data-placement="top" title="View" class="view" href="/product">
+														<i class="fa fa-eye"></i>
+													</a>
+												</li>
+												<li class="list-inline-item">
+													<a data-toggle="tooltip" data-placement="top" title="Edit" class="edit" href="">
+														<i class="fa fa-pencil"></i>
+													</a>
+												</li>
+												<li class="list-inline-item" th:method="post">
+													<a th:href="${'/profile/delete/' + item.id}" data-toggle="tooltip" data-placement="top" title="Delete" class="delete">
+														<i class="fa fa-trash"></i>
+													</a>
+												</li>
+											</ul>
+										</div>
+									</td>
+								</tr>
+							</th:block>
 							<tr>
 								<td class="product-thumb">
 									<img width="80px" height="auto" src="images/products/products-1.jpg" alt="image description"></td>

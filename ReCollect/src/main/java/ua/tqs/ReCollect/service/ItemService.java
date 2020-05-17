@@ -27,24 +27,20 @@ public class ItemService {
         return result.orElse(null);
     }
 
+    public List<Item> getAllItems(){
+        return itemRepository.findAll();
+    }
 
-    /*private void initSomeItems(){
-        Item comic = new Item("Homem Aranha 2", "Descricao 1", "");
-        Item coin = new  Item("Moeda", 9.99, 2);
-        Item toys = new Item("Toys", "fa-robot");
-        Item tech = new Item("Technology", "fa-camera-retro");
-        Item music = new Item("Music", "fa-guitar");
-        Item art = new Item("Art", "fa-image");
-        Item misc = new Item("Miscellaneous", "fa-box-open");
+    public Item save(Item item){
+        return itemRepository.save(item);
+    }
 
-        categoryRepository.save(books);
-        categoryRepository.save(games);
-        categoryRepository.save(toys);
-        categoryRepository.save(tech);
-        categoryRepository.save(music);
-        categoryRepository.save(art);
-        categoryRepository.save(misc);
-    }*/
+    public void deleteItem(Long id){
+        itemRepository.deleteById(id);
+    }
+
+
+
 
 
 
