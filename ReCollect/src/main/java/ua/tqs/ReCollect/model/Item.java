@@ -166,9 +166,17 @@ public class Item {
 
     @Override
     public String toString() {
+        String ownerst=null;
+        if (owner!=null){
+            ownerst=owner.getName();
+        }
+        String sellerst=null;
+        if (seller!=null){
+            sellerst=seller.getName();
+        }
         return "Item [category=" + category + ", #comments=" + comments.size() + ", creationDate=" + creationDate
                 + ", description=" + description + ", id=" + id + ", #images=" + images.size()
-                + ", name=" + name + ", owner=" + owner.getName() + ", price=" + price + ", quantity=" + quantity + ", seller="
-                + seller.getName() + "]";
+                + ", name=" + name + ", owner=" + ownerst + ", price=" + price + ", quantity=" + quantity + ", seller="
+                + sellerst + "]";
     }
 }

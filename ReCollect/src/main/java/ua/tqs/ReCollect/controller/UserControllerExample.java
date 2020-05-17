@@ -8,7 +8,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import ua.tqs.ReCollect.exceptions.EmailAlreadyInUseException;
-import ua.tqs.ReCollect.model.Location;
 import ua.tqs.ReCollect.model.User;
 import ua.tqs.ReCollect.service.LocationService;
 import ua.tqs.ReCollect.service.UserService;
@@ -29,9 +28,6 @@ public class UserControllerExample {
 	public String register(Model model) throws IOException {
 		//setup for test
 		userService.deleteAll();
-		locationService.deleteAll();
-		Location l=new Location("Aveiro", "Aveiro");
-		locationService.save(l);
 		//flow starts here
 		//create user with input, and fetch location
 		User u=new User("user", "email@gmail.com", "coiso", "3467764", locationService.getLocation("Aveiro", "Aveiro"));
