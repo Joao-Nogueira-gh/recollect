@@ -50,10 +50,10 @@ public class User {
     private Set<Comment> comments;
     
     public User(){
-        this.favoriteItems=new HashSet<Item>();
-        this.publishedItems=new HashSet<Item>();
-        this.soldItems=new HashSet<Item>();
-        this.comments=new HashSet<Comment>();
+        this.favoriteItems=new HashSet<>();
+        this.publishedItems=new HashSet<>();
+        this.soldItems=new HashSet<>();
+        this.comments=new HashSet<>();
     }
 
     public User(String name, @Email String email, String password, String phone, Location location) {
@@ -62,10 +62,10 @@ public class User {
         this.password = password;
         this.phone = phone;
         this.location = location;
-        this.favoriteItems=new HashSet<Item>();
-        this.publishedItems=new HashSet<Item>();
-        this.soldItems=new HashSet<Item>();
-        this.comments=new HashSet<Comment>();
+        this.favoriteItems=new HashSet<>();
+        this.publishedItems=new HashSet<>();
+        this.soldItems=new HashSet<>();
+        this.comments=new HashSet<>();
     }
     
     public Long getId() {
@@ -103,7 +103,6 @@ public class User {
     public void setPhone(String phone) {
         this.phone = phone;
     }
-
     public Location getLocation() {
         return location;
     }
@@ -146,8 +145,8 @@ public class User {
 
     @Override
     public String toString() {
-        return "User [comments=" + comments + ", email=" + email + ", favoriteItems=" + favoriteItems + ", id=" + id
+        return "User [email=" + email + ", #favoriteItems=" + favoriteItems.size() + ", id=" + id
                 + ", location=" + location + ", name=" + name + ", password=" + password + ", phone=" + phone
-                + ", publishedItems=" + publishedItems + ", soldItems=" + soldItems + "]";
+                + ", #publishedItems=" + publishedItems.size() + ", #soldItems=" + soldItems.size() + "]";
     }
 }

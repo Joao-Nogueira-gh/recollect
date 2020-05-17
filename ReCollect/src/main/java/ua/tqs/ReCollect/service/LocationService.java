@@ -23,4 +23,7 @@ public class LocationService {
     public void deleteAll(){
         locationRepo.deleteAll();
     }
+    public Location getLocation(String district, String county){
+        return locationRepo.findByDistrictAndCounty(district, county);
+    }
 }
