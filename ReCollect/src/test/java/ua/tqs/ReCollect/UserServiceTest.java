@@ -1,6 +1,7 @@
 package ua.tqs.ReCollect;
 
 import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.BDDMockito.given;
 
@@ -67,6 +68,34 @@ public class UserServiceTest {
         assertThrows(EmailAlreadyInUseException.class, () -> {
             sutRCService.register(user);
         });
+
+    }
+    public void loginExistingUser(){
+        String email="exist@gmail.com";
+        String pass="exist";
+
+        User user = new User("User123", email, pass, "123123123", new Location("Aveiro", "Aveiro"));
+
+        sutRCService.register(user);
+
+        given(rcRepository.findByEmail(email)).willReturn(user);
+
+        assertTrue(sutRCService.checkUserPassword(user,pass));
+
+        assertTrue(sutRCService.login(email,pass));
+
+    }
+    public void loginNonExistingUser(){
+        String email="some@gmail.com";
+        String pass="sdf";
+
+        User user = new User("User123", "sfa@gmail.com", "safdgf", "123123123", new Location("Aveiro", "Aveiro"));
+
+        sutRCService.register(user);
+
+        given(rcRepository.findByEmail(email)).willReturn(null);
+
+        assertFalse(sutRCService.login(email,pass));
 
     }
 
