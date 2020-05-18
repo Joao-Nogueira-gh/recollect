@@ -6,18 +6,27 @@ import java.util.ListIterator;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import ua.tqs.ReCollect.model.User;
+import ua.tqs.ReCollect.repository.RoleRepository;
 import ua.tqs.ReCollect.repository.UserRepository;
 
 @Service
 public class UserService {
 
-    private User currentUser;
+    @Autowired
+    private RoleRepository roleRepo;
 
     @Autowired
     private UserRepository userRepo;
+
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+
+
+    private User currentUser;
 
     static final Logger logger = Logger.getLogger(UserService.class);
 
@@ -37,9 +46,10 @@ public class UserService {
 
         if (this.emailInUse(user.getEmail())) {
             logger.debug("E-mail is already in use");
-            System.out.println("AAAAAAAAAAAAAAAA");
             return false;
         }
+
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 
         this.save(user);
         return true;
@@ -61,7 +71,9 @@ public class UserService {
         }
         return ul;
     }
-    public User getByEmail(String email){
+
+    public User getByEmail(String email) {
+
         return userRepo.findByEmail(email);
 
     }
@@ -80,9 +92,11 @@ public class UserService {
 	public boolean checkUserPassword(User user, String pass) {
 		return user.getPassword().equals(pass) ? true : false;
     }
+
     public void logout(){
         currentUser=null;
     }
+
     public User getCurrentUser(){
         return currentUser;
     }
