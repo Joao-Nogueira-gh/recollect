@@ -1,6 +1,6 @@
 package ua.tqs.ReCollect;
 
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.BDDMockito.given;
 
@@ -16,7 +16,6 @@ import ua.tqs.ReCollect.model.Location;
 import ua.tqs.ReCollect.model.User;
 import ua.tqs.ReCollect.repository.UserRepository;
 import ua.tqs.ReCollect.service.UserService;
-import ua.tqs.ReCollect.exceptions.EmailAlreadyInUseException;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -63,10 +62,7 @@ public class UserServiceTest {
 
         given(rcRepository.findByEmail("user@email.com")).willReturn(user);
         
-
-        assertThrows(EmailAlreadyInUseException.class, () -> {
-            sutRCService.register(user);
-        });
+        assertFalse(sutRCService.register(user));
 
     }
 
