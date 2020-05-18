@@ -43,10 +43,6 @@ public class WebController {
         this.userService = userService;
         this.registeredUser = null;
         this.allUsers = userService.getAllUsers();
-        // TODO: hardoced user para não estar sempre a registar
-        //this.registeredUser = new User("Alex","teste","alex@email.pt", new Localizacao("Leiria", "Ansiao"));
-        // TODO: só para testar, para não estar sempre a fazer login
-       // loggedUser = registeredUser;
         this.resetLoggedUser();
     }
 
@@ -111,7 +107,16 @@ public class WebController {
         System.err.println("providedEmail -> " + providedEmail);
         System.err.println("providedPassword -> " + providedPassword);
 
+
         User userFromDB = userService.getUserByEmail(providedEmail);
+
+        // TODO: só para testes
+        //--------------------------
+        userFromDB = userService.getUserByEmail("alex@email.pt");
+        providedEmail = "alex@email.pt";
+        providedPassword = "pass";
+        //--------------------------
+
         System.err.println("userfromDB -> " + userFromDB);
 
         if(userFromDB!=null){
@@ -184,15 +189,15 @@ public class WebController {
     }
 
     @GetMapping(value = "/profile/delete/{id}")
-    public String postItem(Model model, @PathVariable(name = "id") Long id, RedirectAttributes ra) {
+    public String deleteItem(Model model, @PathVariable(name = "id") Long id) {
 
         // TODO: verificar se o loggedUser está logged in
 
-
-
         System.err.println("ID para delete: " + id);
 
-        this.loggedUser.removeItemPublicado(id);
+        Item deleted = itemService.getItemById(id);
+
+        this.loggedUser.removeItemPublicado(deleted);
         System.err.println("1. loggedUser: " + this.loggedUser);
         userService.updateUser(this.loggedUser);
         System.err.println("2.-----");
@@ -209,6 +214,71 @@ public class WebController {
 
         return "redirect:/profile";
     }
+
+    @GetMapping(value = "/profile/marksold/{id}")
+    public String markAsSoldItem(Model model, @PathVariable(name = "id") Long id) {
+
+        // TODO: verificar se o loggedUser está logged in
+
+        System.err.println("ID para sold: " + id);
+
+        /*
+        * - tirar dos publicados
+        * - meter nos vendidos
+        * - owner do item a null
+        * - seller do item ele próprio
+        * */
+
+        Item sold = itemService.getItemById(id);
+        this.loggedUser.removeItemPublicado(sold);
+        sold.setOwner(null);
+        sold.setSeller(this.loggedUser.getId());
+        this.loggedUser.addSoldItem(sold);
+        System.err.println("1. loggedUser: " + this.loggedUser);
+        userService.updateUser(this.loggedUser);
+
+        System.err.println("2.-----");
+        itemService.updateItem(sold);
+        System.err.println("3.-----");
+
+        Set<Item> allItems = this.loggedUser.getItensPublicados();
+
+        System.err.println("-------- Atributos atualizados --------");
+        model.addAttribute("userItems", allItems);
+        model.addAttribute("loggedUser", this.loggedUser);
+        System.err.println("userItems: " + model.getAttribute("userItems"));
+        System.err.println("user: " + model.getAttribute("loggedUser"));
+
+        return "redirect:/profile";
+    }
+
+    @GetMapping(value = "/profile/deleteSold/{id}")
+    public String deleteSoldItem(Model model, @PathVariable(name = "id") Long id) {
+
+        // TODO: verificar se o loggedUser está logged in
+
+        System.err.println("ID para delete: " + id);
+
+        Item deleted = itemService.getItemById(id);
+
+        this.loggedUser.removeSoldItem(deleted);
+        System.err.println("1. loggedUser: " + this.loggedUser);
+        userService.updateUser(this.loggedUser);
+        System.err.println("2.-----");
+        itemService.deleteItem(id);
+        System.err.println("3.-----");
+
+        Set<Item> allItems = this.loggedUser.getItensVendidos();
+
+        System.err.println("-------- Atributos atualizados --------");
+        model.addAttribute("userSoldItems", allItems);
+        model.addAttribute("loggedUser", this.loggedUser);
+        System.err.println("userItems: " + model.getAttribute("userItems"));
+        System.err.println("user: " + model.getAttribute("loggedUser"));
+
+        return "redirect:/sold-items";
+    }
+
 
     @GetMapping(value = "/about")
     public String aboutUs() {
@@ -244,6 +314,7 @@ public class WebController {
         for(Image im : imagesList.getImages()){
             newItem.addImage(im.getUrl());
         }
+        newItem.setOwner(this.loggedUser.getId());
         System.err.println("2!");
         //System.err.println("newItem recebido: "+ newItem.toString());
         //System.err.println("imagesList: " + imagesList.toString());
@@ -268,7 +339,12 @@ public class WebController {
     }
 
     @GetMapping(value = "/sold-items")
-    public String soldItems() {
+    public String soldItems(Model model) {
+        Set<Item> allItems = this.loggedUser.getItensVendidos();
+
+        model.addAttribute("userSoldItems", allItems);
+        model.addAttribute("loggedUser", this.loggedUser);
+
         return "dashboard-sold-items";
     }
 

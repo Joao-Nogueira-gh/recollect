@@ -18,6 +18,10 @@ public class Item {
     private String descricao;
     private String categoria;
 
+    private Long owner;
+
+    private Long seller;
+
     // usei Set porque nao podem ser repetidos e por que com List<> não
     // dá para usar FetchType.EAGER em mais do que uma
     @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
@@ -32,6 +36,7 @@ public class Item {
     public Item() {
         this.imagens = new ArrayList<>();
         this.commentsList = new HashSet<>();
+        this.seller = null;
     }
 
 
@@ -138,6 +143,21 @@ public class Item {
         this.commentsList.add(comment);
     }
 
+    public Long getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Long owner) {
+        this.owner = owner;
+    }
+
+    public Long getSeller() {
+        return seller;
+    }
+
+    public void setSeller(Long seller) {
+        this.seller = seller;
+    }
 
     @Override
     public String toString() {
@@ -148,6 +168,8 @@ public class Item {
                 ", quantidade=" + quantidade +
                 ", descricao='" + descricao + '\'' +
                 ", categoria='" + categoria + '\'' +
+                ", owner=" + owner +
+                ", seller=" + seller +
                 ", commentsList=" + commentsList +
                 ", imagens=" + imagens +
                 '}';
@@ -158,14 +180,7 @@ public class Item {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Item item = (Item) o;
-        return Double.compare(item.preco, preco) == 0 &&
-                quantidade == item.quantidade &&
-                Objects.equals(id, item.id) &&
-                Objects.equals(nome, item.nome) &&
-                Objects.equals(descricao, item.descricao) &&
-                Objects.equals(categoria, item.categoria) &&
-                Objects.equals(commentsList, item.commentsList) &&
-                Objects.equals(imagens, item.imagens);
+        return Objects.equals(id, item.id);
     }
 
     @Override

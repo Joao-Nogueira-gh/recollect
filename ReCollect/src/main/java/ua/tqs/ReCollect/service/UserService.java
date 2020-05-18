@@ -50,12 +50,18 @@ public class UserService {
     public void updateUser(User u){
         System.err.println("update1 | user: " + u.toString());
         Set<Item> itensPub = u.getItensPublicados();
+        Set<Item> itensSold = u.getItensVendidos();
+        Set<Item> itensFav = u.getItensFavoritos();
         System.err.println("update2 | itensPub: " + itensPub);
         u.setItensPublicados(new HashSet<>());
+        u.setItensVendidos(new HashSet<>());
+        u.setItensFavoritos(new HashSet<>());
         System.err.println("update3 | user: " + u.toString());
         userRepository.saveAndFlush(u);
         System.err.println("update4");
         u.setItensPublicados(itensPub);
+        u.setItensVendidos(itensSold);
+        u.setItensFavoritos(itensFav);
         System.err.println("update5 | user: " + u.toString());
         userRepository.saveAndFlush(u);
     }

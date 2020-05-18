@@ -19,13 +19,13 @@ public class User {
 
     // usei Set porque nao podem ser repetidos e por que com List<> não
     // dá para usar FetchType.EAGER em mais do que uma
-    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+    @OneToMany(fetch = FetchType.EAGER)
     private Set<Item> itensVendidos;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+    @OneToMany(fetch = FetchType.EAGER)
     private Set<Item> itensFavoritos;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+    @OneToMany(fetch = FetchType.EAGER)
     private Set<Item> itensPublicados;
 
     public User() {
@@ -121,7 +121,8 @@ public class User {
         this.itensPublicados.add(item);
     }
 
-    public void removeItemPublicado(Long id){
+    public void removeItemPublicado(Item item){
+        Long id = item.getId();
         Item temp = null;
         for (Item i : itensPublicados){
             if(i.getId().equals(id)){
@@ -137,6 +138,21 @@ public class User {
 
     public void addSoldItem(Item item){
         this.itensVendidos.add(item);
+    }
+
+    public void removeSoldItem(Item item){
+        Long id = item.getId();
+        Item temp = null;
+        for (Item i : itensVendidos){
+            if(i.getId().equals(id)){
+                temp = i;
+                break;
+            }
+        }
+
+        if(temp!=null){
+            itensVendidos.remove(temp);
+        }
     }
 
     public void addFavouriteItem(Item item){

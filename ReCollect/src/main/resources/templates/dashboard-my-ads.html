@@ -15,8 +15,9 @@
   <!-- Bootstrap -->
   <link rel="stylesheet" href="plugins/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="plugins/bootstrap/css/bootstrap-slider.css">
-  <!-- Font Awesome -->
-  <link href="plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+	<!-- Font Awesome -->
+	<link href="plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+	<script src="https://kit.fontawesome.com/f379375b47.js" crossorigin="anonymous"></script>
   <!-- Owl Carousel -->
   <link href="plugins/slick-carousel/slick/slick.css" rel="stylesheet">
   <link href="plugins/slick-carousel/slick/slick-theme.css" rel="stylesheet">
@@ -58,16 +59,16 @@
 							<img src="images/user/user-thumb.jpg" alt="" class="rounded-circle">
 						</div>
 						<!-- User Name -->
-						<h5 class="text-center">Samanta Doe</h5>
+						<h5 class="text-center" th:text="${loggedUser.name}">--> nome <--</h5>
 						<p>Joined February 06, 2017</p>
 						<a href="/edit-profile" class="btn btn-main-sm">Edit Profile</a>
 					</div>
 					<!-- Dashboard Links -->
 					<div class="widget user-dashboard-menu">
 						<ul>
-							<li class="active"><a href="/profile"><i class="fa fa-user"></i> My Ads</a></li>
-							<li><a href="/favourites"><i class="fa fa-bookmark-o"></i> Favourite Ads <span>5</span></a></li>
-							<li><a href="/sold-items"><i class="fa fa-file-archive-o"></i>Sold Items <span>12</span></a></li>
+							<li class="active"><a href="/profile"><i class="fa fa-user"></i> My Ads <span th:text="${loggedUser.itensPublicados.size()}">...</span></a></li>
+							<li><a href="/favourites"><i class="fa fa-bookmark-o"></i> Favourite Ads <span th:text="${loggedUser.itensFavoritos.size()}">...</span></a></li>
+							<li><a href="/sold-items"><i class="fa fa-file-archive-o"></i>Sold Items <span th:text="${loggedUser.itensVendidos.size()}">...</span></a></li>
 							<li><a href="/logout"><i class="fa fa-cog"></i> Logout</a></li>
 							<li><a href="" data-toggle="modal" data-target="#deleteaccount"><i class="fa fa-power-off"></i>Delete Account</a></li>
 						</ul>
@@ -140,7 +141,12 @@
 														<i class="fa fa-pencil"></i>
 													</a>
 												</li>
-												<li class="list-inline-item" th:method="post">
+												<li class="list-inline-item">
+													<a th:href="${'/profile/marksold/' + item.id}" data-toggle="tooltip" data-placement="top" title="Mark as sold" class="sold">
+														<i class="fas fa-dollar-sign"></i>
+													</a>
+												</li>
+												<li class="list-inline-item">
 													<a th:href="${'/profile/delete/' + item.id}" data-toggle="tooltip" data-placement="top" title="Delete" class="delete">
 														<i class="fa fa-trash"></i>
 													</a>
