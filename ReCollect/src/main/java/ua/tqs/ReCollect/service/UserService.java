@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ua.tqs.ReCollect.exceptions.EmailAlreadyInUseException;
 import ua.tqs.ReCollect.model.User;
 import ua.tqs.ReCollect.repository.UserRepository;
 
@@ -16,6 +16,8 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepo;
+
+    static final Logger logger = Logger.getLogger(UserService.class);
 
     public List<User> getAll() {
         return userRepo.findAll();
@@ -29,11 +31,14 @@ public class UserService {
         userRepo.deleteAll();
     }
 
-    public boolean register(User user) throws EmailAlreadyInUseException {
+    public boolean register(User user) {
 
         if (this.emailInUse(user.getEmail())) {
-            throw new EmailAlreadyInUseException();
+            logger.debug("E-mail is already in use");
+            System.out.println("AAAAAAAAAAAAAAAA");
+            return false;
         }
+
         this.save(user);
         return true;
 
@@ -41,6 +46,7 @@ public class UserService {
 
     // Returns if the e-mail is already in use
     public boolean emailInUse(String email) {
+        System.out.println(this.userRepo.findByEmail(email));
         return this.userRepo.findByEmail(email) != null;
     }
 
