@@ -4,9 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -42,10 +39,11 @@ public class StepDefinitionsRegisterTest {
     @Autowired
     LocationRepository localRepo;
 
+    @Autowired
     UserService userService;
     
+    @Autowired
     LocationService locationService;
-
 
     @When("A user submits credentials that don't exist in the DB")
     @Test
@@ -58,7 +56,7 @@ public class StepDefinitionsRegisterTest {
         User newUser = new User("user", "new_user@gmail.com", "coiso", "3467764", localRepo.findByDistrictAndCounty("Aveiro", "Aveiro"));
 
         // Make sure the credentials submitted don't exist in the BD
-        assertEquals(null, userRepo.findByEmail("new_user@gmail.com"), "Error: email in use");
+        assertEquals(null, userService.getByEmail("new_user@gmail.com"), "Error: email in use");
 
         // Post the credentials to the API
         ResponseEntity<Boolean> entity = restClient.postForEntity("/users/register", newUser, Boolean.class);
@@ -70,9 +68,17 @@ public class StepDefinitionsRegisterTest {
     }
     
     @Then("A new user should be created with the inserted credentials")
+    @Test
     public void a_new_user_should_be_created_with_the_inserted_credentials() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
+      
+        User newUser = new User("user", "new_user@gmail.com", "coiso", "3467764", localRepo.findByDistrictAndCounty("Aveiro", "Aveiro"));
+
+        // Simple validation check
+        assertEquals(newUser.getName(), userService.getByEmail("new_user@gmail.com").getName(), "Users don't match");
+
+        // Clean up
+        userRepo.deleteAll();
+
     }
     
 }
