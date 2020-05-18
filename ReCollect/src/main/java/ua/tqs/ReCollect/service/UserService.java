@@ -14,6 +14,8 @@ import ua.tqs.ReCollect.repository.UserRepository;
 @Service
 public class UserService {
 
+    private User currentUser;
+
     @Autowired
     private UserRepository userRepo;
 
@@ -56,6 +58,27 @@ public class UserService {
     public User getByEmail(String email){
         return userRepo.findByEmail(email);
 
+    }
+
+	public boolean login(String email, String pass) {
+        if (userRepo.findByEmail(email) != null){
+            User u = userRepo.findByEmail(email);
+            if (checkUserPassword(u, pass)){
+                currentUser=u;
+                return true;
+            }
+        }
+		return false;
+	}
+
+	public boolean checkUserPassword(User user, String pass) {
+		return user.getPassword().equals(pass) ? true : false;
+    }
+    public void logout(){
+        currentUser=null;
+    }
+    public User getCurrentUser(){
+        return currentUser;
     }
 
 }

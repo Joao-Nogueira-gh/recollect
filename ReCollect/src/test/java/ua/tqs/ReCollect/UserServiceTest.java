@@ -70,6 +70,7 @@ public class UserServiceTest {
         });
 
     }
+    @Test
     public void loginExistingUser(){
         String email="exist@gmail.com";
         String pass="exist";
@@ -85,6 +86,7 @@ public class UserServiceTest {
         assertTrue(sutRCService.login(email,pass));
 
     }
+    @Test
     public void loginNonExistingUser(){
         String email="some@gmail.com";
         String pass="sdf";

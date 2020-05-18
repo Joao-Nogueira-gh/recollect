@@ -77,7 +77,7 @@ public class TestController {
 		System.out.println(userService.getAll());
 		
 		model.addAttribute("test", "test");
-
+		System.out.println(userService.getCurrentUser());
 		return "index";
 	}
     

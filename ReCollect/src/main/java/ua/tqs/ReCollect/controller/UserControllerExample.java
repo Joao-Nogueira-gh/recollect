@@ -40,15 +40,35 @@ public class UserControllerExample {
 			System.out.println("nope");
 		}
 
-		model.addAttribute("test", "users");
+		model.addAttribute("test", "userlogin");
 		System.out.println(userService.getAll());
 		return "index";
 	}
 	//example path
 	@GetMapping(path="/users/login")
 	public String login(Model model) throws IOException {
-		//placeholder for next feature :)
+		//setup for test
+		userService.deleteAll();
+		User u=new User("registereduser", "reg@gmail.com", "coiso", "3467764", locationService.getLocation("Aveiro", "Aveiro"));
+		userService.register(u);
+
+		//flow starts here
+		//get email and password input
+		if (userService.login("reg@gmail.com","coiso")){
+			//logged in
+			System.out.println("logged");
+		}
+		else{
+			//wrong email/pass
+			System.out.println("nope");
+		}
+		//this variable in the user service holds the current logged in user (or null)
+		System.out.println(userService.getCurrentUser());
+
+		//also, logout feature
+		userService.logout();
 		return "index";
 	}
+	
     
 }
