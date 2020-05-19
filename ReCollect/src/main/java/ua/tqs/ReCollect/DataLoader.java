@@ -8,6 +8,7 @@ import java.util.Map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -22,6 +23,8 @@ public class DataLoader implements ApplicationRunner {
 
     @Autowired
     private LocationService locationService;
+
+    static final Logger logger = Logger.getLogger(DataLoader.class);
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -41,7 +44,7 @@ public class DataLoader implements ApplicationRunner {
             }
         }
 
-        System.out.println("Finished loading "+locationService.getAll().size()+ " locations");
+        logger.info("Finished loading "+locationService.getAll().size()+ " locations");
 
     }
 }

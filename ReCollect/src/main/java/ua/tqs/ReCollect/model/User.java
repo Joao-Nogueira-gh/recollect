@@ -50,7 +50,7 @@ public class User {
     private Set<Comment> comments;
 
     @ManyToMany(cascade = CascadeType.MERGE)
-    // @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
 
     @Column(name = "active")
@@ -61,6 +61,8 @@ public class User {
         this.publishedItems=new HashSet<>();
         this.soldItems=new HashSet<>();
         this.comments=new HashSet<>();
+        this.roles=new HashSet<>();
+        this.active = false;
     }
 
     public User(String name, @Email String email, String password, String phone, Location location) {
@@ -73,6 +75,7 @@ public class User {
         this.publishedItems=new HashSet<>();
         this.soldItems=new HashSet<>();
         this.comments=new HashSet<>();
+        this.active = false;
     }
     
     public Long getId() {

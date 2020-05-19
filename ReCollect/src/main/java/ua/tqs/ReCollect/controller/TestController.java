@@ -3,6 +3,7 @@ package ua.tqs.ReCollect.controller;
 import java.io.IOException;
 import java.math.BigDecimal;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,6 +34,8 @@ public class TestController {
 
 	@Autowired
 	private CommentService commentService;
+
+	static final Logger logger = Logger.getLogger(TestController.class);
 
 	@GetMapping("")
 	public String index(Model model) throws IOException {

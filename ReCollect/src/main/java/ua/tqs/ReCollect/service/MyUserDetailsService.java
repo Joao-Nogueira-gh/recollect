@@ -18,16 +18,26 @@ import org.springframework.stereotype.Service;
 import ua.tqs.ReCollect.model.Role;
 import ua.tqs.ReCollect.model.User;
 
+import org.apache.log4j.Logger;
+
 @Service
 public class MyUserDetailsService implements UserDetailsService {
 
     @Autowired
     private UserService userService;
 
+    static final Logger logger = Logger.getLogger(MyUserDetailsService.class);
+
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userService.getByEmail(email);
+        
+        if(user == null){
+            logger.warn("Email not found");
+            throw new UsernameNotFoundException("That email isn't in use. Sign up");
+        }
+
         List<GrantedAuthority> authorities = getUserAuthority(user.getRoles());
         return buildUserForAuthentication(user, authorities);
     }
@@ -45,6 +55,6 @@ public class MyUserDetailsService implements UserDetailsService {
 
     private UserDetails buildUserForAuthentication(User user, List<GrantedAuthority> authorities) {
         return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(),
-                user.getActive(), true, true, true, authorities);
+                true, true, true, true, authorities);
     }
 }

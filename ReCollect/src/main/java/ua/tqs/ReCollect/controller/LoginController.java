@@ -32,7 +32,7 @@ public class LoginController {
     public ModelAndView registration(){
         ModelAndView modelAndView = new ModelAndView();
         User user = new User();
-        // modelAndView.addObject("user", user);
+        modelAndView.addObject("user", user);
         modelAndView.setViewName("registration");
         return modelAndView;
     }
@@ -58,7 +58,7 @@ public class LoginController {
         return modelAndView;
     }
 
-    @RequestMapping(value="/admin/home", method = RequestMethod.GET)
+    @RequestMapping(value="/home", method = RequestMethod.GET)
     public ModelAndView home(){
         ModelAndView modelAndView = new ModelAndView();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
