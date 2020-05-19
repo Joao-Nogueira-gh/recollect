@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: ua.tqs.ReCollect.ReCollectApplicationTests
--------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 19.652 s - in ua.tqs.ReCollect.ReCollectApplicationTests

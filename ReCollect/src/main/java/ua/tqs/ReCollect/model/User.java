@@ -75,6 +75,7 @@ public class User {
         this.publishedItems=new HashSet<>();
         this.soldItems=new HashSet<>();
         this.comments=new HashSet<>();
+        this.roles=new HashSet<>();
         this.active = false;
     }
     
