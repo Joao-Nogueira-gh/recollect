@@ -9,7 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import ua.tqs.ReCollect.model.Item;
+import ua.tqs.ReCollect.model.ItemDTO;
 import ua.tqs.ReCollect.model.User;
+import ua.tqs.ReCollect.model.UserDTO;
 import ua.tqs.ReCollect.repository.UserRepository;
 
 @Service
@@ -97,6 +100,25 @@ public class UserService {
 
     public User getCurrentUser(){
         return currentUser;
+    }
+
+    public UserDTO convertUser(User user){
+        UserDTO dto=new UserDTO(user.getName(), user.getEmail(), user.getPhone(), user.getPassword());
+        
+        if (user.getLocation()!=null){
+            dto.setLocation(user.getLocation().getCounty()+"-"+user.getLocation().getDistrict());
+        }
+        for (Item i : user.getFavoriteItems()) {
+            dto.addFavoriteItems(i.getName()+";"+String.valueOf(i.getQuantity())+";"+String.valueOf(i.getPrice())+";"+i.getDescription()+";"+String.valueOf(i.getCategory()));
+        }
+        for (Item i : user.getSoldItems()) {
+            dto.addSoldItems(i.getName()+";"+String.valueOf(i.getQuantity())+";"+String.valueOf(i.getPrice())+";"+i.getDescription()+";"+String.valueOf(i.getCategory()));
+        }
+        for (Item i : user.getPublishedItems()) {
+            dto.addPublishedItems(i.getName()+";"+String.valueOf(i.getQuantity())+";"+String.valueOf(i.getPrice())+";"+i.getDescription()+";"+String.valueOf(i.getCategory()));
+        }
+
+        return dto;
     }
 
 }

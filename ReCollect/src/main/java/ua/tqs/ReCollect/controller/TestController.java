@@ -83,5 +83,10 @@ public class TestController {
 		System.out.println(userService.getCurrentUser());
 		return "index";
 	}
-    
+    @GetMapping("/testUsers")
+	public String index3(Model model) throws IOException {
+
+		System.out.println(userService.getAll());
+		return "index";
+	}
 }
