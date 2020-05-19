@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Location.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ReCollect</a> &gt; <a href="index.source.html" class="el_package">ua.tqs.ReCollect.model</a> &gt; <span class="el_source">Location.java</span></div><h1>Location.java</h1><pre class="source lang-java linenums">package ua.tqs.ReCollect.model;
+
+import java.util.Set;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = &quot;location&quot;,uniqueConstraints={
+    @UniqueConstraint(columnNames = {&quot;county&quot;, &quot;district&quot;})
+}) 
+public class Location {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name=&quot;id&quot;)
+    private Long id;
+
+    @Column(name=&quot;county&quot;)
+    private String county;
+
+    @Column(name=&quot;district&quot;)
+    private String district;
+    
+    @OneToMany(mappedBy = &quot;location&quot;)
+    private Set&lt;User&gt; usersloc;
+
+    @PreRemove
+    private void preRemove() {
+<span class="nc bnc" id="L29" title="All 2 branches missed.">        for (User u : usersloc) {</span>
+<span class="nc" id="L30">            u.setLocation(null);</span>
+<span class="nc" id="L31">        }</span>
+<span class="nc" id="L32">    }</span>
+    
+<span class="nc" id="L34">    public Location(){</span>
+<span class="nc" id="L35">    }</span>
+
+<span class="nc" id="L37">    public Location(String county, String district) {</span>
+<span class="nc" id="L38">        this.county = county;</span>
+<span class="nc" id="L39">        this.district = district;</span>
+<span class="nc" id="L40">    }</span>
+
+    public Long getId() {
+<span class="nc" id="L43">        return id;</span>
+    }
+
+    public String getCounty() {
+<span class="nc" id="L47">        return county;</span>
+    }
+
+    public void setCounty(String county) {
+<span class="nc" id="L51">        this.county = county;</span>
+<span class="nc" id="L52">    }</span>
+
+    public String getDistrict() {
+<span class="nc" id="L55">        return district;</span>
+    }
+
+    public void setDistrict(String district) {
+<span class="nc" id="L59">        this.district = district;</span>
+<span class="nc" id="L60">    }</span>
+
+    @Override
+    public String toString() {
+<span class="nc" id="L64">        return &quot;Location [county=&quot; + county + &quot;, district=&quot; + district + &quot;, id=&quot; + id  + &quot;]&quot;;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>
