@@ -1,6 +1,6 @@
 HELP.md
-target/
-!target/site/
+target/*
+!target/site
 !target/jacoco.exec
 
 !.mvn/wrapper/maven-wrapper.jar

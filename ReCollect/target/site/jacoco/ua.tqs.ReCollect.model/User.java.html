@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>User.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ReCollect</a> &gt; <a href="index.source.html" class="el_package">ua.tqs.ReCollect.model</a> &gt; <span class="el_source">User.java</span></div><h1>User.java</h1><pre class="source lang-java linenums">package ua.tqs.ReCollect.model;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.*;
+import javax.validation.constraints.Email;
+
+@Entity
+@Table(name = &quot;user&quot;)
+public class User {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = &quot;id&quot;)
+    private Long id;
+
+    @Column(name = &quot;name&quot;)
+    private String name;
+
+    @Email
+    //unique
+    @Column(unique = true, name = &quot;email&quot;)
+    private String email;
+
+    @Column(name = &quot;password&quot;)
+    private String password;
+
+    @Column(name = &quot;phone&quot;)
+    private String phone;
+
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name=&quot;locationid&quot;, referencedColumnName = &quot;id&quot;)
+    private Location location;
+
+    @ManyToMany
+    @JoinTable(
+    name = &quot;fav_items&quot;, 
+    joinColumns = @JoinColumn(name = &quot;user_id&quot;, referencedColumnName = &quot;id&quot;), 
+    inverseJoinColumns = @JoinColumn(name = &quot;item_id&quot;, referencedColumnName = &quot;id&quot;))
+    private Set&lt;Item&gt; favoriteItems;
+
+    @OneToMany(mappedBy = &quot;owner&quot;, cascade = CascadeType.ALL)
+    private Set&lt;Item&gt; publishedItems;
+
+    @OneToMany(mappedBy = &quot;seller&quot;, cascade = CascadeType.ALL)
+    private Set&lt;Item&gt; soldItems;
+
+    @OneToMany(mappedBy=&quot;user&quot;, cascade = CascadeType.ALL)
+    private Set&lt;Comment&gt; comments;
+
+    @ManyToMany(cascade = CascadeType.MERGE)
+    @JoinTable(name = &quot;user_role&quot;, joinColumns = @JoinColumn(name = &quot;user_id&quot;), inverseJoinColumns = @JoinColumn(name = &quot;role_id&quot;))
+    private Set&lt;Role&gt; roles;
+
+    @Column(name = &quot;active&quot;)
+    private Boolean active;
+    
+<span class="nc" id="L59">    public User(){</span>
+<span class="nc" id="L60">        this.favoriteItems=new HashSet&lt;&gt;();</span>
+<span class="nc" id="L61">        this.publishedItems=new HashSet&lt;&gt;();</span>
+<span class="nc" id="L62">        this.soldItems=new HashSet&lt;&gt;();</span>
+<span class="nc" id="L63">        this.comments=new HashSet&lt;&gt;();</span>
+<span class="nc" id="L64">        this.roles=new HashSet&lt;&gt;();</span>
+<span class="nc" id="L65">        this.active = false;</span>
+<span class="nc" id="L66">    }</span>
+
+<span class="nc" id="L68">    public User(String name, @Email String email, String password, String phone, Location location) {</span>
+<span class="nc" id="L69">        this.name = name;</span>
+<span class="nc" id="L70">        this.email = email;</span>
+<span class="nc" id="L71">        this.password = password;</span>
+<span class="nc" id="L72">        this.phone = phone;</span>
+<span class="nc" id="L73">        this.location = location;</span>
+<span class="nc" id="L74">        this.favoriteItems=new HashSet&lt;&gt;();</span>
+<span class="nc" id="L75">        this.publishedItems=new HashSet&lt;&gt;();</span>
+<span class="nc" id="L76">        this.soldItems=new HashSet&lt;&gt;();</span>
+<span class="nc" id="L77">        this.comments=new HashSet&lt;&gt;();</span>
+<span class="nc" id="L78">        this.active = false;</span>
+<span class="nc" id="L79">    }</span>
+    
+    public Long getId() {
+<span class="nc" id="L82">        return id;</span>
+    }
+
+    public String getName() {
+<span class="nc" id="L86">        return name;</span>
+    }
+
+    public void setName(String name) {
+<span class="nc" id="L90">        this.name = name;</span>
+<span class="nc" id="L91">    }</span>
+
+    public String getEmail() {
+<span class="nc" id="L94">        return email;</span>
+    }
+
+    public void setEmail(String email) {
+<span class="nc" id="L98">        this.email = email;</span>
+<span class="nc" id="L99">    }</span>
+
+    public String getPassword() {
+<span class="nc" id="L102">        return password;</span>
+    }
+
+    public void setPassword(String password) {
+<span class="nc" id="L106">        this.password = password;</span>
+<span class="nc" id="L107">    }</span>
+
+    public String getPhone() {
+<span class="nc" id="L110">        return phone;</span>
+    }
+
+    public void setPhone(String phone) {
+<span class="nc" id="L114">        this.phone = phone;</span>
+<span class="nc" id="L115">    }</span>
+    public Location getLocation() {
+<span class="nc" id="L117">        return location;</span>
+    }
+
+    public void setLocation(Location location) {
+<span class="nc" id="L121">        this.location = location;</span>
+<span class="nc" id="L122">    }</span>
+
+    public Set&lt;Item&gt; getFavoriteItems() {
+<span class="nc" id="L125">        return favoriteItems;</span>
+    }
+
+    public void setFavoriteItems(Set&lt;Item&gt; favoriteItems) {
+<span class="nc" id="L129">        this.favoriteItems = favoriteItems;</span>
+<span class="nc" id="L130">    }</span>
+
+    public Set&lt;Item&gt; getPublishedItems() {
+<span class="nc" id="L133">        return publishedItems;</span>
+    }
+
+    public void setPublishedItems(Set&lt;Item&gt; publishedItems) {
+<span class="nc" id="L137">        this.publishedItems = publishedItems;</span>
+<span class="nc" id="L138">    }</span>
+
+    public Set&lt;Item&gt; getSoldItems() {
+<span class="nc" id="L141">        return soldItems;</span>
+    }
+
+    public void setSoldItems(Set&lt;Item&gt; soldItems) {
+<span class="nc" id="L145">        this.soldItems = soldItems;</span>
+<span class="nc" id="L146">    }</span>
+
+    public Set&lt;Comment&gt; getComment() {
+<span class="nc" id="L149">        return comments;</span>
+    }
+
+    public void addComment(Comment comment) {
+<span class="nc" id="L153">        this.comments.add(comment);</span>
+<span class="nc" id="L154">    }</span>
+
+    public Set&lt;Role&gt; getRoles() {
+<span class="nc" id="L157">        return roles;</span>
+    }
+
+    public void setRole(Set&lt;Role&gt; roles) {
+<span class="nc" id="L161">        this.roles = roles;</span>
+<span class="nc" id="L162">    }</span>
+
+    @Override
+    public String toString() {
+<span class="nc" id="L166">        return &quot;User [email=&quot; + email + &quot;, #favoriteItems=&quot; + favoriteItems.size() + &quot;, id=&quot; + id</span>
+                + &quot;, location=&quot; + location + &quot;, name=&quot; + name + &quot;, password=&quot; + password + &quot;, phone=&quot; + phone
+<span class="nc" id="L168">                + &quot;, #publishedItems=&quot; + publishedItems.size() + &quot;, #soldItems=&quot; + soldItems.size() + &quot;]&quot;;</span>
+    }
+
+    public Boolean getActive() {
+<span class="nc" id="L172">        return active;</span>
+    }
+
+    public void setActive(Boolean active) {
+<span class="nc" id="L176">        this.active = active;</span>
+<span class="nc" id="L177">    }</span>
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>WebSecurityConfiguration.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ReCollect</a> &gt; <a href="index.source.html" class="el_package">ua.tqs.ReCollect</a> &gt; <span class="el_source">WebSecurityConfiguration.java</span></div><h1>WebSecurityConfiguration.java</h1><pre class="source lang-java linenums">package ua.tqs.ReCollect;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import ua.tqs.ReCollect.service.MyUserDetailsService;
+
+@Configuration
+@EnableWebSecurity
+<span class="nc" id="L17">public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {</span>
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Autowired
+    private MyUserDetailsService userDetailsService;
+
+
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+<span class="nc" id="L29">                auth</span>
+<span class="nc" id="L30">                    .userDetailsService(userDetailsService)</span>
+<span class="nc" id="L31">                    .passwordEncoder(bCryptPasswordEncoder);</span>
+<span class="nc" id="L32">    }</span>
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+
+<span class="nc" id="L37">        http.</span>
+<span class="nc" id="L38">                authorizeRequests()</span>
+<span class="nc" id="L39">                .antMatchers(&quot;/&quot;).permitAll()</span>
+<span class="nc" id="L40">                .antMatchers(&quot;/login&quot;).permitAll()</span>
+<span class="nc" id="L41">                .antMatchers(&quot;/registration&quot;).permitAll()</span>
+<span class="nc" id="L42">                .antMatchers(&quot;/admin/**&quot;).hasAuthority(&quot;ADMIN&quot;).anyRequest()</span>
+<span class="nc" id="L43">                .authenticated().and().csrf().disable().formLogin()</span>
+<span class="nc" id="L44">                .loginPage(&quot;/login&quot;).failureUrl(&quot;/login?error=true&quot;)</span>
+<span class="nc" id="L45">                .defaultSuccessUrl(&quot;/home&quot;)</span>
+<span class="nc" id="L46">                .usernameParameter(&quot;user_name&quot;)</span>
+<span class="nc" id="L47">                .passwordParameter(&quot;password&quot;)</span>
+<span class="nc" id="L48">                .and().logout()</span>
+<span class="nc" id="L49">                .logoutRequestMatcher(new AntPathRequestMatcher(&quot;/logout&quot;))</span>
+<span class="nc" id="L50">                .logoutSuccessUrl(&quot;/login&quot;).and().exceptionHandling()</span>
+<span class="nc" id="L51">                .accessDeniedPage(&quot;/access-denied&quot;);</span>
+<span class="nc" id="L52">    }</span>
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+<span class="nc" id="L56">        web</span>
+<span class="nc" id="L57">                .ignoring()</span>
+<span class="nc" id="L58">                .antMatchers(&quot;/resources/**&quot;, &quot;/static/**&quot;, &quot;/css/**&quot;, &quot;/js/**&quot;, &quot;/images/**&quot;);</span>
+<span class="nc" id="L59">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>
