@@ -3,10 +3,13 @@ package ua.tqs.ReCollect.controller;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -37,15 +40,18 @@ public class LoginController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/registration", method = RequestMethod.POST)
-    public ModelAndView createNewUser(@Valid User user, BindingResult bindingResult) {
+    @PostMapping(value = "/registration")
+    public ModelAndView createNewUser(@Valid @RequestBody User user, BindingResult bindingResult) {
+
         ModelAndView modelAndView = new ModelAndView();
         User userExists = userService.getByEmail(user.getEmail());
+
         if (userExists != null) {
             bindingResult
                     .rejectValue("userName", "error.user",
                             "There is already a user registered with the user name provided");
         }
+
         if (bindingResult.hasErrors()) {
             modelAndView.setViewName("registration");
         } else {
@@ -53,8 +59,8 @@ public class LoginController {
             modelAndView.addObject("successMessage", "User has been registered successfully");
             modelAndView.addObject("user", new User());
             modelAndView.setViewName("registration");
-
         }
+
         return modelAndView;
     }
 

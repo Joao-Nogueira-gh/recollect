@@ -1,14 +1,19 @@
 package ua.tqs.ReCollect;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.BDDMockito.given;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -33,6 +38,9 @@ public class StepDefinitionsRegisterTest {
     @Autowired
     TestRestTemplate restClient;
 
+    @Mock
+    BCryptPasswordEncoder mockBCryptPwdEncoder;
+
     @Autowired
     UserRepository userRepo;
 
@@ -40,6 +48,7 @@ public class StepDefinitionsRegisterTest {
     LocationRepository localRepo;
 
     @Autowired
+    @InjectMocks
     UserService userService;
     
     @Autowired
@@ -52,18 +61,28 @@ public class StepDefinitionsRegisterTest {
         // Clean up the DB
         userRepo.deleteAll();
         
+        // Set up the PwdEncryption mock
+        given(mockBCryptPwdEncoder.encode("coiso")).willReturn("SHA512(coiso)");
+        
         // Instance the user that will be created
         User newUser = new User("user", "new_user@gmail.com", "coiso", "3467764", localRepo.findByDistrictAndCounty("Aveiro", "Aveiro"));
 
         // Make sure the credentials submitted don't exist in the BD
         assertEquals(null, userService.getByEmail("new_user@gmail.com"), "Error: email in use");
 
-        // Post the credentials to the API
-        ResponseEntity<Boolean> entity = restClient.postForEntity("/users/register", newUser, Boolean.class);
+        // Post the credentials to the registration endpoint
+
+        // restClient.
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("X-COM-PERSIST", "true"); 
+
+        HttpEntity<User> request = new HttpEntity<>(newUser, headers);
+
+        ResponseEntity<String> entity = restClient.postForEntity("/registration", request, String.class);
 
         // Assert everything went OK
         assertEquals(HttpStatus.OK, entity.getStatusCode());
-        assertTrue(entity.getBody());
+        // assertTrue(entity.getBody());
 
     }
     

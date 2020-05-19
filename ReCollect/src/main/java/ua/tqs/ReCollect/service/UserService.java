@@ -10,14 +10,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import ua.tqs.ReCollect.model.User;
-import ua.tqs.ReCollect.repository.RoleRepository;
 import ua.tqs.ReCollect.repository.UserRepository;
 
 @Service
 public class UserService {
-
-    @Autowired
-    private RoleRepository roleRepo;
 
     @Autowired
     private UserRepository userRepo;
@@ -25,11 +21,10 @@ public class UserService {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-
-
     private User currentUser;
 
     static final Logger logger = Logger.getLogger(UserService.class);
+
 
     public List<User> getAll() {
         return userRepo.findAll();
@@ -91,7 +86,9 @@ public class UserService {
 	}
 
 	public boolean checkUserPassword(User user, String pass) {
-		return user.getPassword().equals(pass) ? true : false;
+
+        return user.getPassword().equals(bCryptPasswordEncoder.encode(pass));
+        
     }
 
     public void logout(){
