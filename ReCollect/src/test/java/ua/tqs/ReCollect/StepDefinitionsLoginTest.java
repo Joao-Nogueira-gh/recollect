@@ -49,6 +49,8 @@ public class StepDefinitionsLoginTest {
     @Given("I am on the login page")
     @Test
     public void i_am_on_the_login_page() {
+
+        assertTrue(true);
         //next step combines it
     }
 

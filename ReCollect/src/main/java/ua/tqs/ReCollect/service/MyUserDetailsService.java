@@ -12,6 +12,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import ua.tqs.ReCollect.model.Role;
@@ -29,11 +30,12 @@ public class MyUserDetailsService implements UserDetailsService {
 
     @Override
     @Transactional
-    public UserDetails loadUserByUsername(String email) {
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userService.getByEmail(email);
         
         if(user == null){
             logger.warn("Email not found");
+            throw new UsernameNotFoundException("Error: no such email");
         }
 
         List<GrantedAuthority> authorities = getUserAuthority(user.getRoles());

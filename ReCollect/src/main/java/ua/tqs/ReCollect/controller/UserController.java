@@ -26,7 +26,7 @@ public class UserController {
 
     static final Logger logger = Logger.getLogger(UserController.class);
     
-    private final String REGISTRATION_PAGE = "registration";
+    private static final String registration_page = "registration";
 
 
     @GetMapping(value={"/", "/login"})
@@ -42,7 +42,7 @@ public class UserController {
         ModelAndView modelAndView = new ModelAndView();
         User user = new User();
         modelAndView.addObject("user", user);
-        modelAndView.setViewName(REGISTRATION_PAGE);
+        modelAndView.setViewName(registration_page);
         return modelAndView;
     }
 
@@ -64,7 +64,7 @@ public class UserController {
             modelAndView.addObject("user", new User());
         }
 
-        modelAndView.setViewName(REGISTRATION_PAGE);
+        modelAndView.setViewName(registration_page);
 
         return modelAndView;
     }

@@ -36,7 +36,7 @@ public class TestController {
 
 	static final Logger logger = Logger.getLogger(TestController.class);
 
-	private final String INDEX_PAGE = "index";
+	private static final String index_page = "index";
 
 	@GetMapping("")
 	public String index(Model model) {
@@ -60,7 +60,7 @@ public class TestController {
 
 		model.addAttribute("test", "loaded some data");
 
-		return INDEX_PAGE;
+		return index_page;
 	}
 
 	@GetMapping("/test")
@@ -84,13 +84,13 @@ public class TestController {
 		model.addAttribute("test", "test");
 		logger.debug(userService.getCurrentUser());
 
-		return INDEX_PAGE;
+		return index_page;
 	}
 
     @GetMapping("/testUsers")
 	public String index3(Model model) {
 
 		logger.debug(userService.getAll());
-		return INDEX_PAGE;
+		return index_page;
 	}
 }
