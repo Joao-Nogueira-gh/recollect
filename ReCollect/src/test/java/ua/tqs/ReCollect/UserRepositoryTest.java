@@ -14,7 +14,7 @@ import ua.tqs.ReCollect.repository.UserRepository;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
-public class UserRepositoryTest {
+class UserRepositoryTest {
 
     @Autowired
     private UserRepository rcRepo;
@@ -23,7 +23,7 @@ public class UserRepositoryTest {
     private TestEntityManager entityManager;
 
     @Test
-    public void getUserByEmail() {
+    void getUserByEmail() {
         Location l = new Location("Viseu", "SCD");
         entityManager.persistAndFlush(l);
 

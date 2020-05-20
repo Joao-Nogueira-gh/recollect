@@ -27,7 +27,7 @@ import ua.tqs.ReCollect.service.UserService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class StepDefinitionsRegisterTest {
+class StepDefinitionsRegisterTest {
 
     /**
      * 
@@ -59,7 +59,7 @@ public class StepDefinitionsRegisterTest {
 
     @When("A user submits credentials that don't exist in the DB")
     @Test
-    public void a_user_submits_credentials_that_don_t_exist_in_the_DB() throws Exception {
+    void a_user_submits_credentials_that_don_t_exist_in_the_DB() throws Exception {
 
         // Clean up the DB
         // userRepo.deleteAll();
@@ -95,7 +95,7 @@ public class StepDefinitionsRegisterTest {
     
     @Then("A new user should be created with the inserted credentials")
     @Test
-    public void a_new_user_should_be_created_with_the_inserted_credentials() {
+    void a_new_user_should_be_created_with_the_inserted_credentials() {
       
         // User newUser = new User("user", "new_user@gmail.com", "coiso", "3467764", localRepo.findByDistrictAndCounty("Aveiro", "Aveiro"));
 

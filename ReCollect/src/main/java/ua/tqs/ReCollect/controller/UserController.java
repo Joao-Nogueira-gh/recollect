@@ -10,10 +10,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import ua.tqs.ReCollect.model.User;
+import ua.tqs.ReCollect.model.UserDTO;
 import ua.tqs.ReCollect.service.UserService;
 
 // User controller for frontend integration
@@ -26,7 +26,7 @@ public class UserController {
 
     static final Logger logger = Logger.getLogger(UserController.class);
     
-    private static final String registration_page = "registration";
+    private static final String registrationPage = "registration";
 
 
     @GetMapping(value={"/", "/login"})
@@ -42,29 +42,29 @@ public class UserController {
         ModelAndView modelAndView = new ModelAndView();
         User user = new User();
         modelAndView.addObject("user", user);
-        modelAndView.setViewName(registration_page);
+        modelAndView.setViewName(registrationPage);
         return modelAndView;
     }
 
     @PostMapping(value = "/registration")
-    public ModelAndView createNewUser(@Valid User user, BindingResult bindingResult) {
+    public ModelAndView createNewUser(@Valid UserDTO userdto, BindingResult bindingResult) {
 
         ModelAndView modelAndView = new ModelAndView();
-		User userExists = userService.getByEmail(user.getEmail());
 		 
-        if (userExists != null) {
+        if (userService.userExists(userdto.getEmail())) {
             bindingResult
                     .rejectValue("userName", "error.user",
                             "There is already a user registered with the email provided");
         }
 
         if (!bindingResult.hasErrors()) {
+            User user=userService.convertToUser(userdto);
             userService.register(user);
             modelAndView.addObject("successMessage", "User has been registered successfully");
             modelAndView.addObject("user", new User());
         }
 
-        modelAndView.setViewName(registration_page);
+        modelAndView.setViewName(registrationPage);
 
         return modelAndView;
     }

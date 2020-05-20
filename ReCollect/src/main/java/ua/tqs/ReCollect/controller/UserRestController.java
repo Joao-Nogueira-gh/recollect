@@ -1,6 +1,5 @@
 package ua.tqs.ReCollect.controller;
 
-import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +21,7 @@ public class UserRestController {
 	//not working because of nested serializers shit, kinda hard to fix
 
 	@GetMapping(path="/api/users/")
-	public List<User> userIndex(Model model) throws IOException {
-		System.out.println(userService.getAll());
+	public List<User> userIndex(Model model) {
 		return userService.getAll();
 
 	}

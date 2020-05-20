@@ -10,6 +10,5 @@ import ua.tqs.ReCollect.model.Item;
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Long> {
 
-    //public Product findByX();
     public List<Item> findAll();
 }

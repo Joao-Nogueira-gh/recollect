@@ -164,9 +164,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "User [email=" + email + ", #favoriteItems=" + favoriteItems.size() + ", id=" + id
-                + ", location=" + location + ", name=" + name + ", password=" + password + ", phone=" + phone
-                + ", #publishedItems=" + publishedItems.size() + ", #soldItems=" + soldItems.size() + "]";
+        return getName()+"/"+getEmail()+"/"+getPhone();
     }
 
     public Boolean getActive() {
@@ -175,6 +173,13 @@ public class User {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public User(String name, @Email String email, String password, String phone) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.phone = phone;
     }
 
 
