@@ -12,7 +12,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import ua.tqs.ReCollect.model.Role;
@@ -30,12 +29,11 @@ public class MyUserDetailsService implements UserDetailsService {
 
     @Override
     @Transactional
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String email) {
         User user = userService.getByEmail(email);
         
         if(user == null){
             logger.warn("Email not found");
-            throw new UsernameNotFoundException("That email isn't in use. Sign up");
         }
 
         List<GrantedAuthority> authorities = getUserAuthority(user.getRoles());
@@ -44,12 +42,12 @@ public class MyUserDetailsService implements UserDetailsService {
 
     private List<GrantedAuthority> getUserAuthority(Set<Role> userRoles) {
 
-        Set<GrantedAuthority> roles = new HashSet<GrantedAuthority>();
+        Set<GrantedAuthority> roles = new HashSet<>();
         for (Role role : userRoles) {
             roles.add(new SimpleGrantedAuthority(role.getRole()));
         }
-        List<GrantedAuthority> grantedAuthorities = new ArrayList<>(roles);
-        return grantedAuthorities;
+
+        return new ArrayList<>(roles);
 
     }
 

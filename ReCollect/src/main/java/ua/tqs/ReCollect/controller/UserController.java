@@ -24,7 +24,9 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
-	static final Logger logger = Logger.getLogger(UserController.class);
+    static final Logger logger = Logger.getLogger(UserController.class);
+    
+    private final String REGISTRATION_PAGE = "registration";
 
 
     @GetMapping(value={"/", "/login"})
@@ -40,7 +42,7 @@ public class UserController {
         ModelAndView modelAndView = new ModelAndView();
         User user = new User();
         modelAndView.addObject("user", user);
-        modelAndView.setViewName("registration");
+        modelAndView.setViewName(REGISTRATION_PAGE);
         return modelAndView;
     }
 
@@ -56,14 +58,13 @@ public class UserController {
                             "There is already a user registered with the email provided");
         }
 
-        if (bindingResult.hasErrors()) {
-            modelAndView.setViewName("registration");
-        } else {
+        if (!bindingResult.hasErrors()) {
             userService.register(user);
             modelAndView.addObject("successMessage", "User has been registered successfully");
             modelAndView.addObject("user", new User());
-            modelAndView.setViewName("registration");
         }
+
+        modelAndView.setViewName(REGISTRATION_PAGE);
 
         return modelAndView;
     }

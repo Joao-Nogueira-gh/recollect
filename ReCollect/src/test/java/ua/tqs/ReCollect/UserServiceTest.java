@@ -71,7 +71,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void loginExistingUser(){
+    void loginExistingUser(){
         String email="exist@gmail.com";
         String pass="exist";
 
@@ -89,7 +89,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void loginNonExistingUser(){
+    void loginNonExistingUser(){
         String email="some@gmail.com";
         String pass="sdf";
 

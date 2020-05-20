@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -46,6 +47,7 @@ public class StepDefinitionsLoginTest {
     }
 
     @Given("I am on the login page")
+    @Test
     public void i_am_on_the_login_page() {
         //next step combines it
     }
@@ -53,7 +55,6 @@ public class StepDefinitionsLoginTest {
     @When("I fill in the email and password fields with my credentials")
     public void i_fill_in_the_email_and_password_fields_with_my_credentials() {
         String email="exist@gmail.com";
-        String pass="pass";
         //send password?
 
         ResponseEntity<Boolean> entity=restClient.postForEntity("/users/login", email, Boolean.class);
@@ -74,7 +75,6 @@ public class StepDefinitionsLoginTest {
     @When("I fill in the email and password fields with invalid credentials")
     public void i_fill_in_the_email_and_password_fields_with_invalid_credentials() {
         String email="dontexist@gmail.com";
-        String pass="pass";
         //send password?
 
         ResponseEntity<Boolean> entity=restClient.postForEntity("/users/login", email, Boolean.class);

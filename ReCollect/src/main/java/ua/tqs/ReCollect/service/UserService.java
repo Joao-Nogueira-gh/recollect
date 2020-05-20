@@ -108,13 +108,13 @@ public class UserService {
             dto.setLocation(user.getLocation().getCounty()+"-"+user.getLocation().getDistrict());
         }
         for (Item i : user.getFavoriteItems()) {
-            dto.addFavoriteItems(i.getName()+";"+String.valueOf(i.getQuantity())+";"+String.valueOf(i.getPrice())+";"+i.getDescription()+";"+String.valueOf(i.getCategory()));
+            dto.addFavoriteItems(i.getName()+";"+i.getQuantity()+";"+i.getPrice()+";"+i.getDescription()+";"+i.getCategory());
         }
         for (Item i : user.getSoldItems()) {
-            dto.addSoldItems(i.getName()+";"+String.valueOf(i.getQuantity())+";"+String.valueOf(i.getPrice())+";"+i.getDescription()+";"+String.valueOf(i.getCategory()));
+            dto.addSoldItems(i.getName()+";"+i.getQuantity()+";"+i.getPrice()+";"+i.getDescription()+";"+i.getCategory());
         }
         for (Item i : user.getPublishedItems()) {
-            dto.addPublishedItems(i.getName()+";"+String.valueOf(i.getQuantity())+";"+String.valueOf(i.getPrice())+";"+i.getDescription()+";"+String.valueOf(i.getCategory()));
+            dto.addPublishedItems(i.getName()+";"+i.getQuantity()+";"+i.getPrice()+";"+i.getDescription()+";"+i.getCategory());
         }
 
         return dto;
