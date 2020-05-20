@@ -6,7 +6,7 @@ public class RegisterForm {
     private String name;
     private String email;
     private String password;
-
+    private String phone;
     private String district;
     private String municipality;
 
@@ -48,5 +48,13 @@ public class RegisterForm {
 
     public void setMunicipality(String municipality) {
         this.municipality = municipality;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }

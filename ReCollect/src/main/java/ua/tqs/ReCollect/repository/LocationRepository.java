@@ -12,5 +12,6 @@ public interface LocationRepository extends JpaRepository<Location, Long> {
 
     public List<Location> findAll();
     public Location findByDistrictAndCounty(String district, String county);
+    public List<Location> findByDistrict(String district);
     
 }

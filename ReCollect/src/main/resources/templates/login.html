@@ -47,15 +47,15 @@
             <div class="col-lg-5 col-md-8 align-item-center">
                 <div class="border">
                     <h3 class="bg-gray p-4">Login Now</h3>
-                    <div th:if="${showError}" style="padding: 30px">
+                    <div th:if="${param.error}" style="padding: 30px">
                         <div class="alert alert-danger" role="alert" >
                             Data provided does not match any user. Please try again.
                         </div>
                     </div>
-                    <form method="post" th:action="@{/login}" th:object="${loginForm}">
+                    <form method="post" th:action="@{/login}">
                         <fieldset class="p-4">
-                            <input th:field="*{email}" type="email" placeholder="Email" class="border p-3 w-100 my-2">
-                            <input th:field="*{password}" type="password" placeholder="Password" class="border p-3 w-100 my-2">
+                            <input id="user_name" name="user_name" type="email" placeholder="Email" class="border p-3 w-100 my-2">
+                            <input id="password" name="password" type="password" placeholder="Password" class="border p-3 w-100 my-2">
                             <div class="loggedin-forgot">
                                     <input type="checkbox" id="keep-me-logged-in">
                                     <label for="keep-me-logged-in" class="pt-3 pb-2">Keep me logged in</label>
