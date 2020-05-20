@@ -10,7 +10,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import ua.tqs.ReCollect.model.Item;
-import ua.tqs.ReCollect.model.ItemDTO;
 import ua.tqs.ReCollect.model.User;
 import ua.tqs.ReCollect.model.UserDTO;
 import ua.tqs.ReCollect.repository.UserRepository;

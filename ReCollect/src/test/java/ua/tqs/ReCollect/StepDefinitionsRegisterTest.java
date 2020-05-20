@@ -12,6 +12,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -63,7 +64,7 @@ public class StepDefinitionsRegisterTest {
         
         // Set up the PwdEncryption mock
         given(mockBCryptPwdEncoder.encode("coiso")).willReturn("SHA512(coiso)");
-        
+
         // Instance the user that will be created
         User newUser = new User("user", "new_user@gmail.com", "coiso", "3467764", localRepo.findByDistrictAndCounty("Aveiro", "Aveiro"));
 
@@ -74,15 +75,14 @@ public class StepDefinitionsRegisterTest {
 
         // restClient.
         HttpHeaders headers = new HttpHeaders();
-        headers.set("X-COM-PERSIST", "true"); 
-
+        // headers.setContentType(MediaType.APPLICATION_JSON);
+        
         HttpEntity<User> request = new HttpEntity<>(newUser, headers);
 
         ResponseEntity<String> entity = restClient.postForEntity("/registration", request, String.class);
 
         // Assert everything went OK
         assertEquals(HttpStatus.OK, entity.getStatusCode());
-        // assertTrue(entity.getBody());
 
     }
     

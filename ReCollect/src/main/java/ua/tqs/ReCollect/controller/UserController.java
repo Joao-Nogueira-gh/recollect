@@ -1,106 +1,82 @@
 package ua.tqs.ReCollect.controller;
 
-import java.io.IOException;
+import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import ua.tqs.ReCollect.model.User;
-import ua.tqs.ReCollect.service.LocationService;
 import ua.tqs.ReCollect.service.UserService;
 
 // User controller for frontend integration
 
-@Controller("/users")
+@Controller
 public class UserController {
 
 	@Autowired
 	private UserService userService;
 
-	@Autowired
-	private LocationService locationService;
-
 	static final Logger logger = Logger.getLogger(UserController.class);
 
-	// Path for GETting the register page
-	@GetMapping(path = "/users/register")
-	public String registerForm(Model model) throws IOException {
-		// setup for test
-		userService.deleteAll();
 
-		// flow starts here
-		// create user with input, and fetch location
-		User u = new User("user", "email@gmail.com", "coiso", "3467764",
-				locationService.getLocation("Aveiro", "Aveiro"));
-		//attach user to model
-		model.addAttribute("user", u);
-		System.out.println(userService.getAll());
-		return "index";
-	}
+    @GetMapping(value={"/", "/login"})
+    public ModelAndView login(){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("login");
+        return modelAndView;
+    }
 
-	// Path for registering users (or not, if it goes wrong)
-	@PostMapping("/users/register")
-	public boolean register(@ModelAttribute User user) {
-		//user comes from getMapping model
-		boolean success = userService.register(user);
 
-		if(success) {
-			//success
-			logger.debug("success");
-		} else {
-			//email already existed
-			logger.debug("nope");
-		}
+    @GetMapping(value="/registration")
+    public ModelAndView registration(){
+        ModelAndView modelAndView = new ModelAndView();
+        User user = new User();
+        modelAndView.addObject("user", user);
+        modelAndView.setViewName("registration");
+        return modelAndView;
+    }
 
-		// TODO: return the post-registered HTML
-		return success;
+    @PostMapping(value = "/registration")
+    public ModelAndView createNewUser(@Valid @RequestBody(required = false) User user, BindingResult bindingResult) {
 
-	}
-	// Login page form path
-	@GetMapping(path = "/users/login")
-	public String loginForm(Model model) throws IOException {
-		//setup for test
-		userService.deleteAll();
-		User u=new User("registereduser", "reg@gmail.com", "coiso", "3467764", locationService.getLocation("Aveiro", "Aveiro"));
-		userService.register(u);
+        ModelAndView modelAndView = new ModelAndView();
+		User userExists = userService.getByEmail(user.getEmail());
+		
+        if (userExists != null) {
+            bindingResult
+                    .rejectValue("userName", "error.user",
+                            "There is already a user registered with the email provided");
+        }
 
-		//flow starts here
-		//get email and password input
-		model.addAttribute("inputemail", "reg@gmail.com");
-		model.addAttribute("inputpassword", "coiso");
+        if (bindingResult.hasErrors()) {
+            modelAndView.setViewName("registration");
+        } else {
+            userService.register(user);
+            modelAndView.addObject("successMessage", "User has been registered successfully");
+            modelAndView.addObject("user", new User());
+            modelAndView.setViewName("registration");
+        }
 
-		return "index";
-	}
+        return modelAndView;
+    }
 
-	// Login user (or not)
-	@PostMapping("/users/login")
-	public boolean login(@ModelAttribute String email,@ModelAttribute String pass) {
-		//input comes from getMapping model
-
-		boolean success=userService.login(email,pass);
-		if (success){
-			//logged in
-			System.out.println("logged");
-		}
-		else{
-			//wrong email/pass
-			System.out.println("nope");
-		}
-		//this variable in the user service holds the current logged in user (or null)
-		//access it whenever needed
-		System.out.println(userService.getCurrentUser());
-
-		//also, logout feature
-		userService.logout();
-
-		// return home page or not if login failed
-		return success;
-
-	}
+    @GetMapping(value="/home")
+    public ModelAndView home(){
+        ModelAndView modelAndView = new ModelAndView();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.getByEmail(auth.getName());
+        modelAndView.addObject("userName", "Welcome " + user.getName());
+        modelAndView.addObject("adminMessage","Content Available Only for Users with Admin Role");
+        modelAndView.setViewName("admin/home");
+        return modelAndView;
+    }
     
 }
