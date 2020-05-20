@@ -89,4 +89,4 @@ sonarcloud-check:
     - merge_requests
     - master
     - develop
-    - feature/login_backed
+    - feature/login_backend
