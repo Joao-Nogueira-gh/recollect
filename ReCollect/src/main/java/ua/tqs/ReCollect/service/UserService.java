@@ -47,6 +47,8 @@ public class UserService {
             return false;
         }
 
+        logger.debug(user);
+
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 
         this.save(user);

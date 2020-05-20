@@ -47,11 +47,11 @@ public class UserController {
     }
 
     @PostMapping(value = "/registration")
-    public ModelAndView createNewUser(@Valid @RequestBody(required = false) User user, BindingResult bindingResult) {
+    public ModelAndView createNewUser(@Valid User user, BindingResult bindingResult) {
 
         ModelAndView modelAndView = new ModelAndView();
 		User userExists = userService.getByEmail(user.getEmail());
-		
+		 
         if (userExists != null) {
             bindingResult
                     .rejectValue("userName", "error.user",
