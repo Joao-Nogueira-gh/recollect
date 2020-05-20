@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserDTO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ReCollect</a> &gt; <a href="index.source.html" class="el_package">ua.tqs.ReCollect.model</a> &gt; <span class="el_source">UserDTO.java</span></div><h1>UserDTO.java</h1><pre class="source lang-java linenums">package ua.tqs.ReCollect.model;
+
+import java.util.List;
+
+import javax.validation.constraints.Email;
+
+public class UserDTO{
+    private String name;
+
+    @Email
+    private String email;
+
+    private String phoneNumber;
+
+    private String password;
+
+    private String location;
+
+    private List&lt;String&gt; publishedItems;
+
+    private List&lt;String&gt; soldItems;
+
+    private List&lt;String&gt; favoriteItems;
+
+    
+
+    public String getName() {
+<span class="nc" id="L28">        return name;</span>
+    }
+
+    public void setName(String name) {
+<span class="nc" id="L32">        this.name = name;</span>
+<span class="nc" id="L33">    }</span>
+
+    public String getEmail() {
+<span class="nc" id="L36">        return email;</span>
+    }
+
+    public void setEmail(String email) {
+<span class="nc" id="L40">        this.email = email;</span>
+<span class="nc" id="L41">    }</span>
+
+    public String getPhoneNumber() {
+<span class="nc" id="L44">        return phoneNumber;</span>
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+<span class="nc" id="L48">        this.phoneNumber = phoneNumber;</span>
+<span class="nc" id="L49">    }</span>
+
+    public String getPassword() {
+<span class="nc" id="L52">        return password;</span>
+    }
+
+    public void setPassword(String password) {
+<span class="nc" id="L56">        this.password = password;</span>
+<span class="nc" id="L57">    }</span>
+
+    public String getLocation() {
+<span class="nc" id="L60">        return location;</span>
+    }
+
+    public void setLocation(String location) {
+<span class="nc" id="L64">        this.location = location;</span>
+<span class="nc" id="L65">    }</span>
+
+    public List&lt;String&gt; getPublishedItems() {
+<span class="nc" id="L68">        return publishedItems;</span>
+    }
+
+    public void setPublishedItems(List&lt;String&gt; publishedItems) {
+<span class="nc" id="L72">        this.publishedItems = publishedItems;</span>
+<span class="nc" id="L73">    }</span>
+    public void addPublishedItems(String item) {
+<span class="nc" id="L75">        this.publishedItems.add(item);</span>
+<span class="nc" id="L76">    }</span>
+    public List&lt;String&gt; getSoldItems() {
+<span class="nc" id="L78">        return soldItems;</span>
+    }
+
+    public void setSoldItems(List&lt;String&gt; soldItems) {
+<span class="nc" id="L82">        this.soldItems = soldItems;</span>
+<span class="nc" id="L83">    }</span>
+    public void addSoldItems(String item) {
+<span class="nc" id="L85">        this.soldItems.add(item);</span>
+<span class="nc" id="L86">    }</span>
+
+    public List&lt;String&gt; getFavoriteItems() {
+<span class="nc" id="L89">        return favoriteItems;</span>
+    }
+
+    public void setFavoriteItems(List&lt;String&gt; favoriteItems) {
+<span class="nc" id="L93">        this.favoriteItems = favoriteItems;</span>
+<span class="nc" id="L94">    }</span>
+    public void addFavoriteItems(String item) {
+<span class="nc" id="L96">        this.favoriteItems.add(item);</span>
+<span class="nc" id="L97">    }</span>
+
+<span class="nc" id="L99">    public UserDTO(String name, @Email String email, String phoneNumber, String password) {</span>
+<span class="nc" id="L100">        this.name = name;</span>
+<span class="nc" id="L101">        this.email = email;</span>
+<span class="nc" id="L102">        this.phoneNumber = phoneNumber;</span>
+<span class="nc" id="L103">        this.password = password;</span>
+<span class="nc" id="L104">    }</span>
+
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

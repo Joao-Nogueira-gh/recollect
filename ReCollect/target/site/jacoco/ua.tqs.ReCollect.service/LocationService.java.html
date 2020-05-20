@@ -9,20 +9,20 @@ import ua.tqs.ReCollect.model.Location;
 import ua.tqs.ReCollect.repository.LocationRepository;
 
 @Service
-<span class="nc" id="L12">public class LocationService {</span>
+<span class="fc" id="L12">public class LocationService {</span>
 
     @Autowired
     private LocationRepository locationRepo;
 
     public List&lt;Location&gt; getAll(){
-<span class="nc" id="L18">        return locationRepo.findAll();</span>
+<span class="fc" id="L18">        return locationRepo.findAll();</span>
     }
     public void save(Location item){
-<span class="nc" id="L21">        locationRepo.save(item);</span>
-<span class="nc" id="L22">    }</span>
+<span class="fc" id="L21">        locationRepo.save(item);</span>
+<span class="fc" id="L22">    }</span>
     public void deleteAll(){
-<span class="nc" id="L24">        locationRepo.deleteAll();</span>
-<span class="nc" id="L25">    }</span>
+<span class="fc" id="L24">        locationRepo.deleteAll();</span>
+<span class="fc" id="L25">    }</span>
     public Location getLocation(String district, String county){
 <span class="nc" id="L27">        return locationRepo.findByDistrictAndCounty(district, county);</span>
     }

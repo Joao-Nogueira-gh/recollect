@@ -19,33 +19,33 @@ import ua.tqs.ReCollect.model.Location;
 import ua.tqs.ReCollect.service.LocationService;
 
 @Component
-<span class="nc" id="L22">public class DataLoader implements ApplicationRunner {</span>
+<span class="fc" id="L22">public class DataLoader implements ApplicationRunner {</span>
 
     @Autowired
     private LocationService locationService;
 
-<span class="nc" id="L27">    static final Logger logger = Logger.getLogger(DataLoader.class);</span>
+<span class="fc" id="L27">    static final Logger logger = Logger.getLogger(DataLoader.class);</span>
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-<span class="nc" id="L31">        locationService.deleteAll();</span>
-<span class="nc" id="L32">        String fileName = &quot;cdpt.json&quot;;</span>
-<span class="nc" id="L33">        File resource = new ClassPathResource(fileName).getFile();</span>
-<span class="nc" id="L34">        String cdpt = new String(Files.readAllBytes(resource.toPath()));</span>
-<span class="nc" id="L35">        ObjectMapper mapper = new ObjectMapper();</span>
-<span class="nc" id="L36">        Map&lt;String, ArrayList&lt;String&gt;&gt; map = mapper.readValue(cdpt, Map.class);</span>
+<span class="fc" id="L31">        locationService.deleteAll();</span>
+<span class="fc" id="L32">        String fileName = &quot;cdpt.json&quot;;</span>
+<span class="fc" id="L33">        File resource = new ClassPathResource(fileName).getFile();</span>
+<span class="fc" id="L34">        String cdpt = new String(Files.readAllBytes(resource.toPath()));</span>
+<span class="fc" id="L35">        ObjectMapper mapper = new ObjectMapper();</span>
+<span class="fc" id="L36">        Map&lt;String, ArrayList&lt;String&gt;&gt; map = mapper.readValue(cdpt, Map.class);</span>
 
-<span class="nc" id="L38">        Iterator&lt;String&gt; keys = map.keySet().iterator();</span>
-<span class="nc bnc" id="L39" title="All 2 branches missed.">        while (keys.hasNext()){</span>
-<span class="nc" id="L40">            String district=keys.next();</span>
-<span class="nc" id="L41">            ArrayList&lt;String&gt; counties = map.get(district);</span>
-<span class="nc bnc" id="L42" title="All 2 branches missed.">            for (String county: counties){</span>
-<span class="nc" id="L43">                locationService.save(new Location(county, district));</span>
-<span class="nc" id="L44">            }</span>
-<span class="nc" id="L45">        }</span>
+<span class="fc" id="L38">        Iterator&lt;String&gt; keys = map.keySet().iterator();</span>
+<span class="fc bfc" id="L39" title="All 2 branches covered.">        while (keys.hasNext()){</span>
+<span class="fc" id="L40">            String district=keys.next();</span>
+<span class="fc" id="L41">            ArrayList&lt;String&gt; counties = map.get(district);</span>
+<span class="fc bfc" id="L42" title="All 2 branches covered.">            for (String county: counties){</span>
+<span class="fc" id="L43">                locationService.save(new Location(county, district));</span>
+            }
+        }
 
-<span class="nc" id="L47">        logger.info(&quot;Finished loading &quot;+locationService.getAll().size()+ &quot; locations&quot;);</span>
+<span class="fc" id="L47">        logger.info(&quot;Finished loading &quot;+locationService.getAll().size()+ &quot; locations&quot;);</span>
 
-<span class="nc" id="L49">    }</span>
+<span class="fc" id="L49">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>
