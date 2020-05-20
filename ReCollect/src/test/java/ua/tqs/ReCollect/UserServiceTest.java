@@ -11,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import ua.tqs.ReCollect.model.Location;
 import ua.tqs.ReCollect.model.User;
@@ -23,6 +24,9 @@ public class UserServiceTest {
 
     @Mock
     private UserRepository rcRepository;
+
+    @Mock
+    private BCryptPasswordEncoder mockBCryptPasswordEncoder;
 
     @InjectMocks
     private UserService sutRCService;
@@ -63,6 +67,39 @@ public class UserServiceTest {
         given(rcRepository.findByEmail("user@email.com")).willReturn(user);
         
         assertFalse(sutRCService.register(user));
+
+    }
+
+    @Test
+    void loginExistingUser(){
+        String email="exist@gmail.com";
+        String pass="exist";
+
+        given(mockBCryptPasswordEncoder.encode(pass)).willReturn("SHA512(exist)");
+
+        User user = new User("User123", email, pass, "123123123", new Location("Aveiro", "Aveiro"));
+
+        sutRCService.register(user);
+
+        given(rcRepository.findByEmail(email)).willReturn(user);
+
+        assertTrue(sutRCService.checkUserPassword(user, pass));
+        assertTrue(sutRCService.login(email, pass));
+
+    }
+
+    @Test
+    void loginNonExistingUser(){
+        String email="some@gmail.com";
+        String pass="sdf";
+
+        User user = new User("User123", "sfa@gmail.com", "safdgf", "123123123", new Location("Aveiro", "Aveiro"));
+
+        sutRCService.register(user);
+
+        given(rcRepository.findByEmail(email)).willReturn(null);
+
+        assertFalse(sutRCService.login(email,pass));
 
     }
 

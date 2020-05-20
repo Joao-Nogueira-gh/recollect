@@ -23,6 +23,7 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<version.cucumber>1.1.8</version.cucumber>
+		<sonar.coverage.jacoco.xmlReportPaths>/target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
 	</properties>
 
 	<profiles>
@@ -103,13 +104,6 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.json/json -->
-		<dependency>
-			<groupId>org.json</groupId>
-			<artifactId>json</artifactId>
-			<version>20190722</version>
-		</dependency>
-
 		<dependency>
 			<groupId>info.cukes</groupId>
 			<artifactId>cucumber-java</artifactId>
@@ -144,6 +138,18 @@
 			<artifactId>log4j</artifactId>
 			<version>1.2.17</version>
 		</dependency>
+
+		<!-- Security -->
+		<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+		<dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+		
 	</dependencies>
 
 	<build>

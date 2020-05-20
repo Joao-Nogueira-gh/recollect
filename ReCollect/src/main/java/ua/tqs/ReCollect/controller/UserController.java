@@ -1,76 +1,83 @@
 package ua.tqs.ReCollect.controller;
 
-import java.io.IOException;
+import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import ua.tqs.ReCollect.model.User;
-import ua.tqs.ReCollect.service.LocationService;
 import ua.tqs.ReCollect.service.UserService;
 
 // User controller for frontend integration
 
-@Controller("/users")
+@Controller
 public class UserController {
 
 	@Autowired
 	private UserService userService;
 
-	@Autowired
-	private LocationService locationService;
-
-	static final Logger logger = Logger.getLogger(UserController.class);
-
-	// Path for GETting the register page
-	@GetMapping(path = "/users/register")
-	public String register(Model model) throws IOException {
-
-		// setup for test
-		userService.deleteAll();
-		// flow starts here
-		// create user with input, and fetch location
-		User u = new User("user", "email@gmail.com", "coiso", "3467764",
-				locationService.getLocation("Aveiro", "Aveiro"));
-
-		model.addAttribute("test", "users");
-		System.out.println(userService.getAll());
-		return "index";
-	}
-
-	// Path for registering users (possibly switch to @ModelAttribute later)
-	@PostMapping("/users/register")
-	@ResponseBody
-	public boolean register(@RequestBody User user) {
-
-		boolean success = userService.register(user);
-
-		if(success) {
-			//use register method to save user
-			logger.debug("successs");
-		} else {
-			//email already existed
-			logger.debug("nope");
-		}
-
-		// TODO: return the post-registered HTML
-		return success;
-
-	}
-	
+    static final Logger logger = Logger.getLogger(UserController.class);
+    
+    private static final String registration_page = "registration";
 
 
-	//example path
-	@GetMapping(path="/users/login")
-	public String login(Model model) throws IOException {
-		//placeholder for next feature :)
-		return "index";
-	}
+    @GetMapping(value={"/", "/login"})
+    public ModelAndView login(){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("login");
+        return modelAndView;
+    }
+
+
+    @GetMapping(value="/registration")
+    public ModelAndView registration(){
+        ModelAndView modelAndView = new ModelAndView();
+        User user = new User();
+        modelAndView.addObject("user", user);
+        modelAndView.setViewName(registration_page);
+        return modelAndView;
+    }
+
+    @PostMapping(value = "/registration")
+    public ModelAndView createNewUser(@Valid User user, BindingResult bindingResult) {
+
+        ModelAndView modelAndView = new ModelAndView();
+		User userExists = userService.getByEmail(user.getEmail());
+		 
+        if (userExists != null) {
+            bindingResult
+                    .rejectValue("userName", "error.user",
+                            "There is already a user registered with the email provided");
+        }
+
+        if (!bindingResult.hasErrors()) {
+            userService.register(user);
+            modelAndView.addObject("successMessage", "User has been registered successfully");
+            modelAndView.addObject("user", new User());
+        }
+
+        modelAndView.setViewName(registration_page);
+
+        return modelAndView;
+    }
+
+    @GetMapping(value="/home")
+    public ModelAndView home(){
+        ModelAndView modelAndView = new ModelAndView();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.getByEmail(auth.getName());
+        modelAndView.addObject("userName", "Welcome " + user.getName());
+        modelAndView.addObject("adminMessage","Content Available Only for Users with Admin Role");
+        modelAndView.setViewName("admin/home");
+        return modelAndView;
+    }
     
 }

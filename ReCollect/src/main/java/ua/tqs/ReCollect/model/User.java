@@ -48,12 +48,21 @@ public class User {
 
     @OneToMany(mappedBy="user", cascade = CascadeType.ALL)
     private Set<Comment> comments;
+
+    @ManyToMany(cascade = CascadeType.MERGE)
+    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles;
+
+    @Column(name = "active")
+    private Boolean active;
     
     public User(){
         this.favoriteItems=new HashSet<>();
         this.publishedItems=new HashSet<>();
         this.soldItems=new HashSet<>();
         this.comments=new HashSet<>();
+        this.roles=new HashSet<>();
+        this.active = false;
     }
 
     public User(String name, @Email String email, String password, String phone, Location location) {
@@ -66,6 +75,8 @@ public class User {
         this.publishedItems=new HashSet<>();
         this.soldItems=new HashSet<>();
         this.comments=new HashSet<>();
+        this.roles=new HashSet<>();
+        this.active = false;
     }
     
     public Long getId() {
@@ -143,10 +154,28 @@ public class User {
         this.comments.add(comment);
     }
 
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRole(Set<Role> roles) {
+        this.roles = roles;
+    }
+
     @Override
     public String toString() {
         return "User [email=" + email + ", #favoriteItems=" + favoriteItems.size() + ", id=" + id
                 + ", location=" + location + ", name=" + name + ", password=" + password + ", phone=" + phone
                 + ", #publishedItems=" + publishedItems.size() + ", #soldItems=" + soldItems.size() + "]";
     }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+
 }
