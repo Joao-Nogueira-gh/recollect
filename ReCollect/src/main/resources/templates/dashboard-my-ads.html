@@ -66,9 +66,9 @@
 					<!-- Dashboard Links -->
 					<div class="widget user-dashboard-menu">
 						<ul>
-							<li class="active"><a href="/profile"><i class="fa fa-user"></i> My Ads <span th:text="${loggedUser.itensPublicados.size()}">...</span></a></li>
-							<li><a href="/favourites"><i class="fa fa-bookmark-o"></i> Favourite Ads <span th:text="${loggedUser.itensFavoritos.size()}">...</span></a></li>
-							<li><a href="/sold-items"><i class="fa fa-file-archive-o"></i>Sold Items <span th:text="${loggedUser.itensVendidos.size()}">...</span></a></li>
+							<li class="active"><a href="/profile"><i class="fa fa-user"></i> My Ads <span th:text="${loggedUser.publishedItems.size()}">...</span></a></li>
+							<li><a href="/favourites"><i class="fa fa-bookmark-o"></i> Favourite Ads <span th:text="${loggedUser.favoriteItems.size()}">...</span></a></li>
+							<li><a href="/sold-items"><i class="fa fa-file-archive-o"></i>Sold Items <span th:text="${loggedUser.soldItems.size()}">...</span></a></li>
 							<li><a href="/logout"><i class="fa fa-cog"></i> Logout</a></li>
 							<li><a href="" data-toggle="modal" data-target="#deleteaccount"><i class="fa fa-power-off"></i>Delete Account</a></li>
 						</ul>

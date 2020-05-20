@@ -32,7 +32,7 @@ public class UserController {
 
     private static final String registration_page = "register";
 
-    @GetMapping(value = { "/", "/login" })
+    @GetMapping(value = {"/login" })
     public ModelAndView login() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("login");
@@ -60,15 +60,16 @@ public class UserController {
         User userExists = userService.getByEmail(user.getEmail());
 
         if (userExists != null) {
-            bindingResult.rejectValue("userName", "error.user",
+            bindingResult.rejectValue("name", "error.user",
                     "There is already a user registered with the email provided");
         }
 
         if (!bindingResult.hasErrors()) {
             userService.register(user);
             modelAndView.addObject("successMessage", "User has been registered successfully");
-            modelAndView.addObject("user", new User());
         }
+
+        modelAndView.addObject("registo", new RegisterForm());
 
         modelAndView.setViewName(registration_page);
 
