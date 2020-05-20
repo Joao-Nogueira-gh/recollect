@@ -65,16 +65,28 @@
 						Your item was added successfully. You can view it <a href="/profile">here</a>
 					</div>
 				</div>
+
+				<div th:if="${noImages}">
+					<div class="alert alert-danger" role="alert" >
+						At least one image must be provided!
+					</div>
+				</div>
+				<div th:if="${hasErrors}">
+					<div class="alert alert-danger" role="alert" >
+						Data provided for the announcement was not accepted. Please check if you filled all the data and if it's valid.
+					</div>
+				</div>
 				<!-- General Info -->
 				<div class="row">
 					<div class="col-lg-12 col-md-12">
 						<div class="widget personal-info">
 							<h3 class="widget-header user">Announcement general info</h3>
-							<form method="post" th:action="@{/announce}" th:object="${newItem}">
+							<form method="post" th:action="@{/announce}" th:object="${itemForm}">
 								<!-- First Name -->
 								<div class="form-group col-lg-12 ">
 									<label for="first-name">Title</label>
 									<input th:field="*{nome}" type="text" class="form-control" id="first-name">
+									<p class="label label-danger" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}">A title for the announcement must be provided.</p>
 								</div>
 								<!-- Category -->
 								<div class="form-group col-lg-6" style="margin-bottom: 15px">
@@ -133,6 +145,7 @@
 										<input th:field="*{images[__${itemStat.index}__].url}" type="text" class="form-control" id="picture-input">
 									</th:block>
 								</div>
+
 
 								<div style="margin: 10px">
 

@@ -7,18 +7,15 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.tqs.ReCollect.service.UserService;
-import ua.tqs.ReCollect.utils.Image;
-import ua.tqs.ReCollect.utils.LoginForm;
-import ua.tqs.ReCollect.utils.PictureListDto;
-import ua.tqs.ReCollect.utils.RegisterForm;
+import ua.tqs.ReCollect.utils.*;
 import ua.tqs.ReCollect.entity.Item;
 import ua.tqs.ReCollect.entity.Localizacao;
 import ua.tqs.ReCollect.entity.User;
 import ua.tqs.ReCollect.service.CategoryService;
 import ua.tqs.ReCollect.service.ItemService;
 import ua.tqs.ReCollect.entity.Comment;
-import ua.tqs.ReCollect.utils.SearchParams;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Set;
 
@@ -286,12 +283,15 @@ public class WebController {
     }
 
     @GetMapping(value = "/announce")
-    public String addItem(Model model, @RequestParam(name = "submitted", required = false) boolean submitted) {
+    public String addItem(ItemForm itemForm, Model model, @RequestParam(name = "submitted", required = false) boolean submitted,
+                          @RequestParam(name = "noImages", required = false) boolean noImages,
+                          @RequestParam(name = "hasErrors", required = false) boolean hasErrors) {
         if(!aUserIsLogged()){
             return "redirect:/login";
         }
 
-
+        model.addAttribute("hasErrors", hasErrors);
+        model.addAttribute("noImages", noImages);
         model.addAttribute("submitted", submitted);
         model.addAttribute("categories", categoryService.getAllCategories());
 
@@ -303,15 +303,46 @@ public class WebController {
         }
 
         model.addAttribute("imagesList",pictureListForm);
-        model.addAttribute("newItem", new Item());
+        //model.addAttribute("itemForm", new ItemForm());
         return "add-item";
     }
 
     @PostMapping(value = "/announce")
-    public String postItem(@ModelAttribute Item newItem, @ModelAttribute PictureListDto imagesList, RedirectAttributes ra) {
+    public String postItem(@Valid ItemForm itemForm, BindingResult bindingResult, @ModelAttribute PictureListDto imagesList, RedirectAttributes ra) {
+
+        if(bindingResult.hasErrors()){
+            // if the provided data is invalid
+            System.err.println("INPUTS INVALIDOS!");
+            ra.addAttribute("submitted", false);
+            ra.addAttribute("hasErrors", true);
+            return "redirect:/announce";
+        }
+
+        int emptyEntries = 0;
+        for(Image im : imagesList.getImages()){
+            if(im.getUrl().trim().equals(""))
+                emptyEntries+=1; // count empty entries
+        }
+
+        // if all images urls are empty strings
+        if(emptyEntries==imagesList.getImages().size()){
+            ra.addAttribute("noImages", true);
+            ra.addAttribute("submitted", false);
+            return "redirect:/announce";
+        }
+
+        // setup item with valid provided data
+        Item newItem = new Item();
+        newItem.setNome(itemForm.getNome());
+        newItem.setCategoria(itemForm.getCategoria());
+        newItem.setDescricao(itemForm.getDescricao());
+        newItem.setPreco(itemForm.getPreco());
+        newItem.setQuantidade(itemForm.getQuantidade());
 
         System.err.println("1!");
         for(Image im : imagesList.getImages()){
+            if(im.getUrl().trim().equals(""))
+                continue; // skip empty inputs
             newItem.addImage(im.getUrl());
         }
         newItem.setOwner(this.loggedUser.getId());
