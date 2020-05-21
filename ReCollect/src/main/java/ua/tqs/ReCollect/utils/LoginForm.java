@@ -2,8 +2,9 @@ package ua.tqs.ReCollect.utils;
 
 public class LoginForm {
 
-    public String email;
-    public String password;
+    private String email;
+
+    private String password;
 
 
     public String getEmail() {

@@ -3,6 +3,7 @@ package ua.tqs.ReCollect.service;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,7 +33,7 @@ public class LocationService {
         return locationRepo.findByDistrictAndCounty(district, county);
     }
 
-    public HashMap<String, ArrayList<String>> getCountiesByDistrict() {
+    public Map<String, ArrayList<String>> getCountiesByDistrict() {
         
         List<Location> locs = this.getAll();
         HashMap<String, ArrayList<String>> ret = new HashMap<>();

@@ -7,6 +7,7 @@ public class SearchParams {
     private String searchterm;
 
     public SearchParams() {
+        //empty constructor
     }
 
     public String getCategory() {

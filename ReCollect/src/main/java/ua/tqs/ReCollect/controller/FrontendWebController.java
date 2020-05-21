@@ -28,10 +28,21 @@ import ua.tqs.ReCollect.utils.Image;
 import ua.tqs.ReCollect.utils.ItemForm;
 import ua.tqs.ReCollect.utils.PictureListDto;
 import ua.tqs.ReCollect.utils.SearchParams;
+import org.apache.log4j.Logger;
 
 
 @Controller
 public class FrontendWebController {
+
+    static final Logger logger = Logger.getLogger(FrontendWebController.class);
+
+    private static final String CATEGORYHTML = "category";
+    private static final String USERITEMS = "userItems";
+    private static final String USERST = "user";
+    private static final String SUBMITTED = "submitted";
+    private static final String LOGGEDUSER = "loggedUser";
+    private static final String ATRIBATUAL = "-------- Atributos atualizados --------";
+    private static final String REDIRECTANNOUNCE = "redirect:/announce";
 
     @Autowired
     ItemService itemService;
@@ -50,24 +61,23 @@ public class FrontendWebController {
 
     @GetMapping(value = "/category")
     public String category() {
-        return "category";
+        return CATEGORYHTML;
     }
 
     @PostMapping(value = "/category")
     public String categorysearch(@ModelAttribute SearchParams searchparams, BindingResult result, ModelMap model) {
-        System.out.println("Selected category: " + searchparams.getCategory());
-
+        logger.debug("Selected category: " + searchparams.getCategory());
         model.addAttribute("category", searchparams.getCategory());
 
-        return "category";
+        return CATEGORYHTML;
     }
 
     // @PostMapping(value = "/login")
     // public String login(@ModelAttribute LoginForm loginForm, RedirectAttributes ra) {
     //     String providedEmail = loginForm.getEmail();
     //     String providedPassword = loginForm.getPassword();
-    //     System.err.println("providedEmail -> " + providedEmail);
-    //     System.err.println("providedPassword -> " + providedPassword);
+    //     logger.debug("providedEmail -> " + providedEmail);
+    //     logger.debug("providedPassword -> " + providedPassword);
 
 
     //     User userFromDB = userService.getByEmail(providedEmail);
@@ -79,21 +89,21 @@ public class FrontendWebController {
     //     providedPassword = "pass";
     //     //--------------------------
 
-    //     System.err.println("userfromDB -> " + userFromDB);
+    //     logger.debug("userfromDB -> " + userFromDB);
 
     //     if(userFromDB!=null){
     //         if(providedPassword.trim().equals(userFromDB.getPassword())){
-    //             System.err.println("login success!");
+    //             logger.debug("login success!");
     //             ra.addAttribute("success", true);
     //         }
     //         else{
-    //             System.err.println("login error!");
+    //             logger.debug("login error!");
     //             ra.addAttribute("showError", true);
     //             ra.addAttribute("success", false);
     //         }
     //     }
     //     else{
-    //         System.err.println("login error!");
+    //         logger.debug("login error!");
     //         ra.addAttribute("showError", true);
     //         ra.addAttribute("success", false);
     //     }
@@ -125,8 +135,8 @@ public class FrontendWebController {
 
         Set<Item> allItems = loggedUser.getPublishedItems();
 
-        model.addAttribute("userItems", allItems);
-        model.addAttribute("loggedUser", loggedUser);
+        model.addAttribute(USERITEMS, allItems);
+        model.addAttribute(LOGGEDUSER, loggedUser);
 
         return "dashboard-my-ads";
     }
@@ -136,24 +146,24 @@ public class FrontendWebController {
 
         User loggedUser = this.getLoggedUser();
 
-        System.err.println("ID para delete: " + id);
+        logger.debug("ID para delete: " + id.toString());
 
         // Item deleted = itemService.getItemById(id);
 
         // loggedUser.removeItemPublicado(deleted);
-        // System.err.println("1. loggedUser: " + loggedUser);
+        // logger.debug("1. loggedUser: " + loggedUser);
         // userService.updateUser(loggedUser);
-        // System.err.println("2.-----");
+        // logger.debug("2.-----");
         // itemService.deleteItem(id);
-        // System.err.println("3.-----");
+        // logger.debug("3.-----");
 
         Set<Item> allItems = loggedUser.getPublishedItems();
 
-        System.err.println("-------- Atributos atualizados --------");
-        model.addAttribute("userItems", allItems);
-        model.addAttribute("loggedUser", loggedUser);
-        System.err.println("userItems: " + model.getAttribute("userItems"));
-        System.err.println("user: " + model.getAttribute("loggedUser"));
+        logger.debug(ATRIBATUAL);
+        model.addAttribute(USERITEMS, allItems);
+        model.addAttribute(LOGGEDUSER, loggedUser);
+        logger.debug(USERITEMS+": " + model.getAttribute(USERITEMS));
+        logger.debug(USERST+": " + model.getAttribute(LOGGEDUSER));
 
         return "redirect:/profile";
     }
@@ -163,7 +173,7 @@ public class FrontendWebController {
 
         // TODO: verificar se o loggedUser está logged in
 
-        System.err.println("ID para sold: " + id);
+        logger.debug("ID para sold: " + id);
 
         /*
         * - tirar dos publicados
@@ -177,20 +187,20 @@ public class FrontendWebController {
         // sold.setOwner(null);
         // sold.setSeller(this.getLoggedUser().getId());
         // this.getLoggedUser().addSoldItem(sold);
-        // System.err.println("1. loggedUser: " + this.getLoggedUser());
+        // logger.debug("1. loggedUser: " + this.getLoggedUser());
         // userService.updateUser(this.getLoggedUser());
 
-        // System.err.println("2.-----");
+        // logger.debug("2.-----");
         // itemService.updateItem(sold);
-        // System.err.println("3.-----");
+        // logger.debug("3.-----");
 
         Set<Item> allItems = this.getLoggedUser().getPublishedItems();
 
-        System.err.println("-------- Atributos atualizados --------");
-        model.addAttribute("userItems", allItems);
-        model.addAttribute("loggedUser", this.getLoggedUser());
-        System.err.println("userItems: " + model.getAttribute("userItems"));
-        System.err.println("user: " + model.getAttribute("loggedUser"));
+        logger.debug(ATRIBATUAL);
+        model.addAttribute(USERITEMS, allItems);
+        model.addAttribute(LOGGEDUSER, this.getLoggedUser());
+        logger.debug(USERITEMS+": " + model.getAttribute(USERITEMS));
+        logger.debug(USERST+": " + model.getAttribute(LOGGEDUSER));
 
         return "redirect:/profile";
     }
@@ -200,24 +210,24 @@ public class FrontendWebController {
 
         // TODO: verificar se o loggedUser está logged in
 
-        System.err.println("ID para delete: " + id);
+        logger.debug("ID para delete: " + id);
 
         // Item deleted = itemService.getItemById(id);
 
         // this.getLoggedUser().removeSoldItem(deleted);
-        // System.err.println("1. loggedUser: " + this.getLoggedUser());
+        // logger.debug("1. loggedUser: " + this.getLoggedUser());
         // userService.updateUser(this.getLoggedUser());
-        // System.err.println("2.-----");
+        // logger.debug("2.-----");
         // itemService.deleteItem(id);
-        // System.err.println("3.-----");
+        // logger.debug("3.-----");
 
         Set<Item> allItems = this.getLoggedUser().getSoldItems();
 
-        System.err.println("-------- Atributos atualizados --------");
+        logger.debug(ATRIBATUAL);
         model.addAttribute("userSoldItems", allItems);
-        model.addAttribute("loggedUser", this.getLoggedUser());
-        System.err.println("userItems: " + model.getAttribute("userItems"));
-        System.err.println("user: " + model.getAttribute("loggedUser"));
+        model.addAttribute(LOGGEDUSER, this.getLoggedUser());
+        logger.debug(USERITEMS+": " + model.getAttribute(USERITEMS));
+        logger.debug(USERST+": " + model.getAttribute(LOGGEDUSER));
 
         return "redirect:/sold-items";
     }
@@ -238,7 +248,7 @@ public class FrontendWebController {
 
         model.addAttribute("hasErrors", hasErrors);
         model.addAttribute("noImages", noImages);
-        model.addAttribute("submitted", submitted);
+        model.addAttribute(SUBMITTED, submitted);
         model.addAttribute("categories", categories);
 
         PictureListDto pictureListForm = new PictureListDto();
@@ -258,10 +268,10 @@ public class FrontendWebController {
 
         if(bindingResult.hasErrors()){
             // if the provided data is invalid
-            System.err.println("INPUTS INVALIDOS!");
-            ra.addAttribute("submitted", false);
+            logger.debug("INPUTS INVALIDOS!");
+            ra.addAttribute(SUBMITTED, false);
             ra.addAttribute("hasErrors", true);
-            return "redirect:/announce";
+            return REDIRECTANNOUNCE;
         }
 
         int emptyEntries = 0;
@@ -273,8 +283,8 @@ public class FrontendWebController {
         // if all images urls are empty strings
         if(emptyEntries==imagesList.getImages().size()){
             ra.addAttribute("noImages", true);
-            ra.addAttribute("submitted", false);
-            return "redirect:/announce";
+            ra.addAttribute(SUBMITTED, false);
+            return REDIRECTANNOUNCE;
         }
 
         // setup item with valid provided data
@@ -285,28 +295,28 @@ public class FrontendWebController {
         // newItem.setPreco(itemForm.getPreco());
         // newItem.setQuantidade(itemForm.getQuantidade());
 
-        // System.err.println("1!");
+        // logger.debug("1!");
         // for(Image im : imagesList.getImages()){
         //     if(im.getUrl().trim().equals(""))
         //         continue; // skip empty inputs
         //     newItem.addImage(im.getUrl());
         // }
         // newItem.setOwner(this.getLoggedUser().getId());
-        // System.err.println("2!");
-        // //System.err.println("newItem recebido: "+ newItem.toString());
-        // //System.err.println("imagesList: " + imagesList.toString());
-        // System.err.println("loggerUser antes do add: " + this.getLoggedUser().toString());
+        // logger.debug("2!");
+        // //logger.debug("newItem recebido: "+ newItem.toString());
+        // //logger.debug("imagesList: " + imagesList.toString());
+        // logger.debug("loggerUser antes do add: " + this.getLoggedUser().toString());
         // itemService.save(newItem);
-        // System.err.println("3!");
+        // logger.debug("3!");
         // this.getLoggedUser().addItem(newItem);
-        // System.err.println("4!");
+        // logger.debug("4!");
         // userService.updateUser(this.getLoggedUser());
-        // System.err.println("5!");
-        // ra.addAttribute("submitted", true);
+        // logger.debug("5!");
+        // ra.addAttribute(SUBMITTED, true);
 
-        // System.err.println("Item submetido: " + newItem.toString());
+        // logger.debug("Item submetido: " + newItem.toString());
 
-        return "redirect:/announce";
+        return REDIRECTANNOUNCE;
     }
 
 
@@ -320,7 +330,7 @@ public class FrontendWebController {
         Set<Item> allItems = this.getLoggedUser().getSoldItems();
 
         model.addAttribute("userSoldItems", allItems);
-        model.addAttribute("loggedUser", getLoggedUser());
+        model.addAttribute(LOGGEDUSER, getLoggedUser());
 
         return "dashboard-sold-items";
     }
@@ -357,8 +367,7 @@ public class FrontendWebController {
 
     private User getLoggedUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User loggedUser = userService.getByEmail(auth.getName());
-        return loggedUser;
+        return userService.getByEmail(auth.getName());
     }
 
 }

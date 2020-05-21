@@ -1,8 +1,9 @@
 package ua.tqs.ReCollect.utils;
 
-import javax.validation.constraints.*;
-import java.util.ArrayList;
-import java.util.List;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.Size;
 
 public class ItemForm {
 
@@ -27,6 +28,8 @@ public class ItemForm {
 
 
     public ItemForm() {
+        nome="";
+        
     }
 
     public String getNome() {
