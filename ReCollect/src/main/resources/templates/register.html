@@ -6,7 +6,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Classimax</title>
+  <title>reCollect</title>
   
   <!-- FAVICON -->
   <link href="img/favicon.png" rel="shortcut icon">
@@ -22,9 +22,10 @@
   <link href="plugins/slick-carousel/slick/slick-theme.css" rel="stylesheet">
   <!-- Fancy Box -->
   <link href="plugins/fancybox/jquery.fancybox.pack.css" rel="stylesheet">
-  <link href="plugins/jquery-nice-select/css/nice-select.css" rel="stylesheet">
+  <!-- <link href="plugins/jquery-nice-select/css/nice-select.css" rel="stylesheet"> -->
   <!-- CUSTOM CSS -->
   <link href="css/style.css" rel="stylesheet">
+
 
 
   <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -33,7 +34,6 @@
   <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
-
 
 </head>
 
@@ -54,33 +54,23 @@
                                 <input th:field="*{email}" type="email" placeholder="Email*" class="border p-3 w-100 my-2" required>
                                 <input th:field="*{password}" type="password" placeholder="Password*" class="border p-3 w-100 my-2" required>
                                 <!-- <input type="password" placeholder="Confirm Password*" class="border p-3 w-100 my-2" required> -->
+                                <input th:field="*{phone}" type="tel" placeholder="Phone" class="border p-3 w-100 my-2">
                                 <hr/>
                                 <div class="col-lg-12">
                                     <div style="margin-bottom: 15px">
-                                        <label for="distritoDropdown">District / State</label>
-                                        <div>
-                                            <select th:field="*{district}" id="distritoDropdown" class="form-control form-control-lg border w-100 my-2">
-                                                <option value="NA" selected disabled hidden>District / State</option>
-                                                <option th:value="Aveiro" th:text="Aveiro">...</option>
-                                                <option th:value="Braga" th:text="Braga">...</option>
-                                                <option th:value="Porto" th:text="Porto">...</option>
-                                                <option th:value="Leiria" th:text="Leiria">...</option>
-                                                <option th:value="Coimbra" th:text="Coimbra">...</option>
-                                            </select>
-                                        </div>
+                                        <label for="distritoDropdown">District / State*</label>
+                                        <select required size="4" th:field="*{district}" id="distritoDropdown" class="form-control form-control-lg border w-100 my-2">
+                                            <option value="NA" selected disabled hidden>District / State</option>
+                                            <th:block th:each="distrito : ${cidades.keySet()}">
+                                                <option th:value="${distrito}" th:text="${distrito}">...</option>
+                                            </th:block>
+                                        </select>
                                     </div>
-                                    <div  style="margin-bottom: 10px">
-                                        <label for="concelhoDropdown">Municipality</label>
-                                        <div>
-                                            <select th:field="*{municipality}" id="concelhoDropdown" class="form-control form-control-lg border w-100 my-2">
-                                                <option value="NA" selected disabled hidden>Municipality</option>
-                                                <option th:value="Aveiro" th:text="Aveiro">...</option>
-                                                <option th:value="Ílhavo" th:text="Ílhavo">...</option>
-                                                <option th:value="Estarreja" th:text="Estarreja">...</option>
-                                                <option th:value="Águeda" th:text="Águeda">...</option>
-                                                <option th:value="Albergaria-a-Velha" th:text="Albergaria-a-Velha">...</option>
-                                            </select>
-                                        </div>
+                                    <div style="margin-bottom: 10px">
+                                        <label for="concelhoDropdown">Municipality*</label>
+                                        <select required th:field="*{municipality}" id="concelhoDropdown" class="form-control form-control-lg border w-100 my-2">
+                                            <option value="NA" selected disabled hidden>Municipality</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="loggedin-forgot d-inline-flex my-3">
@@ -113,7 +103,7 @@
 <script src="plugins/tether/js/tether.min.js"></script>
 <script src="plugins/raty/jquery.raty-fa.js"></script>
 <script src="plugins/slick-carousel/slick/slick.min.js"></script>
-<script src="plugins/jquery-nice-select/js/jquery.nice-select.min.js"></script>
+<!--  <script src="plugins/jquery-nice-select/js/jquery.nice-select.min.js"></script> -->
 <script src="plugins/fancybox/jquery.fancybox.pack.js"></script>
 <script src="plugins/smoothscroll/SmoothScroll.min.js"></script>
 <!-- google map -->
@@ -121,7 +111,7 @@
 <script src="plugins/google-map/gmap.js"></script>
 <script src="js/script.js"></script>
 <script src="js/general_scripts.js"></script>
-
+<script type="module" src="js/cities_script.js"></script>
 
 </body>
 

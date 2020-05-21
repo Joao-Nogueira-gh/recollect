@@ -68,7 +68,7 @@ public class UserController {
         }
 
         modelAndView.addObject("registo", new RegisterForm());
-
+        modelAndView.addObject("cidades", locationService.getCountiesByDistrict());
 
         modelAndView.setViewName(registrationPage);
         return modelAndView;

@@ -1,13 +1,30 @@
 package ua.tqs.ReCollect.utils;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+
 public class RegisterForm {
 
+    public RegisterForm(){
+        //this.district = "Aveiro";
+    }
 
+    @NotNull
     private String name;
+
+    @NotNull
+    @Email
     private String email;
+
+    @NotNull
     private String password;
+
     private String phone;
+
+    @NotNull
     private String district;
+
+    @NotNull
     private String municipality;
 
     public String getName() {
