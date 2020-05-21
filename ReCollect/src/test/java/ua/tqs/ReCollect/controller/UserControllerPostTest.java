@@ -15,9 +15,11 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 
+import ua.tqs.ReCollect.model.Location;
 import ua.tqs.ReCollect.model.User;
-import ua.tqs.ReCollect.model.UserDTO;
+import ua.tqs.ReCollect.service.LocationService;
 import ua.tqs.ReCollect.service.UserService;
+import ua.tqs.ReCollect.utils.RegisterForm;
 
 @ExtendWith(MockitoExtension.class)
 public class UserControllerPostTest {
@@ -27,6 +29,9 @@ public class UserControllerPostTest {
 
     @Mock
     static SecurityContextHolder sec;
+
+    @Mock
+    LocationService locService;
 
     @Autowired
     @InjectMocks
@@ -49,9 +54,19 @@ public class UserControllerPostTest {
 
     @Test
     public void registerUser() {
-
         BindingResult result = mock(BindingResult.class);
-        controller.createNewUser(new UserDTO("user", "user@user", "123123123", "pwd"), result);
+        RegisterForm registerForm=new RegisterForm();
+        given(locService.getLocation("Aveiro", "Aveiro")).willReturn(new Location("Aveiro", "Aveiro"));;
+
+        registerForm.setName("user");
+        registerForm.setEmail("user@user");
+        registerForm.setPhone("123123123");
+        registerForm.setPassword("pwd");
+
+        registerForm.setDistrict("Aveiro");
+        registerForm.setMunicipality("Aveiro");
+
+        controller.createNewUser(registerForm, result);
     }
 
 }

@@ -2,6 +2,7 @@ package ua.tqs.ReCollect.service;
 
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,12 +18,21 @@ public class ItemService {
     @Autowired
     private ItemRepository itemRepo;
 
+    public Item getItemById(Long id){
+        Optional<Item> result = itemRepo.findById(id);
+
+        return result.orElse(null);
+    }
+
     public List<Item> getAll(){
         return itemRepo.findAll();
     }
 
     public void save(Item item){
         itemRepo.save(item);
+    }
+    public void deleteItem(Long id){
+        itemRepo.deleteById(id);
     }
     
     public void deleteAll(){
@@ -55,3 +65,12 @@ public class ItemService {
         return dto;
     }
 }
+
+  
+
+
+
+
+
+
+

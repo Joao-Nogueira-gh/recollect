@@ -51,6 +51,8 @@ public class UserService {
 
         this.save(user);
 
+        logger.debug(user.toString());
+
         return true;
 
     }

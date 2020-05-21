@@ -40,12 +40,12 @@ import ua.tqs.ReCollect.service.MyUserDetailsService;
 <span class="fc" id="L40">                authorizeRequests()</span>
 <span class="fc" id="L41">                .antMatchers(&quot;/&quot;).permitAll()</span>
 <span class="fc" id="L42">                .antMatchers(loginPath).permitAll()</span>
-<span class="fc" id="L43">                .antMatchers(&quot;/registration&quot;).permitAll()</span>
+<span class="fc" id="L43">                .antMatchers(&quot;/register&quot;).permitAll()</span>
 <span class="fc" id="L44">                .antMatchers(&quot;/api/**&quot;).permitAll()</span>
 <span class="fc" id="L45">                .antMatchers(&quot;/admin/**&quot;).hasAuthority(&quot;ADMIN&quot;).anyRequest()</span>
 <span class="fc" id="L46">                .authenticated().and().formLogin()</span>
 <span class="fc" id="L47">                .loginPage(loginPath).failureUrl(&quot;/login?error=true&quot;)</span>
-<span class="fc" id="L48">                .defaultSuccessUrl(&quot;/home&quot;)</span>
+<span class="fc" id="L48">                .defaultSuccessUrl(&quot;/profile&quot;)</span>
 <span class="fc" id="L49">                .usernameParameter(&quot;user_name&quot;)</span>
 <span class="fc" id="L50">                .passwordParameter(&quot;password&quot;)</span>
 <span class="fc" id="L51">                .and().logout()</span>
@@ -58,7 +58,7 @@ import ua.tqs.ReCollect.service.MyUserDetailsService;
     public void configure(WebSecurity web) throws Exception {
 <span class="fc" id="L59">        web</span>
 <span class="fc" id="L60">                .ignoring()</span>
-<span class="fc" id="L61">                .antMatchers(&quot;/resources/**&quot;, &quot;/static/**&quot;, &quot;/css/**&quot;, &quot;/js/**&quot;, &quot;/images/**&quot;);</span>
+<span class="fc" id="L61">                .antMatchers(&quot;/resources/**&quot;, &quot;/static/**&quot;, &quot;/css/**&quot;, &quot;/js/**&quot;, &quot;/images/**&quot;, &quot;/plugins/**&quot;);</span>
 <span class="fc" id="L62">    }</span>
 
 }

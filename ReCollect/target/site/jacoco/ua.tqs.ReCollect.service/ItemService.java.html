@@ -2,6 +2,7 @@
 
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,47 +13,65 @@ import ua.tqs.ReCollect.model.ItemDTO;
 import ua.tqs.ReCollect.repository.ItemRepository;
 
 @Service
-<span class="fc" id="L15">public class ItemService {</span>
+<span class="fc" id="L16">public class ItemService {</span>
 
     @Autowired
     private ItemRepository itemRepo;
 
+    public Item getItemById(Long id){
+<span class="nc" id="L22">        Optional&lt;Item&gt; result = itemRepo.findById(id);</span>
+
+<span class="nc" id="L24">        return result.orElse(null);</span>
+    }
+
     public List&lt;Item&gt; getAll(){
-<span class="fc" id="L21">        return itemRepo.findAll();</span>
+<span class="fc" id="L28">        return itemRepo.findAll();</span>
     }
 
     public void save(Item item){
-<span class="fc" id="L25">        itemRepo.save(item);</span>
-<span class="fc" id="L26">    }</span>
+<span class="fc" id="L32">        itemRepo.save(item);</span>
+<span class="fc" id="L33">    }</span>
+    public void deleteItem(Long id){
+<span class="nc" id="L35">        itemRepo.deleteById(id);</span>
+<span class="nc" id="L36">    }</span>
     
     public void deleteAll(){
-<span class="fc" id="L29">        itemRepo.deleteAll();</span>
-<span class="fc" id="L30">    }</span>
+<span class="fc" id="L39">        itemRepo.deleteAll();</span>
+<span class="fc" id="L40">    }</span>
 
     public ItemDTO convertItem(Item item){
-<span class="fc" id="L33">        ItemDTO dto=new ItemDTO(item.getName(), item.getQuantity(), item.getPrice(),item.getDescription());</span>
+<span class="fc" id="L43">        ItemDTO dto=new ItemDTO(item.getName(), item.getQuantity(), item.getPrice(),item.getDescription());</span>
 
-<span class="fc bfc" id="L35" title="All 2 branches covered.">        for (URL image : item.getImages()) {</span>
-<span class="fc" id="L36">           dto.addImages(image); </span>
-<span class="fc" id="L37">        }</span>
-<span class="fc" id="L38">        dto.setCreationDate(item.getCreationDate());</span>
+<span class="fc bfc" id="L45" title="All 2 branches covered.">        for (URL image : item.getImages()) {</span>
+<span class="fc" id="L46">           dto.addImages(image); </span>
+<span class="fc" id="L47">        }</span>
+<span class="fc" id="L48">        dto.setCreationDate(item.getCreationDate());</span>
 
-<span class="fc bfc" id="L40" title="All 2 branches covered.">        if (item.getOwner()!=null){</span>
-<span class="fc" id="L41">            dto.setOwner(item.getOwner().getName());</span>
+<span class="fc bfc" id="L50" title="All 2 branches covered.">        if (item.getOwner()!=null){</span>
+<span class="fc" id="L51">            dto.setOwner(item.getOwner().getName());</span>
         }
-<span class="fc bfc" id="L43" title="All 2 branches covered.">        else if (item.getSeller()!=null){</span>
-<span class="fc" id="L44">            dto.setOwner(item.getSeller().getName());</span>
+<span class="fc bfc" id="L53" title="All 2 branches covered.">        else if (item.getSeller()!=null){</span>
+<span class="fc" id="L54">            dto.setOwner(item.getSeller().getName());</span>
         }
         else{
-<span class="fc" id="L47">            dto.setOwner(&quot;null&quot;);</span>
+<span class="fc" id="L57">            dto.setOwner(&quot;null&quot;);</span>
         }
-<span class="fc bfc" id="L49" title="All 2 branches covered.">        for (Comment comment : item.getComment()) {</span>
-<span class="fc" id="L50">            dto.addComments(comment.getText()+&quot;;&quot;+comment.getUser().getName()); </span>
-<span class="fc" id="L51">         }</span>
+<span class="fc bfc" id="L59" title="All 2 branches covered.">        for (Comment comment : item.getComment()) {</span>
+<span class="fc" id="L60">            dto.addComments(comment.getText()+&quot;;&quot;+comment.getUser().getName()); </span>
+<span class="fc" id="L61">         }</span>
 
-<span class="fc" id="L53">        dto.setCategory(String.valueOf(item.getCategory()));</span>
+<span class="fc" id="L63">        dto.setCategory(String.valueOf(item.getCategory()));</span>
 
-<span class="fc" id="L55">        return dto;</span>
+<span class="fc" id="L65">        return dto;</span>
     }
 }
+
+  
+
+
+
+
+
+
+
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>
