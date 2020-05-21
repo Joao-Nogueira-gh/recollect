@@ -216,6 +216,7 @@
 				<configuration>
 					<excludes>
 						<exclude>**/model/*</exclude>
+						<exclude>**/utils/*</exclude>
 					</excludes>
 				</configuration>
 				<executions>

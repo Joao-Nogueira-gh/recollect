@@ -1,0 +1,14 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+ReCollect,ua.tqs.ReCollect.service,CommentService,14,3,0,0,5,1,3,1,3,1
+ReCollect,ua.tqs.ReCollect.service,ItemService,15,103,0,8,4,21,2,9,2,5
+ReCollect,ua.tqs.ReCollect.service,MyUserDetailsService,66,7,4,0,12,2,5,2,3,2
+ReCollect,ua.tqs.ReCollect.service,UserService,0,221,1,9,0,29,1,14,0,10
+ReCollect,ua.tqs.ReCollect.service,LocationService,0,65,0,4,0,15,0,8,0,6
+ReCollect,ua.tqs.ReCollect,WebSecurityConfiguration,0,126,0,0,0,26,0,4,0,4
+ReCollect,ua.tqs.ReCollect,ReCollectApplication,6,3,0,0,2,1,1,1,1,1
+ReCollect,ua.tqs.ReCollect,DataLoader,0,87,0,4,0,18,0,5,0,3
+ReCollect,ua.tqs.ReCollect,SecurityConfiguration,0,7,0,0,0,2,0,2,0,2
+ReCollect,ua.tqs.ReCollect.controller,FrontendWebController,394,10,12,0,80,3,25,2,19,2
+ReCollect,ua.tqs.ReCollect.controller,ItemRestController,0,7,0,0,0,2,0,2,0,2
+ReCollect,ua.tqs.ReCollect.controller,UserRestController,0,7,0,0,0,2,0,2,0,2
+ReCollect,ua.tqs.ReCollect.controller,UserController,5,138,2,2,1,29,2,6,0,6
