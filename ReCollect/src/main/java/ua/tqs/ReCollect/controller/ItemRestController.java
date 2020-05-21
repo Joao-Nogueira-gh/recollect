@@ -1,6 +1,5 @@
 package ua.tqs.ReCollect.controller;
 
-import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +23,7 @@ public class ItemRestController {
 
 	@GetMapping("/api/items/")
 	@ResponseBody
-	public List<Item> itemIndex(Model model) throws IOException {;
+	public List<Item> itemIndex(Model model) {
 		return this.itemService.getAll();
 	}
     

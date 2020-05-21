@@ -20,7 +20,7 @@ import ua.tqs.ReCollect.service.UserService;
 
 
 @ExtendWith(MockitoExtension.class)
-public class UserServiceTest {
+class UserServiceTest {
 
     @Mock
     private UserRepository rcRepository;
@@ -47,24 +47,24 @@ public class UserServiceTest {
     
 
     @Test
-    public void registerNewCredentials_UserIsRegistered(){
+    void registerNewCredentials_UserIsRegistered(){
 
         User user = new User("User123", "user@email.com", "password", "123123123", new Location("Viseu", "SCD"));
 
         sutRCService.register(user);
 
-        given(rcRepository.findByEmail("user@email.com")).willReturn(user);
+        given(rcRepository.existsByEmail("user@email.com")).willReturn(true);
         
-        assertTrue(sutRCService.emailInUse("user@email.com"));
+        assertTrue(sutRCService.userExists("user@email.com"));
 
     }
 
     @Test
-    public void registerAlreadyExistingCredentials_UserIsNotRegistered(){
+    void registerAlreadyExistingCredentials_UserIsNotRegistered(){
 
         User user = new User("User123", "user@email.com", "password", "123123123", new Location("Viseu", "SCD"));
 
-        given(rcRepository.findByEmail("user@email.com")).willReturn(user);
+        given(rcRepository.existsByEmail("user@email.com")).willReturn(true);
         
         assertFalse(sutRCService.register(user));
 

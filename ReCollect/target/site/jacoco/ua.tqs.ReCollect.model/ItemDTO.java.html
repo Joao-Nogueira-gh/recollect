@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ItemDTO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ReCollect</a> &gt; <a href="index.source.html" class="el_package">ua.tqs.ReCollect.model</a> &gt; <span class="el_source">ItemDTO.java</span></div><h1>ItemDTO.java</h1><pre class="source lang-java linenums">package ua.tqs.ReCollect.model;
+
+import java.math.BigDecimal;
+import java.net.URL;
+import java.util.Date;
+import java.util.List;
+
+public class ItemDTO {
+
+    private String name;
+
+    private int quantity;
+
+    private BigDecimal price;
+
+    private String description;
+
+    private List&lt;URL&gt; images;
+
+    private Date creationDate;
+
+    private String owner;
+
+    private List&lt;String&gt; comments;
+
+    private String category;
+
+    public String getName() {
+<span class="nc" id="L29">        return name;</span>
+    }
+
+    public void setName(String name) {
+<span class="nc" id="L33">        this.name = name;</span>
+<span class="nc" id="L34">    }</span>
+
+    public int getQuantity() {
+<span class="nc" id="L37">        return quantity;</span>
+    }
+
+    public void setQuantity(int quantity) {
+<span class="nc" id="L41">        this.quantity = quantity;</span>
+<span class="nc" id="L42">    }</span>
+
+    public BigDecimal getPrice() {
+<span class="nc" id="L45">        return price;</span>
+    }
+
+    public void setPrice(BigDecimal price) {
+<span class="nc" id="L49">        this.price = price;</span>
+<span class="nc" id="L50">    }</span>
+
+    public String getDescription() {
+<span class="nc" id="L53">        return description;</span>
+    }
+
+    public void setDescription(String description) {
+<span class="nc" id="L57">        this.description = description;</span>
+<span class="nc" id="L58">    }</span>
+
+    public List&lt;URL&gt; getImages() {
+<span class="nc" id="L61">        return images;</span>
+    }
+
+    public void setImages(List&lt;URL&gt; images) {
+<span class="nc" id="L65">        this.images = images;</span>
+<span class="nc" id="L66">    }</span>
+    public void addImages(URL image) {
+<span class="nc" id="L68">        this.images.add(image);</span>
+<span class="nc" id="L69">    }</span>
+
+    public Date getCreationDate() {
+<span class="nc" id="L72">        return creationDate;</span>
+    }
+
+    public void setCreationDate(Date creationDate) {
+<span class="nc" id="L76">        this.creationDate = creationDate;</span>
+<span class="nc" id="L77">    }</span>
+
+    public String getOwner() {
+<span class="nc" id="L80">        return owner;</span>
+    }
+
+    public void setOwner(String owner) {
+<span class="nc" id="L84">        this.owner = owner;</span>
+<span class="nc" id="L85">    }</span>
+
+    public List&lt;String&gt; getComments() {
+<span class="nc" id="L88">        return comments;</span>
+    }
+
+    public void setComments(List&lt;String&gt; comments) {
+<span class="nc" id="L92">        this.comments = comments;</span>
+<span class="nc" id="L93">    }</span>
+    public void addComments(String comment) {
+<span class="nc" id="L95">        this.comments.add(comment);</span>
+<span class="nc" id="L96">    }</span>
+
+    public String getCategory() {
+<span class="nc" id="L99">        return category;</span>
+    }
+
+    public void setCategory(String category) {
+<span class="nc" id="L103">        this.category = category;</span>
+<span class="nc" id="L104">    }</span>
+
+<span class="nc" id="L106">    public ItemDTO(String name, int quantity, BigDecimal price, String description) {</span>
+<span class="nc" id="L107">        this.name = name;</span>
+<span class="nc" id="L108">        this.quantity = quantity;</span>
+<span class="nc" id="L109">        this.price = price;</span>
+<span class="nc" id="L110">        this.description = description;</span>
+<span class="nc" id="L111">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

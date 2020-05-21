@@ -26,21 +26,21 @@ public class Location {
 
     @PreRemove
     private void preRemove() {
-<span class="nc bnc" id="L29" title="All 2 branches missed.">        for (User u : usersloc) {</span>
+<span class="pc bpc" id="L29" title="1 of 2 branches missed.">        for (User u : usersloc) {</span>
 <span class="nc" id="L30">            u.setLocation(null);</span>
 <span class="nc" id="L31">        }</span>
-<span class="nc" id="L32">    }</span>
+<span class="fc" id="L32">    }</span>
     
-<span class="nc" id="L34">    public Location(){</span>
-<span class="nc" id="L35">    }</span>
+<span class="fc" id="L34">    public Location(){</span>
+<span class="fc" id="L35">    }</span>
 
-<span class="nc" id="L37">    public Location(String county, String district) {</span>
-<span class="nc" id="L38">        this.county = county;</span>
-<span class="nc" id="L39">        this.district = district;</span>
-<span class="nc" id="L40">    }</span>
+<span class="fc" id="L37">    public Location(String county, String district) {</span>
+<span class="fc" id="L38">        this.county = county;</span>
+<span class="fc" id="L39">        this.district = district;</span>
+<span class="fc" id="L40">    }</span>
 
     public Long getId() {
-<span class="nc" id="L43">        return id;</span>
+<span class="fc" id="L43">        return id;</span>
     }
 
     public String getCounty() {

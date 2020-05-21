@@ -56,125 +56,131 @@ public class User {
     @Column(name = &quot;active&quot;)
     private Boolean active;
     
-<span class="nc" id="L59">    public User(){</span>
-<span class="nc" id="L60">        this.favoriteItems=new HashSet&lt;&gt;();</span>
-<span class="nc" id="L61">        this.publishedItems=new HashSet&lt;&gt;();</span>
-<span class="nc" id="L62">        this.soldItems=new HashSet&lt;&gt;();</span>
-<span class="nc" id="L63">        this.comments=new HashSet&lt;&gt;();</span>
-<span class="nc" id="L64">        this.roles=new HashSet&lt;&gt;();</span>
-<span class="nc" id="L65">        this.active = false;</span>
-<span class="nc" id="L66">    }</span>
+<span class="fc" id="L59">    public User(){</span>
+<span class="fc" id="L60">        this.favoriteItems=new HashSet&lt;&gt;();</span>
+<span class="fc" id="L61">        this.publishedItems=new HashSet&lt;&gt;();</span>
+<span class="fc" id="L62">        this.soldItems=new HashSet&lt;&gt;();</span>
+<span class="fc" id="L63">        this.comments=new HashSet&lt;&gt;();</span>
+<span class="fc" id="L64">        this.roles=new HashSet&lt;&gt;();</span>
+<span class="fc" id="L65">        this.active = false;</span>
+<span class="fc" id="L66">    }</span>
 
-<span class="nc" id="L68">    public User(String name, @Email String email, String password, String phone, Location location) {</span>
-<span class="nc" id="L69">        this.name = name;</span>
-<span class="nc" id="L70">        this.email = email;</span>
-<span class="nc" id="L71">        this.password = password;</span>
-<span class="nc" id="L72">        this.phone = phone;</span>
-<span class="nc" id="L73">        this.location = location;</span>
-<span class="nc" id="L74">        this.favoriteItems=new HashSet&lt;&gt;();</span>
-<span class="nc" id="L75">        this.publishedItems=new HashSet&lt;&gt;();</span>
-<span class="nc" id="L76">        this.soldItems=new HashSet&lt;&gt;();</span>
-<span class="nc" id="L77">        this.comments=new HashSet&lt;&gt;();</span>
-<span class="nc" id="L78">        this.active = false;</span>
-<span class="nc" id="L79">    }</span>
+<span class="fc" id="L68">    public User(String name, @Email String email, String password, String phone, Location location) {</span>
+<span class="fc" id="L69">        this.name = name;</span>
+<span class="fc" id="L70">        this.email = email;</span>
+<span class="fc" id="L71">        this.password = password;</span>
+<span class="fc" id="L72">        this.phone = phone;</span>
+<span class="fc" id="L73">        this.location = location;</span>
+<span class="fc" id="L74">        this.favoriteItems=new HashSet&lt;&gt;();</span>
+<span class="fc" id="L75">        this.publishedItems=new HashSet&lt;&gt;();</span>
+<span class="fc" id="L76">        this.soldItems=new HashSet&lt;&gt;();</span>
+<span class="fc" id="L77">        this.comments=new HashSet&lt;&gt;();</span>
+<span class="fc" id="L78">        this.roles=new HashSet&lt;&gt;();</span>
+<span class="fc" id="L79">        this.active = false;</span>
+<span class="fc" id="L80">    }</span>
     
     public Long getId() {
-<span class="nc" id="L82">        return id;</span>
+<span class="nc" id="L83">        return id;</span>
     }
 
     public String getName() {
-<span class="nc" id="L86">        return name;</span>
+<span class="fc" id="L87">        return name;</span>
     }
 
     public void setName(String name) {
-<span class="nc" id="L90">        this.name = name;</span>
-<span class="nc" id="L91">    }</span>
+<span class="nc" id="L91">        this.name = name;</span>
+<span class="nc" id="L92">    }</span>
 
     public String getEmail() {
-<span class="nc" id="L94">        return email;</span>
+<span class="fc" id="L95">        return email;</span>
     }
 
     public void setEmail(String email) {
-<span class="nc" id="L98">        this.email = email;</span>
-<span class="nc" id="L99">    }</span>
+<span class="nc" id="L99">        this.email = email;</span>
+<span class="nc" id="L100">    }</span>
 
     public String getPassword() {
-<span class="nc" id="L102">        return password;</span>
+<span class="fc" id="L103">        return password;</span>
     }
 
     public void setPassword(String password) {
-<span class="nc" id="L106">        this.password = password;</span>
-<span class="nc" id="L107">    }</span>
+<span class="fc" id="L107">        this.password = password;</span>
+<span class="fc" id="L108">    }</span>
 
     public String getPhone() {
-<span class="nc" id="L110">        return phone;</span>
+<span class="fc" id="L111">        return phone;</span>
     }
 
     public void setPhone(String phone) {
-<span class="nc" id="L114">        this.phone = phone;</span>
-<span class="nc" id="L115">    }</span>
+<span class="nc" id="L115">        this.phone = phone;</span>
+<span class="nc" id="L116">    }</span>
     public Location getLocation() {
-<span class="nc" id="L117">        return location;</span>
+<span class="nc" id="L118">        return location;</span>
     }
 
     public void setLocation(Location location) {
-<span class="nc" id="L121">        this.location = location;</span>
-<span class="nc" id="L122">    }</span>
+<span class="nc" id="L122">        this.location = location;</span>
+<span class="nc" id="L123">    }</span>
 
     public Set&lt;Item&gt; getFavoriteItems() {
-<span class="nc" id="L125">        return favoriteItems;</span>
+<span class="nc" id="L126">        return favoriteItems;</span>
     }
 
     public void setFavoriteItems(Set&lt;Item&gt; favoriteItems) {
-<span class="nc" id="L129">        this.favoriteItems = favoriteItems;</span>
-<span class="nc" id="L130">    }</span>
+<span class="nc" id="L130">        this.favoriteItems = favoriteItems;</span>
+<span class="nc" id="L131">    }</span>
 
     public Set&lt;Item&gt; getPublishedItems() {
-<span class="nc" id="L133">        return publishedItems;</span>
+<span class="nc" id="L134">        return publishedItems;</span>
     }
 
     public void setPublishedItems(Set&lt;Item&gt; publishedItems) {
-<span class="nc" id="L137">        this.publishedItems = publishedItems;</span>
-<span class="nc" id="L138">    }</span>
+<span class="nc" id="L138">        this.publishedItems = publishedItems;</span>
+<span class="nc" id="L139">    }</span>
 
     public Set&lt;Item&gt; getSoldItems() {
-<span class="nc" id="L141">        return soldItems;</span>
+<span class="nc" id="L142">        return soldItems;</span>
     }
 
     public void setSoldItems(Set&lt;Item&gt; soldItems) {
-<span class="nc" id="L145">        this.soldItems = soldItems;</span>
-<span class="nc" id="L146">    }</span>
+<span class="nc" id="L146">        this.soldItems = soldItems;</span>
+<span class="nc" id="L147">    }</span>
 
     public Set&lt;Comment&gt; getComment() {
-<span class="nc" id="L149">        return comments;</span>
+<span class="nc" id="L150">        return comments;</span>
     }
 
     public void addComment(Comment comment) {
-<span class="nc" id="L153">        this.comments.add(comment);</span>
-<span class="nc" id="L154">    }</span>
+<span class="nc" id="L154">        this.comments.add(comment);</span>
+<span class="nc" id="L155">    }</span>
 
     public Set&lt;Role&gt; getRoles() {
-<span class="nc" id="L157">        return roles;</span>
+<span class="nc" id="L158">        return roles;</span>
     }
 
     public void setRole(Set&lt;Role&gt; roles) {
-<span class="nc" id="L161">        this.roles = roles;</span>
-<span class="nc" id="L162">    }</span>
+<span class="nc" id="L162">        this.roles = roles;</span>
+<span class="nc" id="L163">    }</span>
 
     @Override
     public String toString() {
-<span class="nc" id="L166">        return &quot;User [email=&quot; + email + &quot;, #favoriteItems=&quot; + favoriteItems.size() + &quot;, id=&quot; + id</span>
-                + &quot;, location=&quot; + location + &quot;, name=&quot; + name + &quot;, password=&quot; + password + &quot;, phone=&quot; + phone
-<span class="nc" id="L168">                + &quot;, #publishedItems=&quot; + publishedItems.size() + &quot;, #soldItems=&quot; + soldItems.size() + &quot;]&quot;;</span>
+<span class="fc" id="L167">        return getName()+&quot;/&quot;+getEmail()+&quot;/&quot;+getPhone();</span>
     }
 
     public Boolean getActive() {
-<span class="nc" id="L172">        return active;</span>
+<span class="nc" id="L171">        return active;</span>
     }
 
     public void setActive(Boolean active) {
-<span class="nc" id="L176">        this.active = active;</span>
-<span class="nc" id="L177">    }</span>
+<span class="nc" id="L175">        this.active = active;</span>
+<span class="nc" id="L176">    }</span>
+
+<span class="nc" id="L178">    public User(String name, @Email String email, String password, String phone) {</span>
+<span class="nc" id="L179">        this.name = name;</span>
+<span class="nc" id="L180">        this.email = email;</span>
+<span class="nc" id="L181">        this.password = password;</span>
+<span class="nc" id="L182">        this.phone = phone;</span>
+<span class="nc" id="L183">    }</span>
 
 
 }

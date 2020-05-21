@@ -30,7 +30,7 @@ public class UserController {
 
     static final Logger logger = Logger.getLogger(UserController.class);
 
-    private static final String registration_page = "register";
+    private static final String registrationPage = "register";
 
     @GetMapping(value = {"/login" })
     public ModelAndView login() {
@@ -44,7 +44,7 @@ public class UserController {
         ModelAndView modelAndView = new ModelAndView();
         User user = new User();
         modelAndView.addObject("user", user);
-        modelAndView.setViewName(registration_page);
+        modelAndView.setViewName(registrationPage);
         modelAndView.addObject("registo", new RegisterForm());
         modelAndView.addObject("cidades", locationService.getCountiesByDistrict());
         return modelAndView;
@@ -57,13 +57,11 @@ public class UserController {
                 locationService.getLocation(form.getDistrict(), form.getMunicipality()));
 
         ModelAndView modelAndView = new ModelAndView();
-        User userExists = userService.getByEmail(user.getEmail());
 
-        if (userExists != null) {
+        if (userService.userExists(user.getEmail())) {
             bindingResult.rejectValue("name", "error.user",
                     "There is already a user registered with the email provided");
         }
-
         if (!bindingResult.hasErrors()) {
             userService.register(user);
             modelAndView.addObject("successMessage", "User has been registered successfully");
@@ -71,8 +69,8 @@ public class UserController {
 
         modelAndView.addObject("registo", new RegisterForm());
 
-        modelAndView.setViewName(registration_page);
 
+        modelAndView.setViewName(registrationPage);
         return modelAndView;
     }
 

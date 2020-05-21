@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import ua.tqs.ReCollect.model.Categories;
 import ua.tqs.ReCollect.model.Item;
 import ua.tqs.ReCollect.model.User;
 import ua.tqs.ReCollect.service.ItemService;
@@ -27,7 +26,6 @@ import ua.tqs.ReCollect.service.UserService;
 import ua.tqs.ReCollect.utils.Category;
 import ua.tqs.ReCollect.utils.Image;
 import ua.tqs.ReCollect.utils.ItemForm;
-import ua.tqs.ReCollect.utils.LoginForm;
 import ua.tqs.ReCollect.utils.PictureListDto;
 import ua.tqs.ReCollect.utils.SearchParams;
 

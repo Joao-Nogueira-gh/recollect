@@ -36,7 +36,7 @@ public class TestController {
 
 	static final Logger logger = Logger.getLogger(TestController.class);
 
-	private static final String index_page = "index";
+	private static final String indexPage = "index";
 
 	@GetMapping("")
 	public String index(Model model) {
@@ -60,7 +60,7 @@ public class TestController {
 
 		model.addAttribute("test", "loaded some data");
 
-		return index_page;
+		return indexPage;
 	}
 
 	@GetMapping("/test")
@@ -70,7 +70,6 @@ public class TestController {
 		logger.debug(userService.getAll());
 
 		userService.deleteAll();
-		//logger.debug(commentService.getAll());
 		Item i=new Item("moeda", 1, BigDecimal.valueOf(5.5), "moeda rara", Categories.MISC);
 		itemService.save(i);
 		
@@ -84,13 +83,13 @@ public class TestController {
 		model.addAttribute("test", "test");
 		logger.debug(userService.getCurrentUser());
 
-		return index_page;
+		return indexPage;
 	}
 
     @GetMapping("/testUsers")
 	public String index3(Model model) {
 
 		logger.debug(userService.getAll());
-		return index_page;
+		return indexPage;
 	}
 }

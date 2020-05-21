@@ -21,12 +21,12 @@ import ua.tqs.ReCollect.model.User;
 import org.apache.log4j.Logger;
 
 @Service
-<span class="nc" id="L24">public class MyUserDetailsService implements UserDetailsService {</span>
+<span class="fc" id="L24">public class MyUserDetailsService implements UserDetailsService {</span>
 
     @Autowired
     private UserService userService;
 
-<span class="nc" id="L29">    static final Logger logger = Logger.getLogger(MyUserDetailsService.class);</span>
+<span class="fc" id="L29">    static final Logger logger = Logger.getLogger(MyUserDetailsService.class);</span>
 
     @Override
     @Transactional
@@ -35,7 +35,7 @@ import org.apache.log4j.Logger;
         
 <span class="nc bnc" id="L36" title="All 2 branches missed.">        if(user == null){</span>
 <span class="nc" id="L37">            logger.warn(&quot;Email not found&quot;);</span>
-<span class="nc" id="L38">            throw new UsernameNotFoundException(&quot;That email isn't in use. Sign up&quot;);</span>
+<span class="nc" id="L38">            throw new UsernameNotFoundException(&quot;Error: no such email&quot;);</span>
         }
 
 <span class="nc" id="L41">        List&lt;GrantedAuthority&gt; authorities = getUserAuthority(user.getRoles());</span>
@@ -44,18 +44,18 @@ import org.apache.log4j.Logger;
 
     private List&lt;GrantedAuthority&gt; getUserAuthority(Set&lt;Role&gt; userRoles) {
 
-<span class="nc" id="L47">        Set&lt;GrantedAuthority&gt; roles = new HashSet&lt;GrantedAuthority&gt;();</span>
+<span class="nc" id="L47">        Set&lt;GrantedAuthority&gt; roles = new HashSet&lt;&gt;();</span>
 <span class="nc bnc" id="L48" title="All 2 branches missed.">        for (Role role : userRoles) {</span>
 <span class="nc" id="L49">            roles.add(new SimpleGrantedAuthority(role.getRole()));</span>
-<span class="nc" id="L50">        }</span>
-<span class="nc" id="L51">        List&lt;GrantedAuthority&gt; grantedAuthorities = new ArrayList&lt;&gt;(roles);</span>
-<span class="nc" id="L52">        return grantedAuthorities;</span>
+        }
+
+<span class="nc" id="L52">        return new ArrayList&lt;&gt;(roles);</span>
 
     }
 
     private UserDetails buildUserForAuthentication(User user, List&lt;GrantedAuthority&gt; authorities) {
 <span class="nc" id="L57">        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(),</span>
-                true, true, true, true, authorities);
+<span class="nc" id="L58">                true, true, true, true, authorities);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

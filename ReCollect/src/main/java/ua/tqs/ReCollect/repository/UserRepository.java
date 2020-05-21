@@ -10,11 +10,10 @@ import ua.tqs.ReCollect.model.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    public List<User> findAll();
+    List<User> findAll();
 
     User findByEmail(String email);
 
     boolean existsByEmail(String email);
-
-
+    
 }

@@ -1,23 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ReCollect</a> &gt; <a href="index.source.html" class="el_package">ua.tqs.ReCollect.service</a> &gt; <span class="el_source">UserService.java</span></div><h1>UserService.java</h1><pre class="source lang-java linenums">package ua.tqs.ReCollect.service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import ua.tqs.ReCollect.model.Item;
 import ua.tqs.ReCollect.model.User;
-import ua.tqs.ReCollect.repository.RoleRepository;
+import ua.tqs.ReCollect.model.UserDTO;
 import ua.tqs.ReCollect.repository.UserRepository;
 
 @Service
-<span class="nc" id="L17">public class UserService {</span>
-
-    @Autowired
-    private RoleRepository roleRepo;
+<span class="fc" id="L16">public class UserService {</span>
 
     @Autowired
     private UserRepository userRepo;
@@ -25,81 +21,100 @@ import ua.tqs.ReCollect.repository.UserRepository;
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-
-
     private User currentUser;
 
-<span class="nc" id="L32">    static final Logger logger = Logger.getLogger(UserService.class);</span>
+<span class="fc" id="L26">    static final Logger logger = Logger.getLogger(UserService.class);</span>
+
 
     public List&lt;User&gt; getAll() {
-<span class="nc" id="L35">        return userRepo.findAll();</span>
+<span class="nc" id="L30">        return userRepo.findAll();</span>
+    }
+
+    public boolean userExists(String email){
+<span class="fc" id="L34">        return userRepo.existsByEmail(email);</span>
     }
 
     public void save(User user) {
-<span class="nc" id="L39">        userRepo.save(user);</span>
-<span class="nc" id="L40">    }</span>
+<span class="fc" id="L38">        userRepo.save(user);</span>
+<span class="fc" id="L39">    }</span>
 
     public void deleteAll() {
-<span class="nc" id="L43">        userRepo.deleteAll();</span>
-<span class="nc" id="L44">    }</span>
+<span class="nc" id="L42">        userRepo.deleteAll();</span>
+<span class="nc" id="L43">    }</span>
 
     public boolean register(User user) {
 
-<span class="nc bnc" id="L48" title="All 2 branches missed.">        if (this.emailInUse(user.getEmail())) {</span>
-<span class="nc" id="L49">            logger.debug(&quot;E-mail is already in use&quot;);</span>
-<span class="nc" id="L50">            return false;</span>
+<span class="fc bfc" id="L47" title="All 2 branches covered.">        if (userExists(user.getEmail())) {</span>
+<span class="fc" id="L48">            logger.debug(&quot;E-mail is already in use&quot;);</span>
+<span class="fc" id="L49">            return false;</span>
         }
 
-<span class="nc" id="L53">        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));</span>
+<span class="fc" id="L52">        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));</span>
 
-<span class="nc" id="L55">        this.save(user);</span>
-<span class="nc" id="L56">        return true;</span>
+<span class="fc" id="L54">        this.save(user);</span>
 
-    }
+<span class="fc" id="L56">        logger.debug(user.toString());</span>
 
-    // Returns if the e-mail is already in use
-    public boolean emailInUse(String email) {
-<span class="nc" id="L62">        System.out.println(this.userRepo.findByEmail(email));</span>
-<span class="nc bnc" id="L63" title="All 2 branches missed.">        return this.userRepo.findByEmail(email) != null;</span>
-    }
+<span class="fc" id="L58">        return true;</span>
 
-    //weird alternate solution but idk
-    public List&lt;String&gt; apiGetAll() {
-<span class="nc" id="L68">        ListIterator&lt;User&gt; it = this.getAll().listIterator();</span>
-<span class="nc" id="L69">        List&lt;String&gt; ul= new ArrayList&lt;&gt;();</span>
-<span class="nc bnc" id="L70" title="All 2 branches missed.">        while(it.hasNext()){</span>
-<span class="nc" id="L71">            ul.add(it.next().toString());</span>
-        }
-<span class="nc" id="L73">        return ul;</span>
     }
 
     public User getByEmail(String email) {
 
-<span class="nc" id="L78">        return userRepo.findByEmail(email);</span>
+<span class="nc" id="L64">        return userRepo.findByEmail(email);</span>
 
     }
 
+    //not being used
 	public boolean login(String email, String pass) {
-<span class="nc bnc" id="L83" title="All 2 branches missed.">        if (userRepo.findByEmail(email) != null){</span>
-<span class="nc" id="L84">            User u = userRepo.findByEmail(email);</span>
-<span class="nc bnc" id="L85" title="All 2 branches missed.">            if (checkUserPassword(u, pass)){</span>
-<span class="nc" id="L86">                currentUser=u;</span>
-<span class="nc" id="L87">                return true;</span>
+<span class="fc bfc" id="L70" title="All 2 branches covered.">        if (userRepo.findByEmail(email) != null){</span>
+<span class="fc" id="L71">            User u = userRepo.findByEmail(email);</span>
+<span class="pc bpc" id="L72" title="1 of 2 branches missed.">            if (checkUserPassword(u, pass)){</span>
+<span class="fc" id="L73">                currentUser=u;</span>
+<span class="fc" id="L74">                return true;</span>
             }
         }
-<span class="nc" id="L90">		return false;</span>
+<span class="fc" id="L77">		return false;</span>
 	}
 
 	public boolean checkUserPassword(User user, String pass) {
-<span class="nc bnc" id="L94" title="All 2 branches missed.">		return user.getPassword().equals(pass) ? true : false;</span>
+
+<span class="fc" id="L82">        return user.getPassword().equals(bCryptPasswordEncoder.encode(pass));</span>
+        
     }
 
     public void logout(){
-<span class="nc" id="L98">        currentUser=null;</span>
-<span class="nc" id="L99">    }</span>
+<span class="nc" id="L87">        currentUser=null;</span>
+<span class="nc" id="L88">    }</span>
 
     public User getCurrentUser(){
-<span class="nc" id="L102">        return currentUser;</span>
+<span class="nc" id="L91">        return currentUser;</span>
+    }
+
+    public UserDTO convertToDTO(User user){
+<span class="nc" id="L95">        UserDTO dto=new UserDTO(user.getName(), user.getEmail(), user.getPhone(), user.getPassword());</span>
+        
+<span class="nc bnc" id="L97" title="All 2 branches missed.">        if (user.getLocation()!=null){</span>
+<span class="nc" id="L98">            dto.setLocation(user.getLocation().getCounty()+&quot;-&quot;+user.getLocation().getDistrict());</span>
+        }
+<span class="nc bnc" id="L100" title="All 2 branches missed.">        for (Item i : user.getFavoriteItems()) {</span>
+<span class="nc" id="L101">            dto.addFavoriteItems(i.getName()+&quot;;&quot;+i.getQuantity()+&quot;;&quot;+i.getPrice()+&quot;;&quot;+i.getDescription()+&quot;;&quot;+i.getCategory());</span>
+        }
+<span class="nc bnc" id="L103" title="All 2 branches missed.">        for (Item i : user.getSoldItems()) {</span>
+<span class="nc" id="L104">            dto.addSoldItems(i.getName()+&quot;;&quot;+i.getQuantity()+&quot;;&quot;+i.getPrice()+&quot;;&quot;+i.getDescription()+&quot;;&quot;+i.getCategory());</span>
+        }
+<span class="nc bnc" id="L106" title="All 2 branches missed.">        for (Item i : user.getPublishedItems()) {</span>
+<span class="nc" id="L107">            dto.addPublishedItems(i.getName()+&quot;;&quot;+i.getQuantity()+&quot;;&quot;+i.getPrice()+&quot;;&quot;+i.getDescription()+&quot;;&quot;+i.getCategory());</span>
+        }
+
+<span class="nc" id="L110">        return dto;</span>
+    }
+    //might need to have several methods, or flags
+    //this specific one is because of the register
+    public User convertToUser(UserDTO userdto){
+<span class="nc" id="L115">        User user=new User(userdto.getName(), userdto.getEmail(), userdto.getPassword(), userdto.getPhoneNumber());</span>
+
+<span class="nc" id="L117">        return user;</span>
     }
 
 }
