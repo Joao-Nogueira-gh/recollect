@@ -6,8 +6,6 @@ $(document).ready(function(){
     tagline.innerText = appName;
     tagline.innerHTML = appName;
 
-    console.log("ola");
-
     buildNavbar();
     buildFooter();
     buildFooterBottom();
