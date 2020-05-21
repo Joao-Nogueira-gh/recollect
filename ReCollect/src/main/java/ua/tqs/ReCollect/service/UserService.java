@@ -21,8 +21,6 @@ public class UserService {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    private User currentUser;
-
     static final Logger logger = Logger.getLogger(UserService.class);
 
 
@@ -53,8 +51,6 @@ public class UserService {
 
         this.save(user);
 
-        logger.debug(user.toString());
-
         return true;
 
     }
@@ -65,33 +61,8 @@ public class UserService {
 
     }
 
-    //not being used
-	public boolean login(String email, String pass) {
-        if (userRepo.findByEmail(email) != null){
-            User u = userRepo.findByEmail(email);
-            if (checkUserPassword(u, pass)){
-                currentUser=u;
-                return true;
-            }
-        }
-		return false;
-	}
-
-	public boolean checkUserPassword(User user, String pass) {
-
-        return user.getPassword().equals(bCryptPasswordEncoder.encode(pass));
-        
-    }
-
-    public void logout(){
-        currentUser=null;
-    }
-
-    public User getCurrentUser(){
-        return currentUser;
-    }
-
     public UserDTO convertToDTO(User user){
+
         UserDTO dto=new UserDTO(user.getName(), user.getEmail(), user.getPhone(), user.getPassword());
         
         if (user.getLocation()!=null){
@@ -108,13 +79,15 @@ public class UserService {
         }
 
         return dto;
+
     }
+
     //might need to have several methods, or flags
     //this specific one is because of the register
     public User convertToUser(UserDTO userdto){
-        User user=new User(userdto.getName(), userdto.getEmail(), userdto.getPassword(), userdto.getPhoneNumber());
+        
+        return new User(userdto.getName(), userdto.getEmail(), userdto.getPassword(), userdto.getPhoneNumber());
 
-        return user;
     }
 
 }

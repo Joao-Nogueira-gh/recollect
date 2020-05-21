@@ -2,6 +2,7 @@ package ua.tqs.ReCollect.model;
 
 import java.math.BigDecimal;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -108,6 +109,38 @@ public class ItemDTO {
         this.quantity = quantity;
         this.price = price;
         this.description = description;
+
+        this.images = new ArrayList<>();
+        this.comments = new ArrayList<>();
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        ItemDTO other = (ItemDTO) obj;
+        if (description == null) {
+            if (other.description != null)
+                return false;
+        } else if (!description.equals(other.description))
+            return false;
+        if (name == null) {
+            if (other.name != null)
+                return false;
+        } else if (!name.equals(other.name))
+            return false;
+        if (price == null) {
+            if (other.price != null)
+                return false;
+        } else if (!price.equals(other.price))
+            return false;
+        if (quantity != other.quantity)
+            return false;
+        return true;
+    }
+    
 }

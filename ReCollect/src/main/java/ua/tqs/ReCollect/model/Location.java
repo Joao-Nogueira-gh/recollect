@@ -63,4 +63,26 @@ public class Location {
     public String toString() {
         return "Location [county=" + county + ", district=" + district + ", id=" + id  + "]";
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Location other = (Location) obj;
+        if (county == null) {
+            if (other.county != null)
+                return false;
+        } else if (!county.equals(other.county))
+            return false;
+        if (district == null) {
+            if (other.district != null)
+                return false;
+        } else if (!district.equals(other.district))
+            return false;
+        return true;
+    }
 }

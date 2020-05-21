@@ -215,7 +215,7 @@
 				<version>0.8.4</version>
 				<configuration>
 					<excludes>
-						<exclude>**/model/</exclude>
+						<exclude>**/model/*</exclude>
 					</excludes>
 				</configuration>
 				<executions>

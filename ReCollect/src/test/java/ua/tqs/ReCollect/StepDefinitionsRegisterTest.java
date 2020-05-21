@@ -2,6 +2,7 @@ package ua.tqs.ReCollect;
 
 // import static org.junit.jupiter.api.Assertions.assertEquals;
 // import static org.mockito.BDDMockito.given;
+
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -20,6 +21,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 // import ua.tqs.ReCollect.model.User;
+// import ua.tqs.ReCollect.model.UserDTO;
 import ua.tqs.ReCollect.repository.LocationRepository;
 import ua.tqs.ReCollect.repository.UserRepository;
 import ua.tqs.ReCollect.service.LocationService;
@@ -61,14 +63,14 @@ class StepDefinitionsRegisterTest {
     @Test
     void a_user_submits_credentials_that_don_t_exist_in_the_DB() throws Exception {
 
-        // Clean up the DB
+        // // Clean up the DB
         // userRepo.deleteAll();
         
         // // Set up the PwdEncryption mock
         // given(mockBCryptPwdEncoder.encode("coiso")).willReturn("SHA512(coiso)");
 
         // // Instance the user that will be created
-        // User newUser = new User("user", "new_user@gmail.com", "coiso", "3467764", localRepo.findByDistrictAndCounty("Aveiro", "Aveiro"));
+        // User newUser = new User("user", "new_user@gmail.com", "coiso", "3467764");
 
         // // Make sure the credentials submitted don't exist in the BD
         // assertEquals(null, userService.getByEmail("new_user@gmail.com"), "Error: email in use");
