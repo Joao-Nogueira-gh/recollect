@@ -16,7 +16,9 @@ DevOps Master -> João Nogueira 89262 ; Tiago Melo 89005
 
 ## Relevant Links
 
-Backlog Management -> Trello -> https://trello.com/b/5TPZlqim
+Trello Backlog Management -> https://trello.com/b/5TPZlqim
+
+SonarCloud Analysis -> https://sonarcloud.io/dashboard?id=Joao-Nogueira-gh_recollect
 
 ## To run
 ```bash
