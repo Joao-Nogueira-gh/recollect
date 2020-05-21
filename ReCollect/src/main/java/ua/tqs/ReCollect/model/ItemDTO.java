@@ -115,6 +115,22 @@ public class ItemDTO {
     }
 
     @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((category == null) ? 0 : category.hashCode());
+        result = prime * result + ((comments == null) ? 0 : comments.hashCode());
+        result = prime * result + ((creationDate == null) ? 0 : creationDate.hashCode());
+        result = prime * result + ((description == null) ? 0 : description.hashCode());
+        result = prime * result + ((images == null) ? 0 : images.hashCode());
+        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        result = prime * result + ((owner == null) ? 0 : owner.hashCode());
+        result = prime * result + ((price == null) ? 0 : price.hashCode());
+        result = prime * result + quantity;
+        return result;
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
@@ -142,5 +158,7 @@ public class ItemDTO {
             return false;
         return true;
     }
+
+
     
 }
