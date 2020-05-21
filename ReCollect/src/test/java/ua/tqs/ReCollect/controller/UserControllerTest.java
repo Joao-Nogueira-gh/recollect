@@ -46,7 +46,7 @@ public class UserControllerTest {
         
         String login = this.restTemplate.getForObject("/login", String.class);
 
-        assertTrue(login.contains("Login Page"));
+        assertTrue(login.contains("Login Now"));
         
     }
 

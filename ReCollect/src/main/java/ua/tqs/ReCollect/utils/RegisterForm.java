@@ -6,7 +6,6 @@ import javax.validation.constraints.NotNull;
 public class RegisterForm {
 
     public RegisterForm(){
-        //this.district = "Aveiro";
     }
 
     @NotNull

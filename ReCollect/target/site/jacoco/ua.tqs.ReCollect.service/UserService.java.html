@@ -51,34 +51,36 @@ import ua.tqs.ReCollect.repository.UserRepository;
 
 <span class="fc" id="L52">        this.save(user);</span>
 
-<span class="fc" id="L54">        return true;</span>
+<span class="fc" id="L54">        logger.debug(user.toString());</span>
+
+<span class="fc" id="L56">        return true;</span>
 
     }
 
     public User getByEmail(String email) {
 
-<span class="fc" id="L60">        return userRepo.findByEmail(email);</span>
+<span class="fc" id="L62">        return userRepo.findByEmail(email);</span>
 
     }
 
     public UserDTO convertToDTO(User user){
 
-<span class="fc" id="L66">        UserDTO dto=new UserDTO(user.getName(), user.getEmail(), user.getPhone(), user.getPassword());</span>
+<span class="fc" id="L68">        UserDTO dto=new UserDTO(user.getName(), user.getEmail(), user.getPhone(), user.getPassword());</span>
         
-<span class="pc bpc" id="L68" title="1 of 2 branches missed.">        if (user.getLocation()!=null){</span>
-<span class="fc" id="L69">            dto.setLocation(user.getLocation().getCounty()+&quot;-&quot;+user.getLocation().getDistrict());</span>
+<span class="pc bpc" id="L70" title="1 of 2 branches missed.">        if (user.getLocation()!=null){</span>
+<span class="fc" id="L71">            dto.setLocation(user.getLocation().getCounty()+&quot;-&quot;+user.getLocation().getDistrict());</span>
         }
-<span class="fc bfc" id="L71" title="All 2 branches covered.">        for (Item i : user.getFavoriteItems()) {</span>
-<span class="fc" id="L72">            dto.addFavoriteItems(i.getName()+&quot;;&quot;+i.getQuantity()+&quot;;&quot;+i.getPrice()+&quot;;&quot;+i.getDescription()+&quot;;&quot;+i.getCategory());</span>
-<span class="fc" id="L73">        }</span>
-<span class="fc bfc" id="L74" title="All 2 branches covered.">        for (Item i : user.getSoldItems()) {</span>
-<span class="fc" id="L75">            dto.addSoldItems(i.getName()+&quot;;&quot;+i.getQuantity()+&quot;;&quot;+i.getPrice()+&quot;;&quot;+i.getDescription()+&quot;;&quot;+i.getCategory());</span>
-<span class="fc" id="L76">        }</span>
-<span class="fc bfc" id="L77" title="All 2 branches covered.">        for (Item i : user.getPublishedItems()) {</span>
-<span class="fc" id="L78">            dto.addPublishedItems(i.getName()+&quot;;&quot;+i.getQuantity()+&quot;;&quot;+i.getPrice()+&quot;;&quot;+i.getDescription()+&quot;;&quot;+i.getCategory());</span>
-<span class="fc" id="L79">        }</span>
+<span class="fc bfc" id="L73" title="All 2 branches covered.">        for (Item i : user.getFavoriteItems()) {</span>
+<span class="fc" id="L74">            dto.addFavoriteItems(i.getName()+&quot;;&quot;+i.getQuantity()+&quot;;&quot;+i.getPrice()+&quot;;&quot;+i.getDescription()+&quot;;&quot;+i.getCategory());</span>
+<span class="fc" id="L75">        }</span>
+<span class="fc bfc" id="L76" title="All 2 branches covered.">        for (Item i : user.getSoldItems()) {</span>
+<span class="fc" id="L77">            dto.addSoldItems(i.getName()+&quot;;&quot;+i.getQuantity()+&quot;;&quot;+i.getPrice()+&quot;;&quot;+i.getDescription()+&quot;;&quot;+i.getCategory());</span>
+<span class="fc" id="L78">        }</span>
+<span class="fc bfc" id="L79" title="All 2 branches covered.">        for (Item i : user.getPublishedItems()) {</span>
+<span class="fc" id="L80">            dto.addPublishedItems(i.getName()+&quot;;&quot;+i.getQuantity()+&quot;;&quot;+i.getPrice()+&quot;;&quot;+i.getDescription()+&quot;;&quot;+i.getCategory());</span>
+<span class="fc" id="L81">        }</span>
 
-<span class="fc" id="L81">        return dto;</span>
+<span class="fc" id="L83">        return dto;</span>
 
     }
 
@@ -86,7 +88,7 @@ import ua.tqs.ReCollect.repository.UserRepository;
     //this specific one is because of the register
     public User convertToUser(UserDTO userdto){
         
-<span class="fc" id="L89">        return new User(userdto.getName(), userdto.getEmail(), userdto.getPassword(), userdto.getPhoneNumber());</span>
+<span class="fc" id="L91">        return new User(userdto.getName(), userdto.getEmail(), userdto.getPassword(), userdto.getPhoneNumber());</span>
 
     }
 

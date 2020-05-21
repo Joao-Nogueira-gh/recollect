@@ -164,7 +164,8 @@ public class User {
 
     @Override
     public String toString() {
-        return getName()+"/"+getEmail()+"/"+getPhone();
+        String st=getName()+"/"+getEmail()+"/"+getPhone();
+        return (location==null) ? st : st+"/"+location.getCounty()+"/"+location.getDistrict();
     }
 
     public Boolean getActive() {
