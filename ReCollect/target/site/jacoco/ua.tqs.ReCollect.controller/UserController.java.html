@@ -31,53 +31,53 @@ import ua.tqs.ReCollect.service.UserService;
 
     @GetMapping(value={&quot;/&quot;, &quot;/login&quot;})
     public ModelAndView login(){
-<span class="nc" id="L34">        ModelAndView modelAndView = new ModelAndView();</span>
-<span class="nc" id="L35">        modelAndView.setViewName(&quot;login&quot;);</span>
-<span class="nc" id="L36">        return modelAndView;</span>
+<span class="fc" id="L34">        ModelAndView modelAndView = new ModelAndView();</span>
+<span class="fc" id="L35">        modelAndView.setViewName(&quot;login&quot;);</span>
+<span class="fc" id="L36">        return modelAndView;</span>
     }
 
 
     @GetMapping(value=&quot;/registration&quot;)
     public ModelAndView registration(){
-<span class="nc" id="L42">        ModelAndView modelAndView = new ModelAndView();</span>
-<span class="nc" id="L43">        User user = new User();</span>
-<span class="nc" id="L44">        modelAndView.addObject(&quot;user&quot;, user);</span>
-<span class="nc" id="L45">        modelAndView.setViewName(registrationPage);</span>
-<span class="nc" id="L46">        return modelAndView;</span>
+<span class="fc" id="L42">        ModelAndView modelAndView = new ModelAndView();</span>
+<span class="fc" id="L43">        User user = new User();</span>
+<span class="fc" id="L44">        modelAndView.addObject(&quot;user&quot;, user);</span>
+<span class="fc" id="L45">        modelAndView.setViewName(registrationPage);</span>
+<span class="fc" id="L46">        return modelAndView;</span>
     }
 
     @PostMapping(value = &quot;/registration&quot;)
     public ModelAndView createNewUser(@Valid UserDTO userdto, BindingResult bindingResult) {
 
-<span class="nc" id="L52">        ModelAndView modelAndView = new ModelAndView();</span>
+<span class="fc" id="L52">        ModelAndView modelAndView = new ModelAndView();</span>
 		 
-<span class="nc bnc" id="L54" title="All 2 branches missed.">        if (userService.userExists(userdto.getEmail())) {</span>
+<span class="pc bpc" id="L54" title="1 of 2 branches missed.">        if (userService.userExists(userdto.getEmail())) {</span>
 <span class="nc" id="L55">            bindingResult</span>
 <span class="nc" id="L56">                    .rejectValue(&quot;userName&quot;, &quot;error.user&quot;,</span>
 <span class="nc" id="L57">                            &quot;There is already a user registered with the email provided&quot;);</span>
         }
 
-<span class="nc bnc" id="L60" title="All 2 branches missed.">        if (!bindingResult.hasErrors()) {</span>
-<span class="nc" id="L61">            User user=userService.convertToUser(userdto);</span>
-<span class="nc" id="L62">            userService.register(user);</span>
-<span class="nc" id="L63">            modelAndView.addObject(&quot;successMessage&quot;, &quot;User has been registered successfully&quot;);</span>
-<span class="nc" id="L64">            modelAndView.addObject(&quot;user&quot;, new User());</span>
+<span class="pc bpc" id="L60" title="1 of 2 branches missed.">        if (!bindingResult.hasErrors()) {</span>
+<span class="fc" id="L61">            User user=userService.convertToUser(userdto);</span>
+<span class="fc" id="L62">            userService.register(user);</span>
+<span class="fc" id="L63">            modelAndView.addObject(&quot;successMessage&quot;, &quot;User has been registered successfully&quot;);</span>
+<span class="fc" id="L64">            modelAndView.addObject(&quot;user&quot;, new User());</span>
         }
 
-<span class="nc" id="L67">        modelAndView.setViewName(registrationPage);</span>
+<span class="fc" id="L67">        modelAndView.setViewName(registrationPage);</span>
 
-<span class="nc" id="L69">        return modelAndView;</span>
+<span class="fc" id="L69">        return modelAndView;</span>
     }
 
     @GetMapping(value=&quot;/home&quot;)
     public ModelAndView home(){
-<span class="nc" id="L74">        ModelAndView modelAndView = new ModelAndView();</span>
-<span class="nc" id="L75">        Authentication auth = SecurityContextHolder.getContext().getAuthentication();</span>
-<span class="nc" id="L76">        User user = userService.getByEmail(auth.getName());</span>
-<span class="nc" id="L77">        modelAndView.addObject(&quot;userName&quot;, &quot;Welcome &quot; + user.getName());</span>
-<span class="nc" id="L78">        modelAndView.addObject(&quot;adminMessage&quot;,&quot;Content Available Only for Users with Admin Role&quot;);</span>
-<span class="nc" id="L79">        modelAndView.setViewName(&quot;admin/home&quot;);</span>
-<span class="nc" id="L80">        return modelAndView;</span>
+<span class="fc" id="L74">        ModelAndView modelAndView = new ModelAndView();</span>
+<span class="fc" id="L75">        Authentication auth = SecurityContextHolder.getContext().getAuthentication();</span>
+<span class="fc" id="L76">        User user = userService.getByEmail(auth.getName());</span>
+<span class="fc" id="L77">        modelAndView.addObject(&quot;userName&quot;, &quot;Welcome &quot; + user.getName());</span>
+<span class="fc" id="L78">        modelAndView.addObject(&quot;adminMessage&quot;,&quot;Content Available Only for Users with Admin Role&quot;);</span>
+<span class="fc" id="L79">        modelAndView.setViewName(&quot;admin/home&quot;);</span>
+<span class="fc" id="L80">        return modelAndView;</span>
     }
     
 }

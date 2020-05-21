@@ -183,4 +183,17 @@ public class User {
     }
 
 
+    public void addFavItem(Item i) {
+        this.favoriteItems.add(i);
+    }
+
+    public void addPublishedItem(Item i) {
+        this.publishedItems.add(i);        
+    }
+
+    public void addSoldItem(Item i) {
+        this.soldItems.add(i);        
+    }
+
+
 }

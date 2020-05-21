@@ -20,12 +20,15 @@ public class ItemService {
     public List<Item> getAll(){
         return itemRepo.findAll();
     }
+
     public void save(Item item){
         itemRepo.save(item);
     }
+    
     public void deleteAll(){
         itemRepo.deleteAll();
     }
+
     public ItemDTO convertItem(Item item){
         ItemDTO dto=new ItemDTO(item.getName(), item.getQuantity(), item.getPrice(),item.getDescription());
 

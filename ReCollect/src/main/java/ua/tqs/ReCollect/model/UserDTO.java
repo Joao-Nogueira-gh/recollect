@@ -1,5 +1,6 @@
 package ua.tqs.ReCollect.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.constraints.Email;
@@ -101,6 +102,11 @@ public class UserDTO{
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.password = password;
+
+        this.favoriteItems = new ArrayList<>();
+        this.soldItems = new ArrayList<>();
+        this.publishedItems = new ArrayList<>();
+
     }
 
     

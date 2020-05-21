@@ -2,7 +2,6 @@ package ua.tqs.ReCollect;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.Test;
@@ -43,7 +42,6 @@ public class StepDefinitionsLoginTest {
 
 
         //logged out
-        assertNull(userService.getCurrentUser(), "msg");
     }
 
     @Given("I am on the login page")

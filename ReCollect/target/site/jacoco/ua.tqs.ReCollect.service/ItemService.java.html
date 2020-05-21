@@ -18,38 +18,41 @@ import ua.tqs.ReCollect.repository.ItemRepository;
     private ItemRepository itemRepo;
 
     public List&lt;Item&gt; getAll(){
-<span class="nc" id="L21">        return itemRepo.findAll();</span>
+<span class="fc" id="L21">        return itemRepo.findAll();</span>
     }
+
     public void save(Item item){
-<span class="nc" id="L24">        itemRepo.save(item);</span>
-<span class="nc" id="L25">    }</span>
+<span class="fc" id="L25">        itemRepo.save(item);</span>
+<span class="fc" id="L26">    }</span>
+    
     public void deleteAll(){
-<span class="nc" id="L27">        itemRepo.deleteAll();</span>
-<span class="nc" id="L28">    }</span>
+<span class="fc" id="L29">        itemRepo.deleteAll();</span>
+<span class="fc" id="L30">    }</span>
+
     public ItemDTO convertItem(Item item){
-<span class="nc" id="L30">        ItemDTO dto=new ItemDTO(item.getName(), item.getQuantity(), item.getPrice(),item.getDescription());</span>
+<span class="fc" id="L33">        ItemDTO dto=new ItemDTO(item.getName(), item.getQuantity(), item.getPrice(),item.getDescription());</span>
 
-<span class="nc bnc" id="L32" title="All 2 branches missed.">        for (URL image : item.getImages()) {</span>
-<span class="nc" id="L33">           dto.addImages(image); </span>
+<span class="fc bfc" id="L35" title="All 2 branches covered.">        for (URL image : item.getImages()) {</span>
+<span class="fc" id="L36">           dto.addImages(image); </span>
+<span class="fc" id="L37">        }</span>
+<span class="fc" id="L38">        dto.setCreationDate(item.getCreationDate());</span>
+
+<span class="fc bfc" id="L40" title="All 2 branches covered.">        if (item.getOwner()!=null){</span>
+<span class="fc" id="L41">            dto.setOwner(item.getOwner().getName());</span>
         }
-<span class="nc" id="L35">        dto.setCreationDate(item.getCreationDate());</span>
-
-<span class="nc bnc" id="L37" title="All 2 branches missed.">        if (item.getOwner()!=null){</span>
-<span class="nc" id="L38">            dto.setOwner(item.getOwner().getName());</span>
-<span class="nc" id="L39">        }</span>
-<span class="nc bnc" id="L40" title="All 2 branches missed.">        else if (item.getSeller()!=null){</span>
-<span class="nc" id="L41">            dto.setOwner(item.getSeller().getName());</span>
-<span class="nc" id="L42">        }</span>
+<span class="fc bfc" id="L43" title="All 2 branches covered.">        else if (item.getSeller()!=null){</span>
+<span class="fc" id="L44">            dto.setOwner(item.getSeller().getName());</span>
+        }
         else{
-<span class="nc" id="L44">            dto.setOwner(&quot;null&quot;);</span>
+<span class="fc" id="L47">            dto.setOwner(&quot;null&quot;);</span>
         }
-<span class="nc bnc" id="L46" title="All 2 branches missed.">        for (Comment comment : item.getComment()) {</span>
-<span class="nc" id="L47">            dto.addComments(comment.getText()+&quot;;&quot;+comment.getUser().getName()); </span>
-         }
+<span class="fc bfc" id="L49" title="All 2 branches covered.">        for (Comment comment : item.getComment()) {</span>
+<span class="fc" id="L50">            dto.addComments(comment.getText()+&quot;;&quot;+comment.getUser().getName()); </span>
+<span class="fc" id="L51">         }</span>
 
-<span class="nc" id="L50">        dto.setCategory(String.valueOf(item.getCategory()));</span>
+<span class="fc" id="L53">        dto.setCategory(String.valueOf(item.getCategory()));</span>
 
-<span class="nc" id="L52">        return dto;</span>
+<span class="fc" id="L55">        return dto;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>
