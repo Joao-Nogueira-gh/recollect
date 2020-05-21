@@ -49,15 +49,14 @@ public class UserControllerTest {
         assertTrue(login.contains("Login Page"));
         
     }
-    //TODO FIX
-    //neither registration or register works
-    // @Test
-	// public void getRegistrationPage() throws Exception {
-        
-    //     String login = this.restTemplate.getForObject("/register", String.class);
 
-    //     assertTrue(login.contains("Registration Form"));
+    @Test
+	public void getRegistrationPage() throws Exception {
         
-    // }
+        String register = this.restTemplate.getForObject("/register", String.class);
+
+        assertTrue(register.contains("Register Now"));
+        
+    }
     
 }
