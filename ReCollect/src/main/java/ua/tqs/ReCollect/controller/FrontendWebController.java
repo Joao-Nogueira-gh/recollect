@@ -56,6 +56,7 @@ public class FrontendWebController {
     public String home(Model model) {
         model.addAttribute("item", new Item());
         model.addAttribute("categories", categories);
+        model.addAttribute("searchParams", new SearchParams());
         return "index";
     }
 
