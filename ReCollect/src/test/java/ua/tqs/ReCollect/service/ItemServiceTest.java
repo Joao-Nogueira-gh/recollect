@@ -1,5 +1,6 @@
 package ua.tqs.ReCollect.service;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
 
@@ -78,6 +79,21 @@ public class ItemServiceTest {
 
         assertEquals(itemDTO, sutRCService.convertItem(item), "Items do not match");
         
+    }
+
+    @Test
+    public void whenItemIsSaved_itemCanBeRetrived() {
+
+        Item item = new Item("Moeda", 3, new BigDecimal(3.0), "Moeda fixe", Categories.MISC);
+        sutRCService.save(item);
+
+        ArrayList<Item> all = new ArrayList<>();
+        all.add(item);
+
+        given(rcRepository.findAll()).willReturn(all);
+
+        assertTrue(sutRCService.getAll().contains(item));
+
     }
 
 }
