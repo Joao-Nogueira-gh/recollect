@@ -16,7 +16,7 @@ import ua.tqs.ReCollect.model.User;
 class UserRepositoryTest {
 
     @Autowired
-    private UserRepository rcRepo;
+    private UserRepository userRepo;
 
     @Autowired
     private TestEntityManager entityManager;
@@ -29,7 +29,7 @@ class UserRepositoryTest {
         User savedUser = entityManager.persistAndFlush(
                 new User("User123", "user@email.com", "password", "123123123", l));
 
-        User user = rcRepo.findByEmail("user@email.com");
+        User user = userRepo.findByEmail("user@email.com");
 
         Assertions.assertThat(user.getName()).isEqualTo(savedUser.getName());
     }

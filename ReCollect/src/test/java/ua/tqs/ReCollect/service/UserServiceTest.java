@@ -27,27 +27,27 @@ import ua.tqs.ReCollect.repository.UserRepository;
 class UserServiceTest {
 
     @Mock
-    private UserRepository rcRepository;
+    private UserRepository userRepo;
 
     @Mock
     private BCryptPasswordEncoder mockBCryptPasswordEncoder;
 
     @InjectMocks
-    private UserService sutRCService;
+    private UserService userService;
 
     // Set ups and cleanups
 
     @BeforeEach
     public void setUp() {
 
-        rcRepository.deleteAll();
+        userRepo.deleteAll();
 
     }
 
     @AfterEach
     public void cleanUp() {
 
-        rcRepository.deleteAll();
+        userRepo.deleteAll();
 
     }
 
@@ -60,19 +60,19 @@ class UserServiceTest {
         ArrayList<User> all = new ArrayList<>();
         all.add(user);
 
-        assertTrue(sutRCService.register(user));
+        assertTrue(userService.register(user));
 
-        given(rcRepository.existsByEmail("user@email.com")).willReturn(true);
-        given(rcRepository.findByEmail("user@email.com")).willReturn(user);
-        given(rcRepository.findAll()).willReturn(all);
+        given(userRepo.existsByEmail("user@email.com")).willReturn(true);
+        given(userRepo.findByEmail("user@email.com")).willReturn(user);
+        given(userRepo.findAll()).willReturn(all);
         
-        assertTrue(sutRCService.userExists("user@email.com"));
-        assertEquals(sutRCService.getByEmail("user@email.com"), user, "Users dont match");
-        assertEquals(sutRCService.getAll(), all, "DB Dump doesnt match");
+        assertTrue(userService.userExists("user@email.com"));
+        assertEquals(userService.getByEmail("user@email.com"), user, "Users dont match");
+        assertEquals(userService.getAll(), all, "DB Dump doesnt match");
 
         // Testing DB interaction
         // Checking for NullPtrs and stuff alike
-        sutRCService.deleteAll();
+        userService.deleteAll();
 
     }
 
@@ -81,9 +81,9 @@ class UserServiceTest {
 
         User user = new User("User123", "user@email.com", "password", "123123123", new Location("Viseu", "SCD"));
 
-        given(rcRepository.existsByEmail("user@email.com")).willReturn(true);
+        given(userRepo.existsByEmail("user@email.com")).willReturn(true);
         
-        assertFalse(sutRCService.register(user));
+        assertFalse(userService.register(user));
 
     }
 
@@ -96,9 +96,9 @@ class UserServiceTest {
         user.addPublishedItem(new Item());
         user.addSoldItem(new Item());
 
-        UserDTO userDTO = sutRCService.convertToDTO(user);
+        UserDTO userDTO = userService.convertToDTO(user);
 
-        User convertedBack = sutRCService.convertToUser(userDTO);
+        User convertedBack = userService.convertToUser(userDTO);
 
         assertEquals(user.getName(), convertedBack.getName());
 

@@ -16,19 +16,19 @@ import ua.tqs.ReCollect.repository.LocationRepository;
 public class LocationServiceTest {
 
     @Mock
-    private LocationRepository rcRepo;
+    private LocationRepository locRepo;
 
     @InjectMocks
-    private LocationService sutRCservice;
+    private LocationService locService;
     
     @Test
     public void getLocationForAveiro_returnsAveiro() {
 
-        given(rcRepo.findByDistrictAndCounty("Aveiro", "Aveiro")).willReturn(new Location("Aveiro", "Aveiro"));
+        given(locRepo.findByDistrictAndCounty("Aveiro", "Aveiro")).willReturn(new Location("Aveiro", "Aveiro"));
 
         Location expected = new Location("Aveiro", "Aveiro");
 
-        Location actual = sutRCservice.getLocation("Aveiro", "Aveiro");
+        Location actual = locService.getLocation("Aveiro", "Aveiro");
 
         assertEquals(expected, actual, "Locations dont match");
 
