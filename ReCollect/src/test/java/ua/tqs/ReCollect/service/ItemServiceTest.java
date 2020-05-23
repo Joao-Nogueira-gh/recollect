@@ -135,7 +135,7 @@ public class ItemServiceTest {
 
         itemService.removeProduct(item);
 
-        assertEquals(itemRepo.findAll().size(), 0);
+        assertEquals(itemService.getAll().size(), 0);
 
     }
 
