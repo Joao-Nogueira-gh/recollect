@@ -4,8 +4,10 @@ import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import ua.tqs.ReCollect.model.Comment;
 import ua.tqs.ReCollect.model.Item;
@@ -15,6 +17,8 @@ import ua.tqs.ReCollect.repository.ItemRepository;
 
 @Service
 public class ItemService {
+
+    static final Logger logger = Logger.getLogger(ItemService.class);
 
     @Autowired
     private ItemRepository itemRepo;
@@ -67,10 +71,14 @@ public class ItemService {
     }
 
 	public void addNewProduct(Item item, User owner) {
+        save(item);
+        item.setOwner(owner);
+        save(item);
 	}
-
+    @Transactional
 	public void removeProduct(Item item) {
-	}
+        itemRepo.delete(item);
+    }
 }
 
   

@@ -187,14 +187,21 @@ public class User {
     public void addFavItem(Item i) {
         this.favoriteItems.add(i);
     }
+    public void remFavItem(Item i) {
+        this.favoriteItems.remove(i);
+    }
 
     public void addPublishedItem(Item i) {
         this.publishedItems.add(i);        
     }
-
+    public void remPubItem(Item i) {
+        this.publishedItems.remove(i);
+    }
     public void addSoldItem(Item i) {
         this.soldItems.add(i);        
     }
-
+    public void remSoldItem(Item i) {
+        this.soldItems.remove(i);
+    }
 
 }

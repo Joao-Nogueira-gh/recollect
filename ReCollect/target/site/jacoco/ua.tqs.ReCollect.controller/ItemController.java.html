@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ItemController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ReCollect</a> &gt; <a href="index.source.html" class="el_package">ua.tqs.ReCollect.controller</a> &gt; <span class="el_source">ItemController.java</span></div><h1>ItemController.java</h1><pre class="source lang-java linenums">package ua.tqs.ReCollect.controller;
+
+import java.math.BigDecimal;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import ua.tqs.ReCollect.model.Categories;
+import ua.tqs.ReCollect.model.Item;
+import ua.tqs.ReCollect.model.User;
+import ua.tqs.ReCollect.service.ItemService;
+import ua.tqs.ReCollect.service.UserService;
+
+@Controller
+<span class="fc" id="L18">public class ItemController {</span>
+
+    @Autowired
+    private ItemService itemService;
+
+    @Autowired
+    private UserService userService;
+    
+<span class="fc" id="L26">    static final Logger logger = Logger.getLogger(ItemController.class);</span>
+
+	@GetMapping(path=&quot;/testic/&quot;)
+	public String test(Model model) {
+<span class="nc" id="L30">        itemService.deleteAll();</span>
+<span class="nc" id="L31">        User currUser = userService.getCurrentUser();</span>
+<span class="nc" id="L32">        logger.debug(currUser.toString());</span>
+<span class="nc" id="L33">        Item i1= new Item(&quot;Moeda&quot;, 3, new BigDecimal(3.0), &quot;Moeda fixe&quot;, Categories.MISC);</span>
+<span class="nc" id="L34">        itemService.addNewProduct(i1, currUser);</span>
+<span class="nc" id="L35">        logger.debug(itemService.getAll());</span>
+<span class="nc" id="L36">        logger.debug(currUser.getPublishedItems());</span>
+<span class="nc" id="L37">        itemService.removeProduct(itemService.getAll().get(0));</span>
+<span class="nc" id="L38">        logger.debug(itemService.getAll());</span>
+<span class="nc" id="L39">        logger.debug(currUser.getPublishedItems());</span>
+<span class="nc" id="L40">        return &quot;emptyTest&quot;;</span>
+    }
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

@@ -105,9 +105,12 @@ public class ItemServiceTest {
 
         itemService.addNewProduct(item,owner);
 
-        Item repItem=itemService.getAll().get(0);
+        List<Item> itemList=new ArrayList<>();
+        itemList.add(item);
 
-        given(itemRepo.findAll().get(0)).willReturn(item);
+        given(itemRepo.findAll()).willReturn(itemList);
+
+        Item repItem=itemService.getAll().get(0);
 
         assertEquals(repItem.getOwner().getName(), "user");
 
@@ -125,13 +128,15 @@ public class ItemServiceTest {
 
         //test
 
+        List<Item> empty=new ArrayList<>();
+
+        given(itemRepo.findAll()).willReturn(empty);
+
         itemService.removeProduct(item);
 
         int l = itemService.getAll().size();
 
-        List<Item> empty=new ArrayList<>();
 
-        given(itemRepo.findAll()).willReturn(empty);
 
         assertEquals(0, l);
 

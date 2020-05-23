@@ -11,6 +11,8 @@ import java.util.Set;
 import javax.persistence.*;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name = "item")
@@ -52,8 +54,23 @@ public class Item {
     @JoinColumn(name="sellerid")
     private User seller;
 
-    @OneToMany(mappedBy="item", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy="item", cascade = CascadeType.REMOVE)
     private Set<Comment> comments;
+
+    @PreRemove
+    private void preRemove() {
+        for (Comment com : comments) {
+            //TODO, maybe even not needed?
+            com.setItem(null);
+        }
+        if (owner != null) {
+            owner.remPubItem(this);
+        }
+        if (seller != null) {
+            seller.remSoldItem(this);
+        }
+        //TODO test, if favorite
+    }
 
     @Column(name = "category")
     private Categories category;
@@ -174,8 +191,8 @@ public class Item {
         if (seller!=null){
             sellerst=seller.getName();
         }
-        return "Item [category=" + category + ", #comments=" + comments.size() + ", creationDate=" + creationDate
-                + ", description=" + description + ", id=" + id + ", #images=" + images.size()
+        return "Item [category=" + category + ", creationDate=" + creationDate
+                + ", description=" + description + ", id=" + id
                 + ", name=" + name + ", owner=" + ownerst + ", price=" + price + ", quantity=" + quantity + ", seller="
                 + sellerst + "]";
     }
