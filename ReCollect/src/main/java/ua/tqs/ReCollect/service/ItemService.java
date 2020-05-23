@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import ua.tqs.ReCollect.model.Comment;
 import ua.tqs.ReCollect.model.Item;
 import ua.tqs.ReCollect.model.ItemDTO;
+import ua.tqs.ReCollect.model.User;
 import ua.tqs.ReCollect.repository.ItemRepository;
 
 @Service
@@ -64,6 +65,12 @@ public class ItemService {
 
         return dto;
     }
+
+	public void addNewProduct(Item item, User owner) {
+	}
+
+	public void removeProduct(Item item) {
+	}
 }
 
   

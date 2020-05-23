@@ -6,6 +6,7 @@ import static org.mockito.BDDMockito.given;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
 import java.net.MalformedURLException;
 import java.net.URL;
 import org.junit.jupiter.api.AfterEach;
@@ -22,7 +23,6 @@ import ua.tqs.ReCollect.model.Item;
 import ua.tqs.ReCollect.model.ItemDTO;
 import ua.tqs.ReCollect.model.User;
 import ua.tqs.ReCollect.repository.ItemRepository;
-import ua.tqs.ReCollect.repository.UserRepository;
 
 @ExtendWith(MockitoExtension.class)
 public class ItemServiceTest {
@@ -109,7 +109,7 @@ public class ItemServiceTest {
 
         given(itemRepo.findAll().get(0)).willReturn(item);
 
-        assertEquals(item.getOwner().getName(), "user");
+        assertEquals(repItem.getOwner().getName(), "user");
 
     }
 
@@ -129,7 +129,9 @@ public class ItemServiceTest {
 
         int l = itemService.getAll().size();
 
-        given(itemRepo.findAll().size()).willReturn(0);
+        List<Item> empty=new ArrayList<>();
+
+        given(itemRepo.findAll()).willReturn(empty);
 
         assertEquals(0, l);
 
