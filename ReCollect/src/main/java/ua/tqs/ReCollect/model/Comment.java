@@ -23,12 +23,22 @@ public class Comment {
     private Timestamp timestamp;
 
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="userid")
+    @JoinColumn(name="userid", referencedColumnName = "id")
     private User user;
 
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="item")
+    @JoinColumn(name="item", referencedColumnName = "id")
     private Item item;
+
+    @PreRemove
+    private void preRemove() {
+        if (user != null) {
+           user.remComment(this);
+        }
+        if (item != null) {
+            item.remComment(this);
+        }
+    }
     
     public Comment(){
     }

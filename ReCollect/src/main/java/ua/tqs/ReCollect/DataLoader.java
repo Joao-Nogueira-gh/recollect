@@ -28,23 +28,28 @@ public class DataLoader implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        locationService.deleteAll();
-        String fileName = "cdpt.json";
-        File resource = new ClassPathResource(fileName).getFile();
-        String cdpt = new String(Files.readAllBytes(resource.toPath()));
-        ObjectMapper mapper = new ObjectMapper();
-        Map<String, ArrayList<String>> map = mapper.readValue(cdpt, Map.class);
+        if (locationService.getAll().size() != 308) {
+            locationService.deleteAll();
+            String fileName = "cdpt.json";
+            File resource = new ClassPathResource(fileName).getFile();
+            String cdpt = new String(Files.readAllBytes(resource.toPath()));
+            ObjectMapper mapper = new ObjectMapper();
+            Map<String, ArrayList<String>> map = mapper.readValue(cdpt, Map.class);
 
-        Iterator<String> keys = map.keySet().iterator();
-        while (keys.hasNext()){
-            String district=keys.next();
-            ArrayList<String> counties = map.get(district);
-            for (String county: counties){
-                locationService.save(new Location(county, district));
+            Iterator<String> keys = map.keySet().iterator();
+            while (keys.hasNext()) {
+                String district = keys.next();
+                ArrayList<String> counties = map.get(district);
+                for (String county : counties) {
+                    locationService.save(new Location(county, district));
+                }
             }
-        }
 
-        logger.info("Finished loading "+locationService.getAll().size()+ " locations");
+            logger.info("Finished loading " + locationService.getAll().size() + " locations");
+        }
+        else{
+            logger.debug("up and running");
+        }
 
     }
 }

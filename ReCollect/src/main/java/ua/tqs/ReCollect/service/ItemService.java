@@ -73,7 +73,6 @@ public class ItemService {
 	public void addNewProduct(Item item, User owner) {
         save(item);
         item.setOwner(owner);
-        owner.addPublishedItem(item);
         save(item);
 	}
     @Transactional

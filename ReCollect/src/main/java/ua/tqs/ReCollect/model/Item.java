@@ -2,17 +2,28 @@ package ua.tqs.ReCollect.model;
 
 import java.math.BigDecimal;
 import java.net.URL;
-import java.util.Date;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.PreRemove;
+import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name = "item")
@@ -46,30 +57,26 @@ public class Item {
     @ManyToMany(mappedBy = "favoriteItems")
     private Set<User> favedBy;
 
-    @ManyToOne
-    @JoinColumn(name="ownerid")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="ownerid", referencedColumnName = "id")
     private User owner;
 
-    @ManyToOne
-    @JoinColumn(name="sellerid")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="sellerid", referencedColumnName = "id")
     private User seller;
 
-    @OneToMany(mappedBy="item", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy="item", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Comment> comments;
 
     @PreRemove
     private void preRemove() {
-        for (Comment com : comments) {
-            //TODO, maybe even not needed?
-            com.setItem(null);
-        }
         if (owner != null) {
             owner.remPubItem(this);
         }
-        if (seller != null) {
+        else if (seller != null) {
             seller.remSoldItem(this);
         }
-        //TODO test, if favorite
+        //TODO test for favorites, necessary?
     }
 
     @Column(name = "category")
@@ -171,6 +178,9 @@ public class Item {
 
     public void addComment(Comment comment) {
         this.comments.add(comment);
+    }
+    public void remComment(Comment comment) {
+        this.comments.remove(comment);
     }
 
     public Categories getCategory() {

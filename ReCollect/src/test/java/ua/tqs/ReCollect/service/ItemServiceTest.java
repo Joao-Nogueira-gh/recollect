@@ -2,6 +2,7 @@ package ua.tqs.ReCollect.service;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.BDDMockito.given;
 
 import java.math.BigDecimal;
@@ -134,12 +135,7 @@ public class ItemServiceTest {
 
         itemService.removeProduct(item);
 
-        int l = itemService.getAll().size();
-
-
-
-        assertEquals(0, l);
-
+        assertEquals(itemRepo.findAll().size(), 0);
 
     }
 
