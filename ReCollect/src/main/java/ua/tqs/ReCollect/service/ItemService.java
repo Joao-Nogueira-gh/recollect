@@ -79,6 +79,9 @@ public class ItemService {
 	public void removeProduct(Item item) {
         itemRepo.delete(item);
     }
+
+	public void markAsSold(Item item) {
+	}
 }
 
   
