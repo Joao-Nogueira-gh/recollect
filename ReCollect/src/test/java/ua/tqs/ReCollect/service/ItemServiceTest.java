@@ -159,5 +159,27 @@ public class ItemServiceTest {
 
 
     }
+    @Test
+    public void whenUserRevertsSale_itemChangesList() {
+
+        //setup
+
+        Item item = new Item("Moeda", 3, new BigDecimal(3.0), "Moeda fixe", Categories.MISC);
+        User owner=new User("user", "user@email.com", "x", "123456789");
+
+        itemService.addNewProduct(item,owner);
+
+        //test
+
+        itemService.markAsSold(item);
+
+        itemService.revertSale(item);
+
+        assertNull(item.getSeller());
+
+        assertEquals(item.getOwner().getName(), "user");
+
+
+    }
 
 }

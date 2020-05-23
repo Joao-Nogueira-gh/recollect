@@ -82,6 +82,9 @@ public class ItemService {
 
 	public void markAsSold(Item item) {
 	}
+
+	public void revertSale(Item item) {
+	}
 }
 
   
