@@ -43,8 +43,8 @@ public class User {
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(
     name = "fav_items", 
-    joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), 
-    inverseJoinColumns = @JoinColumn(name = "item_id", referencedColumnName = "id"))
+    joinColumns = @JoinColumn(name = "favuserid", referencedColumnName = "id"), 
+    inverseJoinColumns = @JoinColumn(name = "favitemid", referencedColumnName = "id"))
     private Set<Item> favoriteItems;
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)

@@ -89,11 +89,17 @@ public class ItemService {
         item.setOwner(item.getSeller());
         item.setSeller(null);
 	}
-
+    @Transactional
 	public void addFavorite(Item item, User user) {
+        if (!user.getFavoriteItems().contains(item)){
+            user.addFavItem(item);
+        }
 	}
-
+    @Transactional
 	public void removeFavorite(Item item, User user) {
+        if (user.getFavoriteItems().contains(item)){
+            user.remFavItem(item);
+        }
 	}
 }
 

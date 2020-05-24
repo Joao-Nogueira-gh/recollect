@@ -76,7 +76,9 @@ public class Item {
         else if (seller != null) {
             seller.remSoldItem(this);
         }
-        //TODO test for favorites, necessary?
+        for (User u : favedBy) {
+            u.remFavItem(this);
+        }
     }
 
     @Column(name = "category")

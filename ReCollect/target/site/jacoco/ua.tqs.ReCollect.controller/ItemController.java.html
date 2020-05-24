@@ -28,16 +28,85 @@ import ua.tqs.ReCollect.service.UserService;
 	@GetMapping(path=&quot;/testic/&quot;)
 	public String test(Model model) {
 <span class="nc" id="L30">        itemService.deleteAll();</span>
-<span class="nc" id="L31">        User currUser = userService.getCurrentUser();</span>
-<span class="nc" id="L32">        logger.debug(currUser.toString());</span>
-<span class="nc" id="L33">        Item i1= new Item(&quot;Moeda&quot;, 3, new BigDecimal(3.0), &quot;Moeda fixe&quot;, Categories.MISC);</span>
-<span class="nc" id="L34">        itemService.addNewProduct(i1, currUser);</span>
-<span class="nc" id="L35">        logger.debug(itemService.getAll());</span>
-<span class="nc" id="L36">        logger.debug(currUser.getPublishedItems());</span>
-<span class="nc" id="L37">        itemService.removeProduct(itemService.getAll().get(0));</span>
-<span class="nc" id="L38">        logger.debug(itemService.getAll());</span>
-<span class="nc" id="L39">        logger.debug(currUser.getPublishedItems());</span>
-<span class="nc" id="L40">        return &quot;emptyTest&quot;;</span>
+
+        //get logged in user
+<span class="nc" id="L33">        User currUser = userService.getCurrentUser();</span>
+
+<span class="nc" id="L35">        logger.debug(currUser.toString());</span>
+        //create item from forms
+<span class="nc" id="L37">        Item i1= new Item(&quot;Moeda&quot;, 3, new BigDecimal(3.0), &quot;Moeda fixe&quot;, Categories.MISC);</span>
+        //create item for that user
+<span class="nc" id="L39">        itemService.addNewProduct(i1, currUser);</span>
+
+<span class="nc" id="L41">        logger.debug(itemService.getAll());</span>
+<span class="nc" id="L42">        logger.debug(currUser.getPublishedItems());</span>
+        //remove a certain item, u can obviously get it by id or something
+<span class="nc" id="L44">        itemService.removeProduct(itemService.getAll().get(0));</span>
+<span class="nc" id="L45">        logger.debug(itemService.getAll());</span>
+<span class="nc" id="L46">        logger.debug(currUser.getPublishedItems());</span>
+<span class="nc" id="L47">        return &quot;emptyTest&quot;;</span>
+    }
+    @GetMapping(path=&quot;/testic2/&quot;)
+	public String test2(Model model) {
+<span class="nc" id="L51">        itemService.deleteAll();</span>
+
+        //get logged in user
+<span class="nc" id="L54">        User currUser = userService.getCurrentUser();</span>
+
+<span class="nc" id="L56">        logger.debug(currUser.toString());</span>
+        //create item from forms
+<span class="nc" id="L58">        Item i1= new Item(&quot;Moeda&quot;, 3, new BigDecimal(3.0), &quot;Moeda fixe&quot;, Categories.MISC);</span>
+        //create item for that user
+<span class="nc" id="L60">        itemService.addNewProduct(i1, currUser);</span>
+
+<span class="nc" id="L62">        logger.debug(itemService.getAll());</span>
+<span class="nc" id="L63">        logger.debug(currUser.getPublishedItems());</span>
+<span class="nc" id="L64">        logger.debug(currUser.getSoldItems()+&quot;\n&quot;);</span>
+        //mark item as sold, u can obviously get it by id or something
+<span class="nc" id="L66">        itemService.markAsSold(itemService.getAll().get(0));</span>
+<span class="nc" id="L67">        logger.debug(itemService.getAll());</span>
+<span class="nc" id="L68">        logger.debug(currUser.getPublishedItems());</span>
+<span class="nc" id="L69">        logger.debug(currUser.getSoldItems()+&quot;\n&quot;);</span>
+        //revert sale, u can obviously get item by id or something
+<span class="nc" id="L71">        itemService.revertSale(itemService.getAll().get(0));</span>
+<span class="nc" id="L72">        logger.debug(itemService.getAll());</span>
+<span class="nc" id="L73">        logger.debug(currUser.getPublishedItems());</span>
+<span class="nc" id="L74">        logger.debug(currUser.getSoldItems());</span>
+<span class="nc" id="L75">        return &quot;emptyTest&quot;;</span>
+    }
+    @GetMapping(path=&quot;/testic3/&quot;)
+	public String test3(Model model) {
+        //just for debugging, ignore
+        //check actual state of stuff
+<span class="nc" id="L81">        User currUser = userService.getCurrentUser();</span>
+        
+<span class="nc" id="L83">        logger.debug(itemService.getAll());</span>
+        //logger.debug(itemService.getAll().get(0).getFavedBy());
+<span class="nc" id="L85">        logger.debug(currUser.getFavoriteItems()+&quot;\n&quot;);</span>
+<span class="nc" id="L86">        return &quot;emptyTest&quot;;</span>
+    }
+    @GetMapping(path=&quot;/testic4/&quot;)
+	public String test4(Model model) {
+<span class="nc" id="L90">        itemService.deleteAll();</span>
+<span class="nc" id="L91">        User currUser = userService.getCurrentUser();</span>
+
+<span class="nc" id="L93">        Item i1= new Item(&quot;Moeda&quot;, 3, new BigDecimal(3.0), &quot;Moeda fixe&quot;, Categories.MISC);</span>
+
+<span class="nc" id="L95">        itemService.addNewProduct(i1, currUser);</span>
+        //add to favorite list
+<span class="nc" id="L97">        itemService.addFavorite(itemService.getAll().get(0),currUser);</span>
+
+<span class="nc" id="L99">        logger.debug(itemService.getAll());</span>
+<span class="nc" id="L100">        logger.debug(itemService.getAll().get(0).getFavedBy());</span>
+<span class="nc" id="L101">        logger.debug(currUser.getFavoriteItems()+&quot;\n&quot;);</span>
+        //remove from favorite list
+        //usei itens do proprio user como favoritos, mas isso é whatever i guess
+<span class="nc" id="L104">        itemService.removeFavorite(itemService.getAll().get(0), currUser);</span>
+
+<span class="nc" id="L106">        logger.debug(itemService.getAll());</span>
+<span class="nc" id="L107">        logger.debug(itemService.getAll().get(0).getFavedBy());</span>
+<span class="nc" id="L108">        logger.debug(currUser.getFavoriteItems()+&quot;\n&quot;);</span>
+<span class="nc" id="L109">        return &quot;emptyTest&quot;;</span>
     }
     
 }
