@@ -89,6 +89,12 @@ public class ItemService {
         item.setOwner(item.getSeller());
         item.setSeller(null);
 	}
+
+	public void addFavorite(Item item, User user) {
+	}
+
+	public void removeFavorite(Item item, User user) {
+	}
 }
 
   

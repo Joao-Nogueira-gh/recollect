@@ -181,5 +181,49 @@ public class ItemServiceTest {
 
 
     }
+    @Test
+    public void whenUserAddsFavoriteItem_ItemIsAddedToTheList() {
+
+        //setup
+
+        Item item = new Item("Moeda", 3, new BigDecimal(3.0), "Moeda fixe", Categories.MISC);
+        User owner=new User("user", "user@email.com", "x", "123456789");
+
+        User user=new User("user2", "user2@email.com", "xsff", "789456123");
+
+        itemService.addNewProduct(item,owner);
+
+        //test
+
+        itemService.addFavorite(item,user);
+
+        assertTrue(item.getFavedBy().contains(user));
+
+
+    }
+    @Test
+    public void whenUserRemovesFavoriteItem_ItemIsRemovedFromTheList() {
+
+        //setup
+
+        Item item = new Item("Moeda", 3, new BigDecimal(3.0), "Moeda fixe", Categories.MISC);
+        User owner=new User("user", "user@email.com", "x", "123456789");
+
+        User user=new User("user2", "user2@email.com", "xsff", "789456123");
+
+        itemService.addNewProduct(item,owner);
+
+        itemService.addFavorite(item,user);
+
+        assertTrue(item.getFavedBy().contains(user));
+
+        //test
+
+        itemService.removeFavorite(item,user);
+
+        assertEquals(item.getFavedBy().size(),0);
+
+
+    }
 
 }
