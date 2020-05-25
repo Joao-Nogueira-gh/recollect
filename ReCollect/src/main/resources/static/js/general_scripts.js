@@ -40,8 +40,12 @@ function buildNavbar() {
                         </ul>
                         <ul class="navbar-nav ml-auto mt-10">
                             <li class="nav-item">
-                                <a class="nav-link login-button" href="/login">Login</a>
-                            </li>
+								<a class="nav-link login-button" href="/login">Login</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link login-button" href="/profile">Profile</a>
+							</li>
+						
                             <li class="nav-item">
                                 <a class="nav-link text-white add-button" href="/announce"><i class="fa fa-plus-circle"></i> Announce</a>
                             </li>
