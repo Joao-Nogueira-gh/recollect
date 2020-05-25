@@ -1,4 +1,4 @@
-package ua.tqs.ReCollect.controller;
+package ua.tqs.ReCollect.restcontroller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -12,18 +12,18 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import ua.tqs.ReCollect.model.User;
-import ua.tqs.ReCollect.service.UserService;
+import ua.tqs.ReCollect.model.Item;
+import ua.tqs.ReCollect.service.ItemService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class UserRestControllerTest {
+public class ItemRestControllerTest {
     
     @Autowired
     private TestRestTemplate restTemplate;
     
     @Autowired
-    private UserService service;
+    private ItemService service;
 
     @BeforeEach
     public void setUp() {
@@ -31,12 +31,12 @@ public class UserRestControllerTest {
     }
 
 	@Test
-	public void apiShouldReturnAccurateListOfUsers() throws Exception {
+	public void apiShouldReturnAccurateListOfItems() throws Exception {
 
-        ArrayList<User> all = (ArrayList<User>) service.getAll();
+        ArrayList<Item> all = (ArrayList<Item>) service.getAll();
         
         @SuppressWarnings("unchecked")
-        ArrayList<User> apiItems = this.restTemplate.getForObject("/api/users/", ArrayList.class);
+        ArrayList<Item> apiItems = this.restTemplate.getForObject("/api/items/", ArrayList.class);
         
         assertEquals(all, apiItems);
 	}
