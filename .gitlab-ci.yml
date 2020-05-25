@@ -61,7 +61,7 @@ test:
   services:
     - mysql:5.7
   script:
-    - mvn clean test
+    - mvn clean test -Dtest=\!\*ItemTest
 
 package:
   image: maven
@@ -74,7 +74,7 @@ package:
   services:
     - mysql:5.7
   script:
-    - mvn clean package
+    - mvn clean package -Dtest=\!\*ItemTest
 
 
 sonarcloud-check:
