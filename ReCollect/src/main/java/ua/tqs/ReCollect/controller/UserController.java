@@ -32,7 +32,7 @@ public class UserController {
 
     private static final String registrationPage = "register";
 
-    @GetMapping(value = {"/login" })
+    @GetMapping(value = "/login")
     public ModelAndView login() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("login");

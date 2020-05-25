@@ -18,6 +18,32 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
     public List<Item> findByName(String name);
 
     public void deleteById(Long id);
+
+
+    // public List<Item> findAllOrderByPrice();
+
+    // public List<Item> findAllOrderByCreationDate();
+
+    public List<Item> findByCategory(String cateogyr);
+
+    public List<Item> findBySeller(Long id);
+
+
+    public List<Item> findByCategoryAndSeller(String category, Long id);
+
+    public List<Item> findByCategoryOrderByPrice(String category);
+
+    public List<Item> findBySellerOrderByPrice(Long id);
+
+    public List<Item> findByCategoryOrderByCreationDate(String category);
+
+    public List<Item> findBySellerOrderByCreationDate(Long id);
+
+
+    public List<Item> findByCategoryAndSellerOrderByPrice(String category, Long id);
+
+    public List<Item> findByCategoryAndSellerOrderByCreationDate(String category, Long id);
+
 }
 
 
