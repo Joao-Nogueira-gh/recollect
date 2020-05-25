@@ -2,13 +2,26 @@ package ua.tqs.ReCollect.model;
 
 import java.math.BigDecimal;
 import java.net.URL;
-import java.util.Date;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.PreRemove;
+import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -44,16 +57,27 @@ public class Item {
     @ManyToMany(mappedBy = "favoriteItems")
     private Set<User> favedBy;
 
-    @ManyToOne
-    @JoinColumn(name="ownerid")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="ownerid", referencedColumnName = "id")
     private User owner;
 
-    @ManyToOne
-    @JoinColumn(name="sellerid")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="sellerid", referencedColumnName = "id")
     private User seller;
 
-    @OneToMany(mappedBy="item", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy="item", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Comment> comments;
+
+    @PreRemove
+    private void preRemove() {
+        if (owner != null) {
+            owner.remPubItem(this);
+        }
+        else if (seller != null) {
+            seller.remSoldItem(this);
+        }
+        //TODO test for favorites, necessary?
+    }
 
     @Column(name = "category")
     private Categories category;
@@ -155,6 +179,9 @@ public class Item {
     public void addComment(Comment comment) {
         this.comments.add(comment);
     }
+    public void remComment(Comment comment) {
+        this.comments.remove(comment);
+    }
 
     public Categories getCategory() {
         return category;
@@ -174,8 +201,8 @@ public class Item {
         if (seller!=null){
             sellerst=seller.getName();
         }
-        return "Item [category=" + category + ", #comments=" + comments.size() + ", creationDate=" + creationDate
-                + ", description=" + description + ", id=" + id + ", #images=" + images.size()
+        return "Item [category=" + category + ", creationDate=" + creationDate
+                + ", description=" + description + ", id=" + id
                 + ", name=" + name + ", owner=" + ownerst + ", price=" + price + ", quantity=" + quantity + ", seller="
                 + sellerst + "]";
     }

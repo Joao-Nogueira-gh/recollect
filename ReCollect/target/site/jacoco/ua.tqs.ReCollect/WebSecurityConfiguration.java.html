@@ -42,7 +42,7 @@ import ua.tqs.ReCollect.service.MyUserDetailsService;
 <span class="fc" id="L42">                .antMatchers(loginPath).permitAll()</span>
 <span class="fc" id="L43">                .antMatchers(&quot;/register&quot;).permitAll()</span>
 <span class="fc" id="L44">                .antMatchers(&quot;/api/**&quot;).permitAll()</span>
-<span class="fc" id="L45">                .antMatchers(&quot;/admin/**&quot;).hasAuthority(&quot;ADMIN&quot;).anyRequest()</span>
+<span class="fc" id="L45">                .antMatchers(&quot;/announce&quot;).hasAuthority(&quot;ADMIN&quot;).anyRequest()</span>
 <span class="fc" id="L46">                .authenticated().and().formLogin()</span>
 <span class="fc" id="L47">                .loginPage(loginPath).failureUrl(&quot;/login?error=true&quot;)</span>
 <span class="fc" id="L48">                .defaultSuccessUrl(&quot;/profile&quot;)</span>

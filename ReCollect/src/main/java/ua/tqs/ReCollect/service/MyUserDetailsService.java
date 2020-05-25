@@ -34,7 +34,6 @@ public class MyUserDetailsService implements UserDetailsService {
         User user = userService.getByEmail(email);
         
         if(user == null){
-            logger.warn("Email not found");
             throw new UsernameNotFoundException("Error: no such email");
         }
 

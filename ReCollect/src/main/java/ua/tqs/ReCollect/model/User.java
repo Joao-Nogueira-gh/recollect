@@ -33,20 +33,27 @@ public class User {
     @JoinColumn(name="locationid", referencedColumnName = "id")
     private Location location;
 
-    @ManyToMany
+    @PreRemove
+    private void preRemove() {
+        if (location != null) {
+            location.remUsersloc(this);
+        }
+    }
+
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(
     name = "fav_items", 
     joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), 
     inverseJoinColumns = @JoinColumn(name = "item_id", referencedColumnName = "id"))
     private Set<Item> favoriteItems;
 
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Item> publishedItems;
 
-    @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Item> soldItems;
 
-    @OneToMany(mappedBy="user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy="user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Comment> comments;
 
     @ManyToMany(cascade = CascadeType.MERGE)
@@ -153,6 +160,9 @@ public class User {
     public void addComment(Comment comment) {
         this.comments.add(comment);
     }
+    public void remComment(Comment comment) {
+        this.comments.remove(comment);
+    }
 
     public Set<Role> getRoles() {
         return roles;
@@ -187,14 +197,21 @@ public class User {
     public void addFavItem(Item i) {
         this.favoriteItems.add(i);
     }
+    public void remFavItem(Item i) {
+        this.favoriteItems.remove(i);
+    }
 
     public void addPublishedItem(Item i) {
         this.publishedItems.add(i);        
     }
-
+    public void remPubItem(Item i) {
+        this.publishedItems.remove(i);
+    }
     public void addSoldItem(Item i) {
         this.soldItems.add(i);        
     }
-
+    public void remSoldItem(Item i) {
+        this.soldItems.remove(i);
+    }
 
 }

@@ -1,5 +1,7 @@
 package ua.tqs.ReCollect.utils;
 
+import ua.tqs.ReCollect.model.Categories;
+
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -59,13 +61,23 @@ public class Category {
 
         ArrayList<Category> ret = new ArrayList<>();
 
-        ret.add(new Category("Books", "fas fa-book-open icon-bg-1"));
+
+
+        ret.add(new Category(Categories.BOOKS.toString(), "fas fa-book-open icon-bg-1"));
+        ret.add(new Category(Categories.GAMES.toString(), "fas fa-dice-d6  icon-bg-2"));
+        ret.add(new Category(Categories.TOYS.toString(), "fas fa-robot icon-bg-3"));
+        ret.add(new Category(Categories.TECHNOLOGY.toString(), "fa fa-camera-retro icon-bg-4"));
+        ret.add(new Category(Categories.MUSIC.toString(), "fas fa-guitar icon-bg-5"));
+        ret.add(new Category(Categories.ART.toString(), "fas fa-image icon-bg-6"));
+        ret.add(new Category(Categories.MISC.toString(), "fas fa-box-open icon-bg-7"));
+
+        /*ret.add(new Category("Books", "fas fa-book-open icon-bg-1"));
         ret.add(new Category("Games", "fas fa-dice-d6  icon-bg-2"));
         ret.add(new Category("Toys", "fas fa-robot icon-bg-3"));
         ret.add(new Category("Technology", "fa fa-camera-retro icon-bg-4"));
         ret.add(new Category("Music", "fas fa-guitar icon-bg-5"));
         ret.add(new Category("Art", "fas fa-image icon-bg-6"));
-        ret.add(new Category("Miscellaneous", "fas fa-box-open icon-bg-7"));
+        ret.add(new Category("Miscellaneous", "fas fa-box-open icon-bg-7"));*/
 
         return ret;
     }

@@ -1,10 +1,13 @@
 package ua.tqs.ReCollect.service;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.BDDMockito.given;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
 import java.net.MalformedURLException;
 import java.net.URL;
 import org.junit.jupiter.api.AfterEach;
@@ -26,35 +29,35 @@ import ua.tqs.ReCollect.repository.ItemRepository;
 public class ItemServiceTest {
 
     @Mock
-    private ItemRepository rcRepository;
+    private ItemRepository itemRepo;
 
     @InjectMocks
-    private ItemService sutRCService;
+    private ItemService itemService;
 
     @BeforeEach
     public void setUp() {
 
-        rcRepository.deleteAll();
+        itemRepo.deleteAll();
 
     }
 
     @AfterEach
     public void cleanUp() {
 
-        rcRepository.deleteAll();
+        itemRepo.deleteAll();
 
     }
 
     @Test
     public void dbInteractions() {
 
-        given(rcRepository.findAll()).willReturn(new ArrayList<>());
+        given(itemRepo.findAll()).willReturn(new ArrayList<>());
 
         // Testing just to check if the interaction works OK
         // Checking for NullPtrs and other Exceptions
-        assertEquals(new ArrayList<>(), sutRCService.getAll());
-        sutRCService.save(new Item());
-        sutRCService.deleteAll();
+        assertEquals(new ArrayList<>(), itemService.getAll());
+        itemService.save(new Item());
+        itemService.deleteAll();
 
     }
 
@@ -65,19 +68,75 @@ public class ItemServiceTest {
         ItemDTO itemDTO = new ItemDTO("Moeda", 3, new BigDecimal(3.0), "Moeda fixe");
 
         // Testing every branch
-        assertEquals(itemDTO, sutRCService.convertItem(item), "Items do not match");
+        assertEquals(itemDTO, itemService.convertItem(item), "Items do not match");
 
         item.setSeller(new User());
-        assertEquals(itemDTO, sutRCService.convertItem(item), "Items do not match");
+        assertEquals(itemDTO, itemService.convertItem(item), "Items do not match");
 
         item.setOwner(new User());
-        assertEquals(itemDTO, sutRCService.convertItem(item), "Items do not match");
+        assertEquals(itemDTO, itemService.convertItem(item), "Items do not match");
 
         item.addImage(new URL("https://www.google.com"));
         item.addComment(new Comment("Comment", new User(), item));
 
-        assertEquals(itemDTO, sutRCService.convertItem(item), "Items do not match");
+        assertEquals(itemDTO, itemService.convertItem(item), "Items do not match");
         
+    }
+
+    @Test
+    public void whenItemIsSaved_itemCanBeRetrived() {
+
+        Item item = new Item("Moeda", 3, new BigDecimal(3.0), "Moeda fixe", Categories.MISC);
+        itemService.save(item);
+
+        ArrayList<Item> all = new ArrayList<>();
+        all.add(item);
+
+        given(itemRepo.findAll()).willReturn(all);
+
+        assertTrue(itemService.getAll().contains(item));
+
+    }
+
+    @Test
+    public void whenUserAddsItem_itemIsAddedAndOwnedByUser() {
+
+        Item item = new Item("Moeda", 3, new BigDecimal(3.0), "Moeda fixe", Categories.MISC);
+        User owner=new User("user", "user@email.com", "x", "123456789");
+
+        itemService.addNewProduct(item,owner);
+
+        List<Item> itemList=new ArrayList<>();
+        itemList.add(item);
+
+        given(itemRepo.findAll()).willReturn(itemList);
+
+        Item repItem=itemService.getAll().get(0);
+
+        assertEquals(repItem.getOwner().getName(), "user");
+
+    }
+
+    @Test
+    public void whenUserRemovesItem_itemIsGone() {
+
+        //setup
+
+        Item item = new Item("Moeda", 3, new BigDecimal(3.0), "Moeda fixe", Categories.MISC);
+        User owner=new User("user", "user@email.com", "x", "123456789");
+
+        itemService.addNewProduct(item,owner);
+
+        //test
+
+        List<Item> empty=new ArrayList<>();
+
+        given(itemRepo.findAll()).willReturn(empty);
+
+        itemService.removeProduct(item);
+
+        assertEquals(itemService.getAll().size(), 0);
+
     }
 
 }

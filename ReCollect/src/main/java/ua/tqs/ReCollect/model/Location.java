@@ -1,5 +1,6 @@
 package ua.tqs.ReCollect.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.*;
@@ -21,8 +22,8 @@ public class Location {
     @Column(name="district")
     private String district;
     
-    @OneToMany(mappedBy = "location")
-    private Set<User> usersloc;
+    @OneToMany(mappedBy = "location", cascade = CascadeType.PERSIST)
+    private Set<User> usersloc=new HashSet<>();
 
     @PreRemove
     private void preRemove() {
@@ -95,6 +96,13 @@ public class Location {
         } else if (!district.equals(other.district))
             return false;
         return true;
+    }
+
+    public Set<User> getUsersloc() {
+        return usersloc;
+    }
+    public void remUsersloc(User user) {
+        usersloc.remove(user);
     }
 
 

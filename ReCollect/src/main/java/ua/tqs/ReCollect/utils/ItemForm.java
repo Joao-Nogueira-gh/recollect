@@ -1,9 +1,12 @@
 package ua.tqs.ReCollect.utils;
 
+import ua.tqs.ReCollect.model.Categories;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
+import java.math.BigDecimal;
 
 public class ItemForm {
 
@@ -12,14 +15,14 @@ public class ItemForm {
     private String nome;
 
     @NotNull
-    private String categoria;
+    private Categories categoria;
 
     @NotNull
     private String descricao;
 
     @NotNull
     @PositiveOrZero
-    private double preco;
+    private BigDecimal preco;
 
     @NotNull
     @Positive
@@ -40,11 +43,11 @@ public class ItemForm {
         this.nome = nome;
     }
 
-    public String getCategoria() {
+    public Categories getCategoria() {
         return categoria;
     }
 
-    public void setCategoria(String categoria) {
+    public void setCategoria(Categories categoria) {
         this.categoria = categoria;
     }
 
@@ -56,11 +59,11 @@ public class ItemForm {
         this.descricao = descricao;
     }
 
-    public double getPreco() {
+    public BigDecimal getPreco() {
         return preco;
     }
 
-    public void setPreco(double preco) {
+    public void setPreco(BigDecimal preco) {
         this.preco = preco;
     }
 

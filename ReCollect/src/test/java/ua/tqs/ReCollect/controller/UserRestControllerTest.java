@@ -12,7 +12,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import ua.tqs.ReCollect.model.Item;
 import ua.tqs.ReCollect.model.User;
 import ua.tqs.ReCollect.service.UserService;
 
@@ -37,7 +36,7 @@ public class UserRestControllerTest {
         ArrayList<User> all = (ArrayList<User>) service.getAll();
         
         @SuppressWarnings("unchecked")
-        ArrayList<Item> apiItems = this.restTemplate.getForObject("/api/users/", ArrayList.class);
+        ArrayList<User> apiItems = this.restTemplate.getForObject("/api/users/", ArrayList.class);
         
         assertEquals(all, apiItems);
 	}
