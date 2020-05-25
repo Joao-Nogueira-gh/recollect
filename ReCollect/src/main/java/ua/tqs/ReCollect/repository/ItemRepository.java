@@ -3,9 +3,11 @@ package ua.tqs.ReCollect.repository;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import ua.tqs.ReCollect.model.Categories;
 import ua.tqs.ReCollect.model.Item;
 
 @Repository
@@ -19,30 +21,21 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
     public void deleteById(Long id);
 
+    public List<Item> findAll(Sort sort);
 
-    // public List<Item> findAllOrderByPrice();
+    public List<Item> findByCategory(Categories category);
 
-    // public List<Item> findAllOrderByCreationDate();
-
-    public List<Item> findByCategory(String cateogyr);
+    public List<Item> findByCategory(Categories category, Sort sort);
 
     public List<Item> findBySeller(Long id);
 
+    public List<Item> findBySeller(Long id, Sort sort);
 
-    public List<Item> findByCategoryAndSeller(String category, Long id);
+    public List<Item> findByCategoryAndSeller(Categories category, Long id);
 
-    public List<Item> findByCategoryOrderByPrice(String category);
-
-    public List<Item> findBySellerOrderByPrice(Long id);
-
-    public List<Item> findByCategoryOrderByCreationDate(String category);
-
-    public List<Item> findBySellerOrderByCreationDate(Long id);
+    public List<Item> findByCategoryAndSeller(Categories category, Long id, Sort sort);
 
 
-    public List<Item> findByCategoryAndSellerOrderByPrice(String category, Long id);
-
-    public List<Item> findByCategoryAndSellerOrderByCreationDate(String category, Long id);
 
 }
 
