@@ -75,6 +75,7 @@ public class ItemService {
         item.setOwner(owner);
         save(item);
 	}
+
     @Transactional
 	public void removeProduct(Item item) {
         itemRepo.delete(item);

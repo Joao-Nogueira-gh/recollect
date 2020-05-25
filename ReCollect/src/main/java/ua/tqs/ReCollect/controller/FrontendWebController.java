@@ -144,27 +144,18 @@ public class FrontendWebController {
 
     @GetMapping(value = "/profile/delete/{id}")
     public String deleteItem(Model model, @PathVariable(name = "id") Long id) {
-
         User loggedUser = this.getLoggedUser();
 
-        logger.debug("ID para delete: " + id.toString());
-
-        // Item deleted = itemService.getItemById(id);
-
-        // loggedUser.removeItemPublicado(deleted);
-        // logger.debug("1. loggedUser: " + loggedUser);
-        // userService.updateUser(loggedUser);
-        // logger.debug("2.-----");
-        // itemService.deleteItem(id);
-        // logger.debug("3.-----");
+        Item deleted = itemService.getItemById(id);
+        itemService.removeProduct(deleted);
 
         Set<Item> allItems = loggedUser.getPublishedItems();
 
-        logger.debug(ATRIBATUAL);
+        //logger.debug(ATRIBATUAL);
         model.addAttribute(USERITEMS, allItems);
         model.addAttribute(LOGGEDUSER, loggedUser);
-        logger.debug(USERITEMS+": " + model.getAttribute(USERITEMS));
-        logger.debug(USERST+": " + model.getAttribute(LOGGEDUSER));
+        //logger.debug(USERITEMS+": " + model.getAttribute(USERITEMS));
+        //logger.debug(USERST+": " + model.getAttribute(LOGGEDUSER));
 
         return "redirect:/profile";
     }
@@ -277,7 +268,7 @@ public class FrontendWebController {
 
         int emptyEntries = 0;
         for(Image im : imagesList.getImages()){
-            if(im.getUrl().trim().equals(""))
+            if(im.getUrl()==null)
                 emptyEntries+=1; // count empty entries
         }
 
@@ -288,34 +279,28 @@ public class FrontendWebController {
             return REDIRECTANNOUNCE;
         }
 
+
+
         // setup item with valid provided data
-        // Item newItem = new Item();
-        // newItem.setNome(itemForm.getNome());
-        // newItem.setCategoria(itemForm.getCategoria());
-        // newItem.setDescricao(itemForm.getDescricao());
-        // newItem.setPreco(itemForm.getPreco());
-        // newItem.setQuantidade(itemForm.getQuantidade());
+        Item newItem = new Item();
+        newItem.setName(itemForm.getNome());
+        newItem.setCategory(itemForm.getCategoria());
+        newItem.setDescription(itemForm.getDescricao());
+        newItem.setPrice(itemForm.getPreco());
+        newItem.setQuantity(itemForm.getQuantidade());
 
-        // logger.debug("1!");
-        // for(Image im : imagesList.getImages()){
-        //     if(im.getUrl().trim().equals(""))
-        //         continue; // skip empty inputs
-        //     newItem.addImage(im.getUrl());
-        // }
-        // newItem.setOwner(this.getLoggedUser().getId());
-        // logger.debug("2!");
-        // //logger.debug("newItem recebido: "+ newItem.toString());
-        // //logger.debug("imagesList: " + imagesList.toString());
-        // logger.debug("loggerUser antes do add: " + this.getLoggedUser().toString());
-        // itemService.save(newItem);
-        // logger.debug("3!");
-        // this.getLoggedUser().addItem(newItem);
-        // logger.debug("4!");
-        // userService.updateUser(this.getLoggedUser());
-        // logger.debug("5!");
-        // ra.addAttribute(SUBMITTED, true);
+        for(Image im : imagesList.getImages()){
+            if(im.getUrl()==null){
+                continue;
+            }
+            newItem.addImage(im.getUrl());
+        }
 
-        // logger.debug("Item submetido: " + newItem.toString());
+        itemService.addNewProduct(newItem, this.getLoggedUser());
+
+        ra.addAttribute(SUBMITTED, true);
+
+        logger.debug("Item submetido: " + newItem.toString());
 
         return REDIRECTANNOUNCE;
     }
