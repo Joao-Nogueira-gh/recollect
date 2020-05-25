@@ -144,21 +144,21 @@ public class ItemService {
      */
     private List<Item> fetchItemsBySeller(Long id) {
 
-        return itemRepo.findBySeller(id);
+        return itemRepo.findByOwner(id);
 
     }
 
     // Sort option
     private List<Item> fetchItemsBySeller(Long id, String orderBy) {
 
-        return itemRepo.findBySeller(id, Sort.by(Sort.Direction.ASC, orderBy));
+        return itemRepo.findByOwner(id, Sort.by(Sort.Direction.ASC, orderBy));
 
     }
 
     // Return all Items from a given seller's e-mail and Category
     private List<Item> fetchItemsByCategoryAndSeller(String cat, Long id) {
 
-        return itemRepo.findByCategoryAndSeller(Categories.valueOf(cat), id);
+        return itemRepo.findByCategoryAndOwner(Categories.valueOf(cat), id);
 
     }
 
@@ -166,35 +166,38 @@ public class ItemService {
     // price or date
     private List<Item> fetchItemsByCategoryAndSeller(String cat, Long id, String orderBy) {
 
-        return itemRepo.findByCategoryAndSeller(Categories.valueOf(cat), id, Sort.by(Sort.Direction.ASC, orderBy));
+        return itemRepo.findByCategoryAndOwner(Categories.valueOf(cat), id, Sort.by(Sort.Direction.ASC, orderBy));
 
     }
 
     public List<Item> fetchItemsApi(String cat, String seller, String orderBy) {
 
         if (cat == null && seller == null && orderBy == null) {
-            
+
             return this.getAll();
-        
-        } else if (cat == null && seller == null && orderBy == null) {
+
+        } else if (cat == null && seller == null && orderBy != null) {
 
             return this.getAll(orderBy);
 
         }
 
         // Basic Validation
-        if (!userService.userExists(seller) || !EnumUtils.isValidEnum(Categories.class, cat)
-                || !orderByIsValid(orderBy)) {
+        if ((seller != null && !userService.userExists(seller))
+                || (cat != null && !EnumUtils.isValidEnum(Categories.class, cat))
+                || (orderBy != null && !orderByIsValid(orderBy))) {
+
             return new ArrayList<Item>();
         }
 
-        Long id = this.getUserId(seller);
+        Long id;
 
         if (orderBy == null) {
 
-            if(cat == null) {
+            if (cat == null) {
 
                 // Query based on seller
+                id = this.getUserId(seller);
                 return this.fetchItemsBySeller(id);
 
             } else if (seller == null) {
@@ -205,15 +208,17 @@ public class ItemService {
             } else {
 
                 // Query based on both
+                id = this.getUserId(seller);
                 return this.fetchItemsByCategoryAndSeller(cat, id);
 
             }
 
         } else {
 
-            if(cat == null) {
+            if (cat == null) {
 
                 // Query based on seller
+                id = this.getUserId(seller);
                 return this.fetchItemsBySeller(id, orderBy);
 
             } else if (seller == null) {
@@ -224,6 +229,7 @@ public class ItemService {
             } else {
 
                 // Query based on both
+                id = this.getUserId(seller);
                 return this.fetchItemsByCategoryAndSeller(cat, id, orderBy);
 
             }

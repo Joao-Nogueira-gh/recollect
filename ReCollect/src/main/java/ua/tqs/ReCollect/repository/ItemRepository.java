@@ -27,13 +27,13 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
     public List<Item> findByCategory(Categories category, Sort sort);
 
-    public List<Item> findBySeller(Long id);
+    public List<Item> findByOwner(Long id);
 
-    public List<Item> findBySeller(Long id, Sort sort);
+    public List<Item> findByOwner(Long id, Sort sort);
 
-    public List<Item> findByCategoryAndSeller(Categories category, Long id);
+    public List<Item> findByCategoryAndOwner(Categories category, Long id);
 
-    public List<Item> findByCategoryAndSeller(Categories category, Long id, Sort sort);
+    public List<Item> findByCategoryAndOwner(Categories category, Long id, Sort sort);
 
 
 

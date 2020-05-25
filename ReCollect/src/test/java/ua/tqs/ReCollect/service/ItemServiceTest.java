@@ -227,4 +227,19 @@ public class ItemServiceTest {
 
     // }
 
+    @Test
+    public void whenBooksAreFetched_BooksAreReturned() {
+
+        Item item1 = new Item("Moeda", 3, new BigDecimal(3.0), "Moeda fixe", Categories.BOOKS);
+
+        List<Item> itemList=new ArrayList<>();
+
+        itemList.add(item1);
+
+        given(itemRepo.findByCategory(Categories.BOOKS)).willReturn(itemList);
+
+        assertEquals(itemList, itemService.fetchItemsApi("BOOKS", null, null), "Error: no books found");
+
+    }
+
 }
