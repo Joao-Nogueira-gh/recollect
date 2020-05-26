@@ -6,7 +6,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Classimax</title>
+  <title>reCollect</title>
   
   <!-- FAVICON -->
   <link href="img/favicon.png" rel="shortcut icon">
@@ -123,7 +123,7 @@
 									<td class="product-thumb">
 										<img width="80px" height="auto" th:src="${item.getImages().get(0).toString()}" alt="image description"></td>
 									<td class="product-details">
-										<h3 class="title" th:text="${item.name}">....</h3>
+										<h3 class="title"><a th:text="${item.name}" th:href="${'/product/' + item.id}"></a></h3>
 										<span class="add-id"><strong>Ad ID: </strong><time th:text="${item.id}"></time> </span>
 										<span><strong>Posted on: </strong><span th:text="${item.creationDate}"></span></span>
 									</td>
@@ -132,7 +132,7 @@
 										<div class="">
 											<ul class="list-inline justify-content-center">
 												<li class="list-inline-item">
-													<a data-toggle="tooltip" data-placement="top" title="View" class="view" href="/product">
+													<a th:href="${'/product/' + item.id}" data-toggle="tooltip" data-placement="top" title="View" class="view">
 														<i class="fa fa-eye"></i>
 													</a>
 												</li>

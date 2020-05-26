@@ -125,12 +125,22 @@ public class FrontendWebController {
     }
 
     @GetMapping(value = "/edit-profile")
-    public String editProfile() {
+    public String editProfile(Model model) {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User loggedUser = userService.getByEmail(auth.getName());
+
+        model.addAttribute(LOGGEDUSER, loggedUser);
+
         return "edit-profile";
     }
 
     @GetMapping(value = "/profile")
     public String userProfile(Model model) {
+
+        if(this.getLoggedUser() == null){
+            return "redirect:/login";
+        }
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User loggedUser = userService.getByEmail(auth.getName());
@@ -145,6 +155,11 @@ public class FrontendWebController {
 
     @GetMapping(value = "/profile/delete/{id}")
     public String deleteItem(Model model, @PathVariable(name = "id") Long id) {
+
+        if(this.getLoggedUser() == null){
+            return "redirect:/login";
+        }
+
         User loggedUser = this.getLoggedUser();
 
         Item deleted = itemService.getItemById(id);
@@ -161,7 +176,9 @@ public class FrontendWebController {
     @GetMapping(value = "/sold-items/deleteSold/{id}")
     public String deleteSoldItem(Model model, @PathVariable(name = "id") Long id) {
 
-        // TODO: verificar se o loggedUser está logged in
+        if(this.getLoggedUser() == null){
+            return "redirect:/login";
+        }
 
         logger.debug("ID para delete: " + id);
 
@@ -183,7 +200,9 @@ public class FrontendWebController {
     @GetMapping(value = "/profile/marksold/{id}")
     public String markAsSoldItem(Model model, @PathVariable(name = "id") Long id) {
 
-        // TODO: verificar se o loggedUser está logged in
+        if(this.getLoggedUser() == null){
+            return "redirect:/login";
+        }
 
         logger.debug("ID para sold: " + id);
 
@@ -204,7 +223,9 @@ public class FrontendWebController {
     @GetMapping(value = "/sold-items/backOnSale/{id}")
     public String putItemBackOnSale(Model model, @PathVariable(name = "id") Long id) {
 
-        // TODO: verificar se o loggedUser está logged in
+        if(this.getLoggedUser() == null){
+            return "redirect:/login";
+        }
 
         logger.debug("ID para sold: " + id);
 
@@ -320,10 +341,30 @@ public class FrontendWebController {
         return "dashboard-sold-items";
     }
 
-    @GetMapping(value = "/product")
-    public String productPost(Model model) {
+    @GetMapping(value = "/product/{id}")
+    public String productPost(Model model, @PathVariable(name = "id") Long id, RedirectAttributes ra) {
 
+        System.err.println("id -> " + id);
         model.addAttribute("searchparams", new SearchParams());
+        Item item = itemService.getItemById(id);
+
+        System.err.println("item recebido 1 -> " + item.toString());
+        ra.addAttribute("item", item);
+        //model.addAttribute("item", item);
+
+        return "redirect:/product";
+    }
+
+    @GetMapping(value = "/product")
+    public String productPage(Model model, @RequestParam(name = "item", required = false) Item item) {
+
+        //System.err.println("id -> " + id);
+        model.addAttribute("searchparams", new SearchParams());
+        //Item item = itemService.getItemById(id);
+
+        System.err.println("item recebido 2 -> " + item.toString());
+
+        model.addAttribute("item", item);
 
         return "product-post";
     }
