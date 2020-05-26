@@ -46,5 +46,43 @@ public class ItemController {
         logger.debug(currUser.getPublishedItems());
         return "emptyTest";
     }
+    @GetMapping(path="/testic2/")
+	public String test2(Model model) {
+        itemService.deleteAll();
+
+        //get logged in user
+        User currUser = userService.getCurrentUser();
+
+        logger.debug(currUser.toString());
+        //create item from forms
+        Item i1= new Item("Moeda", 3, new BigDecimal(3.0), "Moeda fixe", Categories.MISC);
+        //create item for that user
+        itemService.addNewProduct(i1, currUser);
+
+        logger.debug(itemService.getAll());
+        logger.debug(currUser.getPublishedItems());
+        logger.debug(currUser.getSoldItems()+"\n");
+        //mark item as sold, u can obviously get it by id or something
+        itemService.markAsSold(itemService.getAll().get(0));
+        logger.debug(itemService.getAll());
+        logger.debug(currUser.getPublishedItems());
+        logger.debug(currUser.getSoldItems()+"\n");
+        //revert sale, u can obviously get item by id or something
+        itemService.revertSale(itemService.getAll().get(0));
+        logger.debug(itemService.getAll());
+        logger.debug(currUser.getPublishedItems());
+        logger.debug(currUser.getSoldItems());
+        return "emptyTest";
+    }
+    @GetMapping(path="/testic3/")
+	public String test3(Model model) {
+        //check actual state of stuff
+        User currUser = userService.getCurrentUser();
+
+        logger.debug(itemService.getAll());
+        logger.debug(currUser.getPublishedItems());
+        logger.debug(currUser.getSoldItems()+"\n");
+        return "emptyTest";
+    }
     
 }

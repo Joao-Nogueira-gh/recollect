@@ -70,9 +70,9 @@
 					<!-- Dashboard Links -->
 					<div class="widget user-dashboard-menu">
 						<ul>
-							<li><a href="/profile"><i class="fa fa-user"></i> My Ads <span th:text="${loggedUser.itensPublicados.size()}">...</span></a></li>
-							<li><a href="/favourites"><i class="fa fa-bookmark-o"></i> Favourite Ads <span th:text="${loggedUser.itensFavoritos.size()}">...</span></a></li>
-							<li class="active"><a href="/sold-items"><i class="fa fa-file-archive-o"></i>Sold Items <span th:text="${loggedUser.itensVendidos.size()}">..</span></a></li>
+							<li><a href="/profile"><i class="fa fa-user"></i> My Ads <span id="on_sale_count" th:text="${loggedUser.publishedItems.size()}">...</span></a></li>
+							<li><a href="/favourites"><i class="fa fa-bookmark-o"></i> Favourite Ads <span id="favorite_count" th:text="${loggedUser.favoriteItems.size()}">...</span></a></li>
+							<li class="active"><a href="/sold-items"><i class="fa fa-file-archive-o"></i>Sold Items <span id="sold_count" th:text="${loggedUser.soldItems.size()}">..</span></a></li>
 							<li><a href="/logout"><i class="fa fa-cog"></i> Logout</a></li>
 							<li><a href="" data-toggle="modal" data-target="#deleteaccount"><i class="fa fa-power-off"></i>Delete Account</a></li>
 						</ul>
@@ -111,7 +111,7 @@
 			<div class="col-md-10 offset-md-1 col-lg-8 offset-lg-0">
 				<!-- Recently Sold -->
 				<div class="widget dashboard-container my-adslist">
-					<h3 class="widget-header">My Ads</h3>
+					<h3 class="widget-header" id="soldItemsTitle">Sold Items</h3>
 					<table class="table table-responsive product-dashboard-table">
 						<thead>
 							<tr>
@@ -125,13 +125,13 @@
 						<th:block th:each="item : ${userSoldItems}">
 							<tr>
 								<td class="product-thumb">
-									<img width="80px" height="auto" th:src="${item.getImagens().get(0)}" alt="image description"></td>
+									<img width="80px" height="auto" th:src="${item.getImages().get(0)}" alt="image description"></td>
 								<td class="product-details">
-									<h3 class="title" th:text="${item.nome}">....</h3>
+									<h3 class="title" th:text="${item.name}">....</h3>
 									<span class="add-id"><strong>Ad ID: </strong><time th:text="${item.id}"></time> </span>
-									<span><strong>Posted on: </strong><time>TODO: Jun 27, 2017</time> </span>
+									<span><strong>Posted on: </strong><span th:text="${item.creationDate}"></span> </span>
 								</td>
-								<td class="product-category"><span class="categories" th:text="${item.categoria}">...</span></td>
+								<td class="product-category"><span class="categories" th:text="${item.category}">...</span></td>
 								<td class="action" data-title="Action">
 									<div class="">
 										<ul class="list-inline justify-content-center">
@@ -141,12 +141,12 @@
 												</a>
 											</li>
 											<li class="list-inline-item">
-												<a data-toggle="tooltip" data-placement="top" title="Put back on sale" class="edit" href="">
+												<a th:href="${'/sold-items/backOnSale/' + item.id}" data-toggle="tooltip" data-placement="top" title="Put back on sale" class="edit" id="back-sale-item-button">
 													<i class="fas fa-bullhorn"></i>
 												</a>
 											</li>
 											<li class="list-inline-item">
-												<a th:href="${'/profile/deleteSold/' + item.id}" data-toggle="tooltip" data-placement="top" title="Delete" class="delete" id="delete-item-button">
+												<a th:href="${'/sold-items/deleteSold/' + item.id}" data-toggle="tooltip" data-placement="top" title="Delete" class="delete" id="delete-item-button">
 													<i class="fa fa-trash"></i>
 												</a>
 											</li>
