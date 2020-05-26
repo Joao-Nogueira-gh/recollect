@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import ua.tqs.ReCollect.model.Comment;
 import ua.tqs.ReCollect.repository.CommentRepository;
@@ -22,5 +23,13 @@ public class CommentService {
     }
     public void deleteAll(){
         commentRepo.deleteAll();
+    }
+    @Transactional
+	public void addNewComment(Comment comment) {
+        save(comment);
+    }
+    @Transactional
+    public void deleteComment(Comment comment){
+        commentRepo.delete(comment);
     }
 }
