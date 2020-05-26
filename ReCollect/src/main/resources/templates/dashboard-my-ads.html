@@ -125,7 +125,7 @@
 									<td class="product-details">
 										<h3 class="title" th:text="${item.name}">....</h3>
 										<span class="add-id"><strong>Ad ID: </strong><time th:text="${item.id}"></time> </span>
-										<span><strong>Posted on: </strong><time th:text="${item.creationDate.toString().split(' ')[0]}"></time></span>
+										<span><strong>Posted on: </strong><span th:text="${item.creationDate}"></span></span>
 									</td>
 									<td class="product-category"><span class="categories" th:text="${item.category.toString()}">...</span></td>
 									<td class="action" data-title="Action">

@@ -6,10 +6,11 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.BDDMockito.given;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -136,6 +137,48 @@ public class ItemServiceTest {
         itemService.removeProduct(item);
 
         assertEquals(itemService.getAll().size(), 0);
+
+    }
+    @Test
+    public void whenUserMarksItemAsSold_itemChangesList() {
+
+        //setup
+
+        Item item = new Item("Moeda", 3, new BigDecimal(3.0), "Moeda fixe", Categories.MISC);
+        User owner=new User("user", "user@email.com", "x", "123456789");
+
+        itemService.addNewProduct(item,owner);
+
+        //test
+
+        itemService.markAsSold(item);
+
+        assertNull(item.getOwner());
+
+        assertEquals(item.getSeller().getName(), "user");
+
+
+    }
+    @Test
+    public void whenUserRevertsSale_itemChangesList() {
+
+        //setup
+
+        Item item = new Item("Moeda", 3, new BigDecimal(3.0), "Moeda fixe", Categories.MISC);
+        User owner=new User("user", "user@email.com", "x", "123456789");
+
+        itemService.addNewProduct(item,owner);
+
+        //test
+
+        itemService.markAsSold(item);
+
+        itemService.revertSale(item);
+
+        assertNull(item.getSeller());
+
+        assertEquals(item.getOwner().getName(), "user");
+
 
     }
 

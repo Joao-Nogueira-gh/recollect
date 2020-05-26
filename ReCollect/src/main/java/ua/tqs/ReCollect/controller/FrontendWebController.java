@@ -43,6 +43,7 @@ public class FrontendWebController {
     private static final String LOGGEDUSER = "loggedUser";
     private static final String ATRIBATUAL = "-------- Atributos atualizados --------";
     private static final String REDIRECTANNOUNCE = "redirect:/announce";
+    private static final int MAX_ITEM_PICTURES = 5;
 
     @Autowired
     ItemService itemService;
@@ -151,14 +152,33 @@ public class FrontendWebController {
 
         Set<Item> allItems = loggedUser.getPublishedItems();
 
-        //logger.debug(ATRIBATUAL);
         model.addAttribute(USERITEMS, allItems);
         model.addAttribute(LOGGEDUSER, loggedUser);
-        //logger.debug(USERITEMS+": " + model.getAttribute(USERITEMS));
-        //logger.debug(USERST+": " + model.getAttribute(LOGGEDUSER));
 
         return "redirect:/profile";
     }
+
+    @GetMapping(value = "/sold-items/deleteSold/{id}")
+    public String deleteSoldItem(Model model, @PathVariable(name = "id") Long id) {
+
+        // TODO: verificar se o loggedUser está logged in
+
+        logger.debug("ID para delete: " + id);
+
+        Item deleted = itemService.getItemById(id);
+        itemService.removeProduct(deleted);
+
+        Set<Item> allItems = this.getLoggedUser().getSoldItems();
+
+        logger.debug(ATRIBATUAL);
+        model.addAttribute("userSoldItems", allItems);
+        model.addAttribute(LOGGEDUSER, this.getLoggedUser());
+        logger.debug(USERITEMS+": " + model.getAttribute(USERITEMS));
+        logger.debug(USERST+": " + model.getAttribute(LOGGEDUSER));
+
+        return "redirect:/sold-items";
+    }
+
 
     @GetMapping(value = "/profile/marksold/{id}")
     public String markAsSoldItem(Model model, @PathVariable(name = "id") Long id) {
@@ -167,24 +187,8 @@ public class FrontendWebController {
 
         logger.debug("ID para sold: " + id);
 
-        /*
-        * - tirar dos publicados
-        * - meter nos vendidos
-        * - owner do item a null
-        * - seller do item ele próprio
-        * */
-
-        // Item sold = itemService.getItemById(id);
-        // this.getLoggedUser().removeItemPublicado(sold);
-        // sold.setOwner(null);
-        // sold.setSeller(this.getLoggedUser().getId());
-        // this.getLoggedUser().addSoldItem(sold);
-        // logger.debug("1. loggedUser: " + this.getLoggedUser());
-        // userService.updateUser(this.getLoggedUser());
-
-        // logger.debug("2.-----");
-        // itemService.updateItem(sold);
-        // logger.debug("3.-----");
+        Item sold = itemService.getItemById(id);
+        itemService.markAsSold(sold);
 
         Set<Item> allItems = this.getLoggedUser().getPublishedItems();
 
@@ -197,32 +201,28 @@ public class FrontendWebController {
         return "redirect:/profile";
     }
 
-    @GetMapping(value = "/profile/deleteSold/{id}")
-    public String deleteSoldItem(Model model, @PathVariable(name = "id") Long id) {
+    @GetMapping(value = "/sold-items/backOnSale/{id}")
+    public String putItemBackOnSale(Model model, @PathVariable(name = "id") Long id) {
 
         // TODO: verificar se o loggedUser está logged in
 
-        logger.debug("ID para delete: " + id);
+        logger.debug("ID para sold: " + id);
 
-        // Item deleted = itemService.getItemById(id);
-
-        // this.getLoggedUser().removeSoldItem(deleted);
-        // logger.debug("1. loggedUser: " + this.getLoggedUser());
-        // userService.updateUser(this.getLoggedUser());
-        // logger.debug("2.-----");
-        // itemService.deleteItem(id);
-        // logger.debug("3.-----");
+        Item backOnSale = itemService.getItemById(id);
+        itemService.revertSale(backOnSale);
 
         Set<Item> allItems = this.getLoggedUser().getSoldItems();
 
         logger.debug(ATRIBATUAL);
-        model.addAttribute("userSoldItems", allItems);
+        model.addAttribute(USERITEMS, allItems);
         model.addAttribute(LOGGEDUSER, this.getLoggedUser());
         logger.debug(USERITEMS+": " + model.getAttribute(USERITEMS));
         logger.debug(USERST+": " + model.getAttribute(LOGGEDUSER));
 
         return "redirect:/sold-items";
     }
+
+
 
 
     @GetMapping(value = "/about")
@@ -245,13 +245,12 @@ public class FrontendWebController {
 
         PictureListDto pictureListForm = new PictureListDto();
 
-        // 5 images, at max
-        for (int i = 1; i <= 5; i++) {
+        // create space for MAX_ITEM_PICTURES, maximum
+        for (int i = 1; i <= MAX_ITEM_PICTURES; i++) {
             pictureListForm.addImage(new Image());
         }
 
         model.addAttribute("imagesList",pictureListForm);
-        //model.addAttribute("itemForm", new ItemForm());
         return "add-item";
     }
 
@@ -324,10 +323,6 @@ public class FrontendWebController {
     @GetMapping(value = "/product")
     public String productPost(Model model) {
 
-        // Item i = new Item("Hp Dual Core 2gb Ram-Slim Laptop Available In Very Low Price", "Only three of these were made!",2009.99, 1);
-        // i.addComment(new Comment("André Amarante", "Always wanted one!"));
-        // i.addComment(new Comment("Joana Silva", "Very high price. Would you be willing to lower it?"));
-        // model.addAttribute("item", i);
         model.addAttribute("searchparams", new SearchParams());
 
         return "product-post";

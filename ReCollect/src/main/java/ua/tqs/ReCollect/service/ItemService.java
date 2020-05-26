@@ -69,7 +69,7 @@ public class ItemService {
 
         return dto;
     }
-
+    @Transactional
 	public void addNewProduct(Item item, User owner) {
         save(item);
         item.setOwner(owner);
@@ -80,6 +80,20 @@ public class ItemService {
 	public void removeProduct(Item item) {
         itemRepo.delete(item);
     }
+
+
+    @Transactional
+	public void markAsSold(Item item) {
+        item.setSeller(item.getOwner());
+        item.setOwner(null);
+	}
+
+
+    @Transactional
+	public void revertSale(Item item) {
+        item.setOwner(item.getSeller());
+        item.setSeller(null);
+	}
 }
 
   
