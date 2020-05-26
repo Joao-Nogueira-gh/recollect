@@ -147,31 +147,31 @@ public class ItemService {
      * Return all Items from a given seller's e-mail
      * 
      */
-    private List<Item> fetchItemsBySeller(Long id) {
+    private List<Item> fetchItemsBySeller(String email) {
 
-        return itemRepo.findByOwner(id);
+        return itemRepo.findByOwner(userService.getByEmail(email));
 
     }
 
     // Sort option
-    private List<Item> fetchItemsBySeller(Long id, String orderBy) {
+    private List<Item> fetchItemsBySeller(String email, String orderBy) {
 
-        return itemRepo.findByOwner(id, Sort.by(Sort.Direction.ASC, orderBy));
+        return itemRepo.findByOwner(userService.getByEmail(email), Sort.by(Sort.Direction.ASC, orderBy));
 
     }
 
     // Return all Items from a given seller's e-mail and Category
-    private List<Item> fetchItemsByCategoryAndSeller(String cat, Long id) {
+    private List<Item> fetchItemsByCategoryAndSeller(String cat, String email) {
 
-        return itemRepo.findByCategoryAndOwner(Categories.valueOf(cat), id);
+        return itemRepo.findByCategoryAndOwner(Categories.valueOf(cat), userService.getByEmail(email));
 
     }
 
     // Return all Items from a given seller's e-mail and Category sorted by either
     // price or date
-    private List<Item> fetchItemsByCategoryAndSeller(String cat, Long id, String orderBy) {
+    private List<Item> fetchItemsByCategoryAndSeller(String cat, String email, String orderBy) {
 
-        return itemRepo.findByCategoryAndOwner(Categories.valueOf(cat), id, Sort.by(Sort.Direction.ASC, orderBy));
+        return itemRepo.findByCategoryAndOwner(Categories.valueOf(cat), userService.getByEmail(email), Sort.by(Sort.Direction.ASC, orderBy));
 
     }
 
@@ -195,15 +195,12 @@ public class ItemService {
             return new ArrayList<Item>();
         }
 
-        Long id;
-
         if (orderBy == null) {
 
             if (cat == null) {
 
                 // Query based on seller
-                id = this.getUserId(seller);
-                return this.fetchItemsBySeller(id);
+                return this.fetchItemsBySeller(seller);
 
             } else if (seller == null) {
 
@@ -213,8 +210,7 @@ public class ItemService {
             } else {
 
                 // Query based on both
-                id = this.getUserId(seller);
-                return this.fetchItemsByCategoryAndSeller(cat, id);
+                return this.fetchItemsByCategoryAndSeller(cat, seller);
 
             }
 
@@ -223,8 +219,7 @@ public class ItemService {
             if (cat == null) {
 
                 // Query based on seller
-                id = this.getUserId(seller);
-                return this.fetchItemsBySeller(id, orderBy);
+                return this.fetchItemsBySeller(seller, orderBy);
 
             } else if (seller == null) {
 
@@ -234,17 +229,12 @@ public class ItemService {
             } else {
 
                 // Query based on both
-                id = this.getUserId(seller);
-                return this.fetchItemsByCategoryAndSeller(cat, id, orderBy);
+                return this.fetchItemsByCategoryAndSeller(cat, seller, orderBy);
 
             }
 
         }
 
-    }
-
-    private Long getUserId(String email) {
-        return userService.getByEmail(email).getId();
     }
 
     private boolean orderByIsValid(String orderBy) {

@@ -11,22 +11,26 @@ import org.springframework.web.bind.annotation.RestController;
 import ua.tqs.ReCollect.model.Item;
 import ua.tqs.ReCollect.service.ItemService;
 
-//API controller, WIP
-
 @RestController
 public class ItemRestController {
 
 	@Autowired
 	private ItemService itemService;
 
-	// not working because of nested serializers shit, kinda hard to fix
-
 	@GetMapping("/api/items")
 	@ResponseBody
 	public List<Item> itemIndex(@RequestParam(required = false) String category,
 			@RequestParam(required = false) String owner, @RequestParam(required = false) String orderBy) {
 		
-		return itemService.fetchItemsApi(category, owner, orderBy);
+		String processedOwner;
+
+		if(owner != null) {
+			processedOwner = owner.replace("'", "");
+		} else {
+			processedOwner = owner;
+		}
+
+		return itemService.fetchItemsApi(category, processedOwner, orderBy);
 	}
 	
 

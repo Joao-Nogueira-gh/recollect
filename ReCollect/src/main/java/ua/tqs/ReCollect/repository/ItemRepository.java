@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import ua.tqs.ReCollect.model.Categories;
 import ua.tqs.ReCollect.model.Item;
+import ua.tqs.ReCollect.model.User;
 
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Long> {
@@ -27,13 +28,13 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
     public List<Item> findByCategory(Categories category, Sort sort);
 
-    public List<Item> findByOwner(Long id);
+    public List<Item> findByOwner(User user);
 
-    public List<Item> findByOwner(Long id, Sort sort);
+    public List<Item> findByOwner(User user, Sort sort);
 
-    public List<Item> findByCategoryAndOwner(Categories category, Long id);
+    public List<Item> findByCategoryAndOwner(Categories category, User user);
 
-    public List<Item> findByCategoryAndOwner(Categories category, Long id, Sort sort);
+    public List<Item> findByCategoryAndOwner(Categories category, User user, Sort sort);
 
 }
 

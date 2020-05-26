@@ -41,7 +41,7 @@ public class UserAndItemServiceTest {
     @Autowired
     private ItemService itemService;
 
-    private static final User user =new User("user2", "email@email.com", "xsff", "789456123");
+    private User user =new User("user2", "email@email.com", "xsff", "789456123");
 
     @Test
     public void whenUserAddsFavoriteItem_ItemIsAddedToTheList() {
@@ -103,9 +103,8 @@ public class UserAndItemServiceTest {
 
         given(userRepo.existsByEmail(email)).willReturn(true);
         given(userRepo.findByEmail(email)).willReturn(user);
-        given(itemRepo.findByOwner(null)).willReturn(userItems);
+        given(itemRepo.findByOwner(user)).willReturn(userItems);
 
-        // List<Item> usersItems = itemRepo.findByOwner(user.getId());
         List<Item> usersItems = itemService.fetchItemsApi(null, email, null);
         
         assertEquals(2, usersItems.size());
