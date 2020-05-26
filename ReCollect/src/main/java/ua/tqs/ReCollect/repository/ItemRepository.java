@@ -18,6 +18,11 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
     public List<Item> findByName(String name);
 
     public void deleteById(Long id);
+
+    public List<Item> findTop20ByOrderByCreationDateAsc();
+
+    public List<Item> findTop20ByOrderByCreationDateDesc();
+
 }
 
 

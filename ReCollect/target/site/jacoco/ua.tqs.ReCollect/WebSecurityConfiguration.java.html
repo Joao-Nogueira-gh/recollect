@@ -42,24 +42,25 @@ import ua.tqs.ReCollect.service.MyUserDetailsService;
 <span class="fc" id="L42">                .antMatchers(loginPath).permitAll()</span>
 <span class="fc" id="L43">                .antMatchers(&quot;/register&quot;).permitAll()</span>
 <span class="fc" id="L44">                .antMatchers(&quot;/api/**&quot;).permitAll()</span>
-<span class="fc" id="L45">                .antMatchers(&quot;/announce&quot;).hasAuthority(&quot;ADMIN&quot;).anyRequest()</span>
-<span class="fc" id="L46">                .authenticated().and().formLogin()</span>
-<span class="fc" id="L47">                .loginPage(loginPath).failureUrl(&quot;/login?error=true&quot;)</span>
-<span class="fc" id="L48">                .defaultSuccessUrl(&quot;/profile&quot;)</span>
-<span class="fc" id="L49">                .usernameParameter(&quot;user_name&quot;)</span>
-<span class="fc" id="L50">                .passwordParameter(&quot;password&quot;)</span>
-<span class="fc" id="L51">                .and().logout()</span>
-<span class="fc" id="L52">                .logoutRequestMatcher(new AntPathRequestMatcher(&quot;/logout&quot;))</span>
-<span class="fc" id="L53">                .logoutSuccessUrl(loginPath).and().exceptionHandling()</span>
-<span class="fc" id="L54">                .accessDeniedPage(&quot;/access-denied&quot;);</span>
-<span class="fc" id="L55">    }</span>
+<span class="fc" id="L45">                .antMatchers(&quot;/admin/**&quot;).hasAuthority(&quot;ADMIN&quot;).anyRequest()</span>
+                //.antMatchers(&quot;/announce&quot;).hasAuthority(&quot;ADMIN&quot;).anyRequest()
+<span class="fc" id="L47">                .authenticated().and().formLogin()</span>
+<span class="fc" id="L48">                .loginPage(loginPath).failureUrl(&quot;/login?error=true&quot;)</span>
+<span class="fc" id="L49">                .defaultSuccessUrl(&quot;/profile&quot;)</span>
+<span class="fc" id="L50">                .usernameParameter(&quot;user_name&quot;)</span>
+<span class="fc" id="L51">                .passwordParameter(&quot;password&quot;)</span>
+<span class="fc" id="L52">                .and().logout()</span>
+<span class="fc" id="L53">                .logoutRequestMatcher(new AntPathRequestMatcher(&quot;/logout&quot;))</span>
+<span class="fc" id="L54">                .logoutSuccessUrl(loginPath).and().exceptionHandling()</span>
+<span class="fc" id="L55">                .accessDeniedPage(&quot;/access-denied&quot;);</span>
+<span class="fc" id="L56">    }</span>
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-<span class="fc" id="L59">        web</span>
-<span class="fc" id="L60">                .ignoring()</span>
-<span class="fc" id="L61">                .antMatchers(&quot;/resources/**&quot;, &quot;/static/**&quot;, &quot;/css/**&quot;, &quot;/js/**&quot;, &quot;/images/**&quot;, &quot;/plugins/**&quot;);</span>
-<span class="fc" id="L62">    }</span>
+<span class="fc" id="L60">        web</span>
+<span class="fc" id="L61">                .ignoring()</span>
+<span class="fc" id="L62">                .antMatchers(&quot;/resources/**&quot;, &quot;/static/**&quot;, &quot;/css/**&quot;, &quot;/js/**&quot;, &quot;/images/**&quot;, &quot;/plugins/**&quot;);</span>
+<span class="fc" id="L63">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

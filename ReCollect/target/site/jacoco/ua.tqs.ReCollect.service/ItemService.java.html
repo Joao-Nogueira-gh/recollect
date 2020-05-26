@@ -69,16 +69,45 @@ import ua.tqs.ReCollect.repository.ItemRepository;
 
 <span class="fc" id="L70">        return dto;</span>
     }
-
+    @Transactional
 	public void addNewProduct(Item item, User owner) {
 <span class="fc" id="L74">        save(item);</span>
 <span class="fc" id="L75">        item.setOwner(owner);</span>
 <span class="fc" id="L76">        save(item);</span>
 <span class="fc" id="L77">	}</span>
+
     @Transactional
 	public void removeProduct(Item item) {
-<span class="fc" id="L80">        itemRepo.delete(item);</span>
-<span class="fc" id="L81">    }</span>
+<span class="fc" id="L81">        itemRepo.delete(item);</span>
+<span class="fc" id="L82">    }</span>
+
+
+    @Transactional
+	public void markAsSold(Item item) {
+<span class="fc" id="L87">        item.setSeller(item.getOwner());</span>
+<span class="fc" id="L88">        item.setOwner(null);</span>
+<span class="fc" id="L89">	}</span>
+
+
+    @Transactional
+	public void revertSale(Item item) {
+<span class="fc" id="L94">        item.setOwner(item.getSeller());</span>
+<span class="fc" id="L95">        item.setSeller(null);</span>
+<span class="fc" id="L96">    }</span>
+
+    // Cant be tested in the Service Unit test since they need BD integration for the 
+    // timestamps to be generated. Mocks won't suffice.
+    public List&lt;Item&gt; get20NewestItems() {
+
+<span class="nc" id="L102">        return this.itemRepo.findTop20ByOrderByCreationDateAsc();</span>
+
+    }
+
+    public List&lt;Item&gt; get20OldestItems() {
+
+<span class="nc" id="L108">        return this.itemRepo.findTop20ByOrderByCreationDateDesc();</span>
+        
+    }
 }
 
   

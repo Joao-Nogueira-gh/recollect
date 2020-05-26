@@ -179,7 +179,6 @@ public class ItemServiceTest {
 
         assertEquals(item.getOwner().getName(), "user");
 
-
     }
 
 }

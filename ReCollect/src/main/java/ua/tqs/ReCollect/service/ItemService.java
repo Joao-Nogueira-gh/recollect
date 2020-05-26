@@ -93,7 +93,21 @@ public class ItemService {
 	public void revertSale(Item item) {
         item.setOwner(item.getSeller());
         item.setSeller(null);
-	}
+    }
+
+    // Cant be tested in the Service Unit test since they need BD integration for the 
+    // timestamps to be generated. Mocks won't suffice.
+    public List<Item> get20NewestItems() {
+
+        return this.itemRepo.findTop20ByOrderByCreationDateAsc();
+
+    }
+
+    public List<Item> get20OldestItems() {
+
+        return this.itemRepo.findTop20ByOrderByCreationDateDesc();
+        
+    }
 }
 
   
