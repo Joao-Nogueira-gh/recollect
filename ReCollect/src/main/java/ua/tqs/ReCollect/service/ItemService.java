@@ -80,11 +80,15 @@ public class ItemService {
 	public void removeProduct(Item item) {
         itemRepo.delete(item);
     }
+
+
     @Transactional
 	public void markAsSold(Item item) {
         item.setSeller(item.getOwner());
         item.setOwner(null);
 	}
+
+
     @Transactional
 	public void revertSale(Item item) {
         item.setOwner(item.getSeller());
