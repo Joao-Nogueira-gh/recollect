@@ -23,4 +23,6 @@ public class CommentService {
     public void deleteAll(){
         commentRepo.deleteAll();
     }
+	public void addNewComment(Comment comment) {
+	}
 }
