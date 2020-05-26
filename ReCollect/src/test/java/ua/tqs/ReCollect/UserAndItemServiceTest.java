@@ -2,6 +2,7 @@ package ua.tqs.ReCollect;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.BDDMockito.given;
 
 import java.math.BigDecimal;
@@ -56,8 +57,7 @@ public class UserAndItemServiceTest {
 
         itemService.addFavorite(item,user);
 
-        assertTrue(item.getFavedBy().contains(user));
-
+        assertTrue(user.getFavoriteItems().contains(item));
 
     }
 
@@ -73,13 +73,13 @@ public class UserAndItemServiceTest {
 
         itemService.addFavorite(item,user);
 
-        assertTrue(item.getFavedBy().contains(user));
+        assertTrue(user.getFavoriteItems().contains(item));
 
         // test
 
         itemService.removeFavorite(item,user);
 
-        assertEquals(item.getFavedBy().size(),0);
+        assertFalse(user.getFavoriteItems().contains(item));
 
 
     }
