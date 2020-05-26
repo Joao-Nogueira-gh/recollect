@@ -2,7 +2,16 @@ version: '3'
 
 services:
 
-  mysql-recollect:
+  recollect:
+    image: recollect-image
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+    networks:
+      - recollect-network
+
+  mysql:
     image: mysql:5.7
     environment:
       MYSQL_DATABASE: 'reCollect'
@@ -11,10 +20,11 @@ services:
       MYSQL_ROOT_PASSWORD: 'password'
     ports:
       - "3306:3306"
-    restart: always
+    expose:
+      - "3306"
+    networks:
+      - recollect-network
 
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - "8081:8080"
+networks:
+  recollect-network:
+         
