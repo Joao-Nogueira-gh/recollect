@@ -44,27 +44,27 @@ public class CommentServiceTest {
 
     }
 
-    @Test
-    public void whenUserAddsComment_itIsAddedToTheSystem() {
+    // @Test
+    // public void whenUserAddsComment_itIsAddedToTheSystem() {
 
-        Item item = new Item("Moeda", 3, new BigDecimal(3.0), "Moeda fixe", Categories.MISC);
-        User owner=new User("user", "user@email.com", "x", "123456789");
+    //     Item item = new Item("Moeda", 3, new BigDecimal(3.0), "Moeda fixe", Categories.MISC);
+    //     User owner=new User("user", "user@email.com", "x", "123456789");
 
-        Comment comment=new Comment("nice!", owner, item);
+    //     Comment comment=new Comment("nice!", owner, item);
 
-        commentService.addNewComment(comment);
+    //     commentService.addNewComment(comment);
 
-        List<Comment> commentList=new ArrayList<>();
-        commentList.add(comment);
+    //     List<Comment> commentList=new ArrayList<>();
+    //     commentList.add(comment);
 
-        given(commentRepository.findAll()).willReturn(commentList);
+    //     given(commentRepository.findAll()).willReturn(commentList);
 
-        Comment retrieved = commentService.getAll().get(0);
+    //     Comment retrieved = commentService.getAll().get(0);
 
-        assertEquals(retrieved.getText(), comment.getText());
-        assertEquals(retrieved.getUser(), comment.getUser());
-        assertEquals(retrieved.getItem(), comment.getItem());
+    //     assertEquals(retrieved.getText(), comment.getText());
+    //     assertEquals(retrieved.getUser(), comment.getUser());
+    //     assertEquals(retrieved.getItem(), comment.getItem());
 
-    }
+    // }
 
 }
