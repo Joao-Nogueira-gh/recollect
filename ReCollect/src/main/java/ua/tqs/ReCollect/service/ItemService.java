@@ -52,6 +52,11 @@ public class ItemService {
         itemRepo.deleteAll();
     }
 
+    // Needed it for tests
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
+
     public ItemDTO convertItem(Item item) {
         ItemDTO dto = new ItemDTO(item.getName(), item.getQuantity(), item.getPrice(), item.getDescription());
 
@@ -104,6 +109,7 @@ public class ItemService {
     public void addFavorite(Item item, User user) {
         if (!user.getFavoriteItems().contains(item)) {
             user.addFavItem(item);
+            item.addFavedBy(user);
         }
     }
 
@@ -111,6 +117,7 @@ public class ItemService {
     public void removeFavorite(Item item, User user) {
         if (user.getFavoriteItems().contains(item)) {
             user.remFavItem(item);
+            item.remFavedBy(user);
         }
     }
 

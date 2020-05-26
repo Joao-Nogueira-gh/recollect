@@ -25,8 +25,6 @@ public class ItemRestController {
 	@ResponseBody
 	public List<Item> itemIndex(@RequestParam(required = false) String category,
 			@RequestParam(required = false) String owner, @RequestParam(required = false) String orderBy) {
-
-				System.out.println(category);
 		
 		return itemService.fetchItemsApi(category, owner, orderBy);
 	}

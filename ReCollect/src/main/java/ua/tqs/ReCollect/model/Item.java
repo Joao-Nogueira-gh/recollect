@@ -12,7 +12,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -23,10 +22,14 @@ import javax.persistence.OneToMany;
 import javax.persistence.PreRemove;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 @Table(name = "item")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Item {
 
     @Id
@@ -57,11 +60,11 @@ public class Item {
     @ManyToMany(mappedBy = "favoriteItems")
     private Set<User> favedBy;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name="ownerid", referencedColumnName = "id")
     private User owner;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name="sellerid", referencedColumnName = "id")
     private User seller;
 
@@ -156,6 +159,10 @@ public class Item {
 
     public void addFavedBy(User favedBy) {
         this.favedBy.add(favedBy);
+    }
+
+    public void remFavedBy(User favedBy) {
+        this.favedBy.remove(favedBy);
     }
 
     public User getOwner() {

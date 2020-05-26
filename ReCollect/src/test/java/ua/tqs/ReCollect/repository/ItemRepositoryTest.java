@@ -28,6 +28,9 @@ public class ItemRepositoryTest {
     private ItemRepository itemRepo;
 
     @Autowired
+    private UserRepository userRepo;
+
+    @Autowired
     private TestEntityManager entityManager;
 
     User user = new User("Tiago", "email@ua", "password", "123123123");
@@ -42,6 +45,7 @@ public class ItemRepositoryTest {
     public void insert() {
 
         itemRepo.deleteAll();
+        userRepo.deleteAll();
 
         entityManager.persistAndFlush(i1);
         entityManager.persistAndFlush(i2);
@@ -100,17 +104,9 @@ public class ItemRepositoryTest {
 
     }
 
-    @AfterEach
-    public void cleanUp() {
-        itemRepo.deleteAll();
-    }
-
-
-
-
-    // Infelizmente este teste nao pode ser aqui acho eu
+    // Can't get this test to work :/
     // @Test
-    // public void getItemsByOwner() {
+    // public void whenGetItemsByOwner_onlyOwnerItemsAreReturned() {
 
     //     Item i6 = new Item("Carica", 2, new BigDecimal(1.0), "Carica fixe", Categories.MISC);
     //     Item i7 = new Item("BD do Big Wheel", 3, new BigDecimal(3.0), "Moeda fixe", Categories.BOOKS);
@@ -118,18 +114,30 @@ public class ItemRepositoryTest {
     //     i6.setOwner(user);
     //     i7.setOwner(user);
 
+    //     List<Item> userItems = new ArrayList<>();
+    //     userItems.add(i6);
+    //     userItems.add(i7);
+
+    //     entityManager.persistAndFlush(user);
     //     entityManager.persistAndFlush(i6);
     //     entityManager.persistAndFlush(i7);
 
     //     List<Item> usersItems = itemRepo.findByOwner(user.getId());
+        
+    //     assertEquals(2, usersItems.size());
 
     //     for (Item item : usersItems) {
-            
-    //         assertEquals(user.getName(), item.getOwner().getName(), "Error: wrong owner");
+
+    //         assertTrue(user.getName().equals(item.getOwner().getName()));
 
     //     }
 
     // }
 
+    @AfterEach
+    public void cleanUp() {
+        itemRepo.deleteAll();
+        userRepo.deleteAll();
+    }
 
 }
