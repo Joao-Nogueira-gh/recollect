@@ -1,5 +1,6 @@
 package ua.tqs.ReCollect.functionalTest;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -21,7 +22,7 @@ public class AnnouncePage extends PageObject {
     private WebElement itemTitle;
 
     @FindBy(id = "category")
-    private Select category;
+    private WebElement category;
 
     @FindBy(id = "description")
     private WebElement description;
@@ -54,7 +55,7 @@ public class AnnouncePage extends PageObject {
         super(driver);
     }
 
-    public void fillForm(String titulo, String categoria, String descricao,
+    public void fillForm(String titulo, String descricao,
                          String preco, String quantidade, String imagem){
         this.itemTitle.clear();
         this.description.clear();

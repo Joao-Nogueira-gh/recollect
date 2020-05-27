@@ -4,9 +4,9 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.assertTrue;
 
-public class MarkSoldItemTest extends FunctionalTest{
+public class MarkSoldItemSeleniumTest extends FunctionalTest{
 
-    public MarkSoldItemTest(){
+    public MarkSoldItemSeleniumTest(){
         super();
         setUp();
     }
