@@ -18,6 +18,7 @@ public class ItemForm {
     private Categories categoria;
 
     @NotNull
+    @Size(max = 255) // TODO: check this with DB
     private String descricao;
 
     @NotNull
