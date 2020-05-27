@@ -5,9 +5,6 @@ services:
 - maven
 - mysql:5.7
 
-tags:
-  - docker
-
 variables:
   DOCKER_DRIVER: overlay2
   MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
@@ -81,6 +78,8 @@ package:
 
 deploy:
   stage: deploy
+  tags:
+    - docker
   only:
     - master
     - cd
