@@ -5,6 +5,8 @@ services:
 - maven
 - mysql:5.7
 
+tags:
+  - docker
 
 variables:
   DOCKER_DRIVER: overlay2
