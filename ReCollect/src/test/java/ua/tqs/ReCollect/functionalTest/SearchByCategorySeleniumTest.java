@@ -6,9 +6,9 @@ import org.openqa.selenium.NoSuchElementException;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class SearchByCategoryTest extends FunctionalTest {
+public class SearchByCategorySeleniumTest extends FunctionalTest {
 
-    public SearchByCategoryTest() {
+    public SearchByCategorySeleniumTest() {
         super();
         setUp();
     }

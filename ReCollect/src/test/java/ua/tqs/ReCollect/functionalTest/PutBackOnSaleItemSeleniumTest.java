@@ -4,10 +4,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.assertTrue;
 
-public class PutBackOnSaleItemTest extends FunctionalTest {
+public class PutBackOnSaleItemSeleniumTest extends FunctionalTest {
 
 
-    public PutBackOnSaleItemTest(){
+    public PutBackOnSaleItemSeleniumTest(){
         super();
         setUp();
     }

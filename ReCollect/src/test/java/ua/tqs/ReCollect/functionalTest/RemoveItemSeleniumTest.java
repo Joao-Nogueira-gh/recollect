@@ -3,9 +3,9 @@ package ua.tqs.ReCollect.functionalTest;
 import org.junit.jupiter.api.Test;
 import static org.junit.Assert.assertTrue;
 
-public class RemoveItemTest extends FunctionalTest {
+public class RemoveItemSeleniumTest extends FunctionalTest {
 
-    public RemoveItemTest() {
+    public RemoveItemSeleniumTest() {
         super();
         setUp();
     }
