@@ -96,13 +96,15 @@ deploy:
     MYSQL_ROOT_PASSWORD: "root"
   services:
     - mysql:5.7
+    - docker:dind
+    - maven
   only:
     - master
     - cd
   script:
     - apk update
     - apk upgrade
-    - apk add python python-dev py-pip build-base
+    - apk add --no-cache py-pip python-dev libffi-dev openssl-dev gcc libc-dev make
     - pip install docker-compose
     - docker-compose up -d --build
 
