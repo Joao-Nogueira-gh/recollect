@@ -85,9 +85,17 @@ package:
     - mvn clean package -Dtest=\!\*SeleniumTest
 
 deploy:
+  image: docker
   stage: deploy
   tags:
     - docker
+  variables:
+    MYSQL_DATABASE: "reCollect"
+    MYSQL_USER: "adminrc"
+    MYSQL_PASSWORD: "admin"
+    MYSQL_ROOT_PASSWORD: "root"
+  services:
+    - mysql:5.7
   only:
     - master
     - cd
