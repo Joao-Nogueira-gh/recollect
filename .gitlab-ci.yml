@@ -92,9 +92,8 @@ deploy:
     - master
     - cd
   script:
-    #- apt-get install -y python-pip
-    #- pip install docker-compose
-    - docker-compose down
+    - sudo apt-get install -y python-pip
+    - pip install docker-compose
     - docker-compose up -d --build
 
 
