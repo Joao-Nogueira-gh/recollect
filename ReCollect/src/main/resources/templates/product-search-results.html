@@ -140,7 +140,7 @@
 								<div class="product-item bg-light">
 									<div class="card">
 										<div class="thumb-content">
-											<div class="price" th:text="${item.price}">$200</div>
+											<div class="price" th:text="${item.price}">...</div>
 											<a th:href="${'/product/' + item.id}">
 												<img class="card-img-top img-fluid" th:src="${item.getImages().get(0).toString()}" alt="Card image cap">
 											</a>
@@ -149,7 +149,7 @@
 											<h4 class="card-title"><a th:href="${'/product/' + item.id}" th:text="${item.name}">...</a></h4>
 											<ul class="list-inline product-meta">
 												<li class="list-inline-item">
-													<div><i class="fa fa-folder-open-o"></i> Electronics</div>
+													<div><i class="fa fa-folder-open-o"></i> <span th:text="${item.category.toString()}"></span> ...</div>
 												</li>
 												<li class="list-inline-item">
 													<div><i class="fa fa-calendar"></i> <span th:text="${item.creationDate}"></span> ...</div>

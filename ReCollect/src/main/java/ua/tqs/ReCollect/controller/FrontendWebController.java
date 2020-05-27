@@ -22,15 +22,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import ua.tqs.ReCollect.model.Categories;
+import ua.tqs.ReCollect.model.Comment;
 import ua.tqs.ReCollect.model.Item;
 import ua.tqs.ReCollect.model.User;
+import ua.tqs.ReCollect.service.CommentService;
 import ua.tqs.ReCollect.service.ItemService;
 import ua.tqs.ReCollect.service.UserService;
-import ua.tqs.ReCollect.utils.Category;
-import ua.tqs.ReCollect.utils.Image;
-import ua.tqs.ReCollect.utils.ItemForm;
-import ua.tqs.ReCollect.utils.PictureListDto;
-import ua.tqs.ReCollect.utils.SearchParams;
+import ua.tqs.ReCollect.utils.*;
 import org.apache.log4j.Logger;
 
 
@@ -49,6 +47,7 @@ public class FrontendWebController {
     // REDIRECTS AND PAGE NAMES
     private static final String PRODUCT_SEARCH_RESULTS = "product-search-results";
     private static final String PRODUCT_POST = "product-post";
+    private static final String REDIRECT_PRODUCT_POST = "redirect:/product";
     private static final String REDIRECTANNOUNCE = "redirect:/announce";
     private static final String REDIRECT_SEARCH_RESULTS = "redirect:/category";
     private static final String REDIRECT_HOME= "redirect:/";
@@ -59,13 +58,17 @@ public class FrontendWebController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    CommentService commentService;
+
     ArrayList<Category> categories = Category.getCategories();
 
     @GetMapping(value = "/")
     public String home(SearchParams searchParams, Model model, @RequestParam(name = "hasErrors", required = false) boolean hasErrors) {
         model.addAttribute("categories", categories);
-        //model.addAttribute("searchParams", new SearchParams());
         model.addAttribute("hasErrors", hasErrors);
+        List<Item> recentItems = itemService.get20NewestItems();
+        model.addAttribute("recentItems", recentItems);
         return "index";
     }
 
@@ -396,11 +399,15 @@ public class FrontendWebController {
     }
 
     @GetMapping(value = "/product")
-    public String productPage(Model model, @RequestParam(name = "item", required = false) Item item) {
+    public String productPage(CommentForm commentForm,
+                              Model model,
+                              @RequestParam(name = "item", required = false) Item item,
+                              @RequestParam(name = "commentHasError", required = false) boolean commentHasError) {
         model.addAttribute("categories", categories);
         model.addAttribute("searchparams", new SearchParams());
         //System.err.println("item recebido 2 -> " + item.toString());
         model.addAttribute("item", item);
+        model.addAttribute("commentHasError", commentHasError);
         return PRODUCT_POST;
     }
 
@@ -409,6 +416,30 @@ public class FrontendWebController {
         model.addAttribute("categories", categories);
 
         return PRODUCT_POST;
+
+    }
+
+    @PostMapping(value = "/product/comment/{id}")
+    public String addComment(@Valid CommentForm commentForm, BindingResult bindingResult, Model model, @PathVariable(name = "id") Long id, RedirectAttributes ra) {
+
+        Item commentedItem = itemService.getItemById(id);
+
+        if(bindingResult.hasErrors()){
+            // if the provided data is invalid
+            logger.debug("COMENTARIO INVALIDOS!");
+            ra.addAttribute("item", commentedItem);
+            ra.addAttribute("commentHasError", true);
+            return REDIRECT_PRODUCT_POST;
+        }
+
+
+        Comment comment = new Comment(commentForm.getConteudo(), this.getLoggedUser(), commentedItem);
+        commentService.addNewComment(comment);
+        // get the most recent snapshop for that item, after the comment was made
+        commentedItem = itemService.getItemById(id);
+        model.addAttribute("item", commentedItem);
+
+        return REDIRECT_PRODUCT_POST;
 
     }
 

@@ -98,21 +98,6 @@
 								<img class="img-fluid w-100" th:attr="data-image=${imageURL.toString()}"  th:src="${imageURL.toString()}" alt="product-img">
 							</div>
 						</th:block>
-						<!--<div class="product-slider-item my-4" data-image="images/products/products-1.jpg">
-							<img class="img-fluid w-100" src="images/products/products-1.jpg" alt="product-img">
-						</div>
-						<div class="product-slider-item my-4" data-image="images/products/products-2.jpg">
-							<img class="d-block img-fluid w-100" src="images/products/products-2.jpg" alt="Second slide">
-						</div>
-						<div class="product-slider-item my-4" data-image="images/products/products-3.jpg">
-							<img class="d-block img-fluid w-100" src="images/products/products-3.jpg" alt="Third slide">
-						</div>
-						<div class="product-slider-item my-4" data-image="images/products/products-1.jpg">
-							<img class="d-block img-fluid w-100" src="images/products/products-1.jpg" alt="Third slide">
-						</div>
-						<div class="product-slider-item my-4" data-image="images/products/products-2.jpg">
-							<img class="d-block img-fluid w-100" src="images/products/products-2.jpg" alt="Third slide">
-						</div>-->
 					</div>
 					<!-- product slider -->
 
@@ -141,26 +126,6 @@
 										<!-- Avater -->
 										<img src="images/user/user-thumb.jpg" alt="avater">
 										<div class="media-body">
-											<!-- Ratings -->
-											<div class="ratings">
-												<ul class="list-inline">
-													<li class="list-inline-item">
-														<i class="fa fa-star"></i>
-													</li>
-													<li class="list-inline-item">
-														<i class="fa fa-star"></i>
-													</li>
-													<li class="list-inline-item">
-														<i class="fa fa-star"></i>
-													</li>
-													<li class="list-inline-item">
-														<i class="fa fa-star"></i>
-													</li>
-													<li class="list-inline-item">
-														<i class="fa fa-star"></i>
-													</li>
-												</ul>
-											</div>
 											<div class="name">
 												<h5 th:text="${comment.getUser().name}"></h5>
 											</div>
@@ -176,20 +141,15 @@
 									</div>
 									<div class="review-submission">
 										<h3 class="tab-title">Submit your review</h3>
-										<!-- Rate -->
-										<div class="rate">
-											<div class="starrr"></div>
+										<div th:if="${commentHasError}">
+											<div class="alert alert-danger" role="alert" id="invalidCommentMessage">
+												Could not submit your comment. Maybe you tried to insert an empty comment.
+											</div>
 										</div>
 										<div class="review-submit">
-											<form th:action="@{/product}" method="POST" class="row">
-												<div class="col-lg-6">
-													<input type="text" name="name" id="name" class="form-control" placeholder="Name">
-												</div>
-												<div class="col-lg-6">
-													<input type="email" name="email" id="email" class="form-control" placeholder="Email">
-												</div>
+											<form th:action="@{'/product/comment/'+ ${item.id}}" method="POST" class="row" th:object="${commentForm}" >
 												<div class="col-12">
-													<textarea name="review" id="review" rows="10" class="form-control" placeholder="Message"></textarea>
+													<textarea th:field="*{conteudo}" name="review" id="review" rows="10" class="form-control" placeholder="Message"></textarea>
 												</div>
 												<div class="col-12">
 													<button type="submit" class="btn btn-main">Submit</button>
@@ -207,34 +167,16 @@
 				<div class="sidebar">
 					<div class="widget price text-center">
 						<h4>Price</h4>
-						<p>$230</p>
+						<p th:text="${item.price + '€'}">...</p>
 					</div>
 					<!-- User Profile widget -->
 					<div class="widget user text-center">
 						<img class="rounded-circle img-fluid mb-5 px-5" src="images/user/user-thumb.jpg" alt="">
-						<h4><a href="">Jonathon Andrew</a></h4>
-						<p class="member-time">Member Since Jun 27, 2017</p>
-						<a href="">See all ads</a>
+						<h4 th:text="${item.owner.name}">...</h4>
+						<p th:text="${item.owner.email}">...</p>
 						<ul class="list-inline mt-20">
-							<li class="list-inline-item"><a href="" class="btn btn-contact d-inline-block  btn-primary px-lg-5 my-1 px-md-3">Contact</a></li>
-							<li class="list-inline-item"><a href="" class="btn btn-offer d-inline-block btn-primary ml-n1 my-1 px-lg-4 px-md-3">Make an
-									offer</a></li>
+							<li class="list-inline-item"><div class="btn btn-contact d-inline-block  btn-primary px-lg-5 my-1 px-md-3" th:text="${item.owner.phone}">...</div></li>
 						</ul>
-					</div>
-					<!-- Map Widget -->
-					<!-- <div class="widget map">
-						<div class="map">
-							<div id="map_canvas" data-latitude="51.507351" data-longitude="-0.127758"></div>
-						</div>
-					</div> -->
-					<!-- Rate Widget -->
-					<div class="widget rate">
-						<!-- Heading -->
-						<h5 class="widget-header text-center">What would you rate
-							<br>
-							this product</h5>
-						<!-- Rate -->
-						<div class="starrr"></div>
 					</div>
 					<!-- Safety tips widget -->
 					<div class="widget disclaimer">
@@ -253,7 +195,7 @@
 							your fellow users.
 						</p>
 						<!-- Submit button -->
-						<a href="" class="btn btn-transparent-white">Submit Listing</a>
+						<a href="/announce" class="btn btn-transparent-white">Announce!</a>
 					</div>
 
 				</div>
