@@ -27,7 +27,7 @@ public class AddItemTest extends FunctionalTest {
         //AnnouncePage announcePage = new AnnouncePage(driver);
         assertTrue(announcePage.isInitialized());
 
-        announcePage.fillForm("Banda desenhada Marvel", "BOOKS", "produto excelente", "5", "1", "https://cdn.catawiki.net/assets/marketing/stories-images/4757-7326c52efe4952575f17182fdd3944dcb079c2ba-og_image.jpg");
+        announcePage.fillForm("Banda desenhada Marvel", "produto excelente", "5", "1", "https://cdn.catawiki.net/assets/marketing/stories-images/4757-7326c52efe4952575f17182fdd3944dcb079c2ba-og_image.jpg");
         AnnouncePage resultPage = announcePage.postItem();
         assertTrue(resultPage.isInitialized());
         assertTrue(resultPage.submittedSuccess());
@@ -49,7 +49,7 @@ public class AddItemTest extends FunctionalTest {
 
         assertTrue(announcePage.isInitialized());
 
-        announcePage.fillForm("", "BOOKS", "produto excelente", "5", "1", "https://cdn.catawiki.net/assets/marketing/stories-images/4757-7326c52efe4952575f17182fdd3944dcb079c2ba-og_image.jpg");
+        announcePage.fillForm("", "produto excelente", "5", "1", "https://cdn.catawiki.net/assets/marketing/stories-images/4757-7326c52efe4952575f17182fdd3944dcb079c2ba-og_image.jpg");
         AnnouncePage resultPage = announcePage.postItem();
         assertTrue(resultPage.isInitialized());
         assertTrue(resultPage.existsErrorMessage());

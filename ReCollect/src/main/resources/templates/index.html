@@ -97,7 +97,7 @@
 			<div class="col-md-12">
 				<!-- Header Contetnt -->
 				<div class="content-block">
-					<h1>Buy & Sell Your Old Collections </h1>
+					<h1 id="home_header">Buy & Sell Your Old Collections </h1>
 					<p>Join the millions who buy and sell from each other <br> everyday in local communities around the world</p>
 					
 				</div>
@@ -115,12 +115,6 @@
 													<select th:field="*{category}" class="w-100 form-control mt-lg-1 mt-md-2">
 														<th:block th:each="category : ${categories}">
 															<option th:value="${category.name}" th:text="${category.name}">Books</option>
-															<!-- <option value="Games">Games</option>
-                                                            <option value="Toys">Toys</option>
-                                                            <option value="Technology">Technology</option>
-                                                            <option value="Musica">Music</option>
-                                                            <option value="Art">Art</option>
-                                                            <option value="Miscellaneous">Miscellaneous</option> -->
 														</th:block>
 													</select>
 												</div>
@@ -128,7 +122,7 @@
 													<input type="text" class="form-control my-2 my-lg-1" id="inputLocation4" placeholder="Location">
 												</div>
 												<div class="form-group col-md-2 align-self-center">
-													<button type="submit" class="btn btn-primary">Search Now</button>
+													<button type="submit" class="btn btn-primary" id="search_button_home">Search Now</button>
 												</div>
 											</div>
 										</form>
@@ -350,71 +344,12 @@
 							<div class="category-block">
 								<div class="header">
 									<a th:href="${'/home_category/' + category.name}"><i th:class="${category.iconClass}"></i> </a>
-									<h4><a th:href="${'/home_category/' + category.name}" th:text="${category.name}">...</a></h4>
+									<h4 th:id="${'button_' + category.name}"> <a th:href="${'/home_category/' + category.name}" th:text="${category.name}">...</a></h4>
 								</div>
 							</div>
 						</div>
 						<!-- /Category List -->
 					</th:block>
-
-					<!--
-					<div class="col-lg-3 offset-lg-0 col-md-5 offset-md-1 col-sm-6 col-6">
-						<div class="category-block">
-							<div class="header">
-								<a href="/category"><i class="fas fa-book-open icon-bg-1"></i> </a>
-								<h4><a href="/category">Books</a></h4>
-							</div>
-						</div>
-					</div>
-					<div class="col-lg-3 offset-lg-0 col-md-5 offset-md-1 col-sm-6 col-6">
-						<div class="category-block">
-							<div class="header">
-								<a href="/category"><i class="fas fa-dice-d6 icon-bg-2"></i> </a>
-								<h4><a href="/category">Games</a></h4>
-							</div>
-						</div>
-					</div>
-					<div class="col-lg-3 offset-lg-0 col-md-5 offset-md-1 col-sm-6 col-6">
-						<div class="category-block">
-							<div class="header">
-								<a href="/category"><i class="fas fa-robot icon-bg-3"></i> </a>
-								<h4><a href="/category">Toys</a></h4>
-							</div>
-						</div>
-					</div>
-					<div class="col-lg-3 offset-lg-0 col-md-5 offset-md-1 col-sm-6 col-6">
-						<div class="category-block">
-							<div class="header">
-								<a href="/category"><i class="fa fa-camera-retro icon-bg-4"></i> </a>
-								<h4><a href="/category">Technology</a></h4>
-							</div>
-						</div>
-					</div>
-					<div class="col-lg-3 offset-lg-0 col-md-5 offset-md-1 col-sm-6 col-6">
-						<div class="category-block">
-							<div class="header">
-								<a href="/category"><i class="fas fa-guitar icon-bg-5"></i> </a>
-								<h4><a href="/category">Music</a></h4>
-							</div>
-						</div>
-					</div>
-					<div class="col-lg-3 offset-lg-0 col-md-5 offset-md-1 col-sm-6 col-6">
-						<div class="category-block">
-							<div class="header">
-								<a href="/category"><i class="fas fa-image icon-bg-6"></i> </a>
-								<h4><a href="/category">Art</a></h4>
-							</div>
-						</div>
-					</div>
-					<div class="col-lg-3 offset-lg-0 col-md-5 offset-md-1 col-sm-6 col-6">
-						<div class="category-block">
-							<div class="header">
-								<a href="/category"><i class="fas fa-box-open icon-bg-8"></i> </a>
-								<h4><a href="/category">Miscellaneous</a></h4>
-							</div>
-						</div>
-					</div>
-					-->
 
 				</div>
 			</div>
