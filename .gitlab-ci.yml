@@ -24,6 +24,8 @@ stages:
 
 connect:
   stage: connect
+  tags:
+    - docker
   variables:
     MYSQL_DATABASE: "reCollect"
     MYSQL_USER: "adminrc"
@@ -40,6 +42,8 @@ connect:
 build:
   image: maven
   stage: build
+  tags:
+    - docker
   variables:
     MYSQL_DATABASE: "reCollect"
     MYSQL_USER: "adminrc"
@@ -53,6 +57,8 @@ build:
 test:
   image: maven
   stage: test
+  tags:
+    - docker
   variables:
     MYSQL_DATABASE: "reCollect"
     MYSQL_USER: "adminrc"
@@ -65,6 +71,8 @@ test:
 
 package:
   image: maven
+  tags:
+    - docker
   stage: package
   variables:
     MYSQL_DATABASE: "reCollect"
