@@ -20,7 +20,6 @@ import ua.tqs.ReCollect.model.Item;
 import ua.tqs.ReCollect.model.User;
 import ua.tqs.ReCollect.repository.ItemRepository;
 import ua.tqs.ReCollect.repository.UserRepository;
-import ua.tqs.ReCollect.service.ItemService;
 import ua.tqs.ReCollect.service.LocationService;
 import ua.tqs.ReCollect.service.UserService;
 
@@ -59,9 +58,6 @@ public class ApiIntegrationTest {
     private UserRepository userRepository;
 
     @Autowired
-    private ItemService itemService;
-
-    @Autowired
     private UserService userService;
 
     @Autowired
@@ -88,12 +84,23 @@ public class ApiIntegrationTest {
         userService.save(u1);
         userService.save(u2);
 
-        itemService.addNewProduct(i1, u1);
-        itemService.addNewProduct(i2, u2);
-        itemService.addNewProduct(i3, u1);
-        itemService.addNewProduct(i4, u1);
-        itemService.addNewProduct(i5, u2);
-        itemService.addNewProduct(i6, u1);
+        i1.setOwner(u1);
+        itemRepository.saveAndFlush(i1);
+
+        i2.setOwner(u2);
+        itemRepository.saveAndFlush(i2);
+
+        i3.setOwner(u1);
+        itemRepository.saveAndFlush(i3);
+
+        i4.setOwner(u1);
+        itemRepository.saveAndFlush(i4);
+
+        i5.setOwner(u2);
+        itemRepository.saveAndFlush(i5);
+
+        i6.setOwner(u1);
+        itemRepository.saveAndFlush(i6);
 
     }
 
@@ -186,7 +193,7 @@ public class ApiIntegrationTest {
     @Test
     public void getSortedUser2() {
 
-        ResponseEntity<List<Item>> entity = restClient.exchange("/api/items?owner='user2@email.com'&orderBy=price",
+        ResponseEntity<List<Item>> entity = restClient.exchange("/api/items?owner='user2@email.com'&orderBy=creationDate",
                 HttpMethod.GET, null, new ParameterizedTypeReference<List<Item>>() {
                 });
 
@@ -199,8 +206,6 @@ public class ApiIntegrationTest {
             assertEquals("USER 2", item.getOwner().getName());
 
         }
-
-        System.out.println(body);
 
         assertEquals(i2.getName(), body.get(0).getName(), "ERROR: Not sorted properly");
 
