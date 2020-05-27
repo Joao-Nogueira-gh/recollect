@@ -99,25 +99,6 @@
 				<div class="content-block">
 					<h1>Buy & Sell Your Old Collections </h1>
 					<p>Join the millions who buy and sell from each other <br> everyday in local communities around the world</p>
-					<div class="short-popular-category-list text-center">
-						<h2>Popular Categories</h2>
-						<ul class="list-inline">
-							<li class="list-inline-item">
-								<a href="/category"><i class="fas fa-book-open"></i> Books</a></li>
-							<li class="list-inline-item">
-								<a href="category"><i class="fas fa-dice-d6"></i> Games</a>
-							</li>
-							<li class="list-inline-item">
-								<a href="/category"><i class="fas fa-robot"></i> Toys</a>
-							</li>
-							<li class="list-inline-item">
-								<a href="/category"><i class="fas fa-camera-retro"></i> Technology</a>
-							</li>
-							<li class="list-inline-item">
-								<a href="/category"><i class="fas fa-guitar"></i> Music</a>
-							</li>
-						</ul>
-					</div>
 					
 				</div>
 				<!-- Advance Search -->
@@ -368,8 +349,8 @@
 						<div class="col-lg-3 offset-lg-0 col-md-5 offset-md-1 col-sm-6 col-6">
 							<div class="category-block">
 								<div class="header">
-									<a href="/category"><i th:class="${category.iconClass}"></i> </a>
-									<h4><a href="/category" th:text="${category.name}">...</a></h4>
+									<a th:href="${'/home_category/' + category.name}"><i th:class="${category.iconClass}"></i> </a>
+									<h4><a th:href="${'/home_category/' + category.name}" th:text="${category.name}">...</a></h4>
 								</div>
 							</div>
 						</div>
