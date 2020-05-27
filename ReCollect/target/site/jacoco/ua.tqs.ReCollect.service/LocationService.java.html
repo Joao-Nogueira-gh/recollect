@@ -12,45 +12,45 @@ import ua.tqs.ReCollect.model.Location;
 import ua.tqs.ReCollect.repository.LocationRepository;
 
 @Service
-<span class="fc" id="L15">public class LocationService {</span>
+<span class="nc" id="L15">public class LocationService {</span>
 
     @Autowired
     private LocationRepository locationRepo;
 
     public List&lt;Location&gt; getAll(){
-<span class="fc" id="L21">        return locationRepo.findAll();</span>
+<span class="nc" id="L21">        return locationRepo.findAll();</span>
     }
 
     public void save(Location item){
-<span class="fc" id="L25">        locationRepo.save(item);</span>
-<span class="fc" id="L26">    }</span>
+<span class="nc" id="L25">        locationRepo.save(item);</span>
+<span class="nc" id="L26">    }</span>
 
     public void deleteAll(){
-<span class="fc" id="L29">        locationRepo.deleteAll();</span>
-<span class="fc" id="L30">    }</span>
+<span class="nc" id="L29">        locationRepo.deleteAll();</span>
+<span class="nc" id="L30">    }</span>
 
     public Location getLocation(String district, String county){
-<span class="fc" id="L33">        return locationRepo.findByDistrictAndCounty(district, county);</span>
+<span class="nc" id="L33">        return locationRepo.findByDistrictAndCounty(district, county);</span>
     }
 
     public Map&lt;String, ArrayList&lt;String&gt;&gt; getCountiesByDistrict() {
         
-<span class="fc" id="L38">        List&lt;Location&gt; locs = this.getAll();</span>
-<span class="fc" id="L39">        HashMap&lt;String, ArrayList&lt;String&gt;&gt; ret = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L38">        List&lt;Location&gt; locs = this.getAll();</span>
+<span class="nc" id="L39">        HashMap&lt;String, ArrayList&lt;String&gt;&gt; ret = new HashMap&lt;&gt;();</span>
 
-<span class="fc bfc" id="L41" title="All 2 branches covered.">        for (Location location : locs) {</span>
+<span class="nc bnc" id="L41" title="All 2 branches missed.">        for (Location location : locs) {</span>
 
-<span class="fc bfc" id="L43" title="All 2 branches covered.">            if(!ret.containsKey(location.getDistrict())) {</span>
+<span class="nc bnc" id="L43" title="All 2 branches missed.">            if(!ret.containsKey(location.getDistrict())) {</span>
 
-<span class="fc" id="L45">                ret.put(location.getDistrict(), new ArrayList&lt;&gt;());</span>
+<span class="nc" id="L45">                ret.put(location.getDistrict(), new ArrayList&lt;&gt;());</span>
 
             } 
 
-<span class="fc" id="L49">            ret.get(location.getDistrict()).add(location.getCounty());</span>
+<span class="nc" id="L49">            ret.get(location.getDistrict()).add(location.getCounty());</span>
             
-<span class="fc" id="L51">        }</span>
+<span class="nc" id="L51">        }</span>
 
-<span class="fc" id="L53">        return ret;</span>
+<span class="nc" id="L53">        return ret;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

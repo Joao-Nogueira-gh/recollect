@@ -15,7 +15,7 @@ import ua.tqs.ReCollect.service.ItemService;
 import ua.tqs.ReCollect.service.UserService;
 
 @Controller
-<span class="fc" id="L18">public class ItemController {</span>
+<span class="nc" id="L18">public class ItemController {</span>
 
     @Autowired
     private ItemService itemService;
@@ -23,21 +23,28 @@ import ua.tqs.ReCollect.service.UserService;
     @Autowired
     private UserService userService;
     
-<span class="fc" id="L26">    static final Logger logger = Logger.getLogger(ItemController.class);</span>
+<span class="nc" id="L26">    static final Logger logger = Logger.getLogger(ItemController.class);</span>
 
 	@GetMapping(path=&quot;/testic/&quot;)
 	public String test(Model model) {
 <span class="nc" id="L30">        itemService.deleteAll();</span>
-<span class="nc" id="L31">        User currUser = userService.getCurrentUser();</span>
-<span class="nc" id="L32">        logger.debug(currUser.toString());</span>
-<span class="nc" id="L33">        Item i1= new Item(&quot;Moeda&quot;, 3, new BigDecimal(3.0), &quot;Moeda fixe&quot;, Categories.MISC);</span>
-<span class="nc" id="L34">        itemService.addNewProduct(i1, currUser);</span>
-<span class="nc" id="L35">        logger.debug(itemService.getAll());</span>
-<span class="nc" id="L36">        logger.debug(currUser.getPublishedItems());</span>
-<span class="nc" id="L37">        itemService.removeProduct(itemService.getAll().get(0));</span>
-<span class="nc" id="L38">        logger.debug(itemService.getAll());</span>
-<span class="nc" id="L39">        logger.debug(currUser.getPublishedItems());</span>
-<span class="nc" id="L40">        return &quot;emptyTest&quot;;</span>
+
+        //get logged in user
+<span class="nc" id="L33">        User currUser = userService.getCurrentUser();</span>
+
+<span class="nc" id="L35">        logger.debug(currUser.toString());</span>
+        //create item from forms
+<span class="nc" id="L37">        Item i1= new Item(&quot;Moeda&quot;, 3, new BigDecimal(3.0), &quot;Moeda fixe&quot;, Categories.MISC);</span>
+        //create item for that user
+<span class="nc" id="L39">        itemService.addNewProduct(i1, currUser);</span>
+
+<span class="nc" id="L41">        logger.debug(itemService.getAll());</span>
+<span class="nc" id="L42">        logger.debug(currUser.getPublishedItems());</span>
+        //remove a certain item, u can obviously get it by id or something
+<span class="nc" id="L44">        itemService.removeProduct(itemService.getAll().get(0));</span>
+<span class="nc" id="L45">        logger.debug(itemService.getAll());</span>
+<span class="nc" id="L46">        logger.debug(currUser.getPublishedItems());</span>
+<span class="nc" id="L47">        return &quot;emptyTest&quot;;</span>
     }
     
 }

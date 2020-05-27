@@ -32,9 +32,9 @@ import org.apache.log4j.Logger;
 
 
 @Controller
-<span class="fc" id="L35">public class FrontendWebController {</span>
+<span class="nc" id="L35">public class FrontendWebController {</span>
 
-<span class="fc" id="L37">    static final Logger logger = Logger.getLogger(FrontendWebController.class);</span>
+<span class="nc" id="L37">    static final Logger logger = Logger.getLogger(FrontendWebController.class);</span>
 
     private static final String CATEGORYHTML = &quot;category&quot;;
     private static final String USERITEMS = &quot;userItems&quot;;
@@ -50,26 +50,27 @@ import org.apache.log4j.Logger;
     @Autowired
     UserService userService;
 
-<span class="fc" id="L53">    ArrayList&lt;Category&gt; categories = Category.getCategories();</span>
+<span class="nc" id="L53">    ArrayList&lt;Category&gt; categories = Category.getCategories();</span>
 
     @GetMapping(value = &quot;/&quot;)
     public String home(Model model) {
 <span class="nc" id="L57">        model.addAttribute(&quot;item&quot;, new Item());</span>
 <span class="nc" id="L58">        model.addAttribute(&quot;categories&quot;, categories);</span>
-<span class="nc" id="L59">        return &quot;index&quot;;</span>
+<span class="nc" id="L59">        model.addAttribute(&quot;searchParams&quot;, new SearchParams());</span>
+<span class="nc" id="L60">        return &quot;index&quot;;</span>
     }
 
     @GetMapping(value = &quot;/category&quot;)
     public String category() {
-<span class="nc" id="L64">        return CATEGORYHTML;</span>
+<span class="nc" id="L65">        return CATEGORYHTML;</span>
     }
 
     @PostMapping(value = &quot;/category&quot;)
     public String categorysearch(@ModelAttribute SearchParams searchparams, BindingResult result, ModelMap model) {
-<span class="nc" id="L69">        logger.debug(&quot;Selected category: &quot; + searchparams.getCategory());</span>
-<span class="nc" id="L70">        model.addAttribute(&quot;category&quot;, searchparams.getCategory());</span>
+<span class="nc" id="L70">        logger.debug(&quot;Selected category: &quot; + searchparams.getCategory());</span>
+<span class="nc" id="L71">        model.addAttribute(&quot;category&quot;, searchparams.getCategory());</span>
 
-<span class="nc" id="L72">        return CATEGORYHTML;</span>
+<span class="nc" id="L73">        return CATEGORYHTML;</span>
     }
 
     // @PostMapping(value = &quot;/login&quot;)
@@ -114,58 +115,49 @@ import org.apache.log4j.Logger;
 
     @GetMapping(value = &quot;/ad-listing&quot;)
     public String adListing() {
-<span class="nc" id="L117">        return &quot;Ad-listing&quot;;</span>
+<span class="nc" id="L118">        return &quot;Ad-listing&quot;;</span>
     }
 
     @GetMapping(value = &quot;/ad-list-view&quot;)
     public String adListView() {
-<span class="nc" id="L122">        return &quot;ad-list-view&quot;;</span>
+<span class="nc" id="L123">        return &quot;ad-list-view&quot;;</span>
     }
 
     @GetMapping(value = &quot;/edit-profile&quot;)
     public String editProfile() {
-<span class="nc" id="L127">        return &quot;edit-profile&quot;;</span>
+<span class="nc" id="L128">        return &quot;edit-profile&quot;;</span>
     }
 
     @GetMapping(value = &quot;/profile&quot;)
     public String userProfile(Model model) {
 
-<span class="nc" id="L133">        Authentication auth = SecurityContextHolder.getContext().getAuthentication();</span>
-<span class="nc" id="L134">        User loggedUser = userService.getByEmail(auth.getName());</span>
+<span class="nc" id="L134">        Authentication auth = SecurityContextHolder.getContext().getAuthentication();</span>
+<span class="nc" id="L135">        User loggedUser = userService.getByEmail(auth.getName());</span>
 
-<span class="nc" id="L136">        Set&lt;Item&gt; allItems = loggedUser.getPublishedItems();</span>
+<span class="nc" id="L137">        Set&lt;Item&gt; allItems = loggedUser.getPublishedItems();</span>
 
-<span class="nc" id="L138">        model.addAttribute(USERITEMS, allItems);</span>
-<span class="nc" id="L139">        model.addAttribute(LOGGEDUSER, loggedUser);</span>
+<span class="nc" id="L139">        model.addAttribute(USERITEMS, allItems);</span>
+<span class="nc" id="L140">        model.addAttribute(LOGGEDUSER, loggedUser);</span>
 
-<span class="nc" id="L141">        return &quot;dashboard-my-ads&quot;;</span>
+<span class="nc" id="L142">        return &quot;dashboard-my-ads&quot;;</span>
     }
 
     @GetMapping(value = &quot;/profile/delete/{id}&quot;)
     public String deleteItem(Model model, @PathVariable(name = &quot;id&quot;) Long id) {
-
 <span class="nc" id="L147">        User loggedUser = this.getLoggedUser();</span>
 
-<span class="nc" id="L149">        logger.debug(&quot;ID para delete: &quot; + id.toString());</span>
+<span class="nc" id="L149">        Item deleted = itemService.getItemById(id);</span>
+<span class="nc" id="L150">        itemService.removeProduct(deleted);</span>
 
-        // Item deleted = itemService.getItemById(id);
+<span class="nc" id="L152">        Set&lt;Item&gt; allItems = loggedUser.getPublishedItems();</span>
 
-        // loggedUser.removeItemPublicado(deleted);
-        // logger.debug(&quot;1. loggedUser: &quot; + loggedUser);
-        // userService.updateUser(loggedUser);
-        // logger.debug(&quot;2.-----&quot;);
-        // itemService.deleteItem(id);
-        // logger.debug(&quot;3.-----&quot;);
+        //logger.debug(ATRIBATUAL);
+<span class="nc" id="L155">        model.addAttribute(USERITEMS, allItems);</span>
+<span class="nc" id="L156">        model.addAttribute(LOGGEDUSER, loggedUser);</span>
+        //logger.debug(USERITEMS+&quot;: &quot; + model.getAttribute(USERITEMS));
+        //logger.debug(USERST+&quot;: &quot; + model.getAttribute(LOGGEDUSER));
 
-<span class="nc" id="L160">        Set&lt;Item&gt; allItems = loggedUser.getPublishedItems();</span>
-
-<span class="nc" id="L162">        logger.debug(ATRIBATUAL);</span>
-<span class="nc" id="L163">        model.addAttribute(USERITEMS, allItems);</span>
-<span class="nc" id="L164">        model.addAttribute(LOGGEDUSER, loggedUser);</span>
-<span class="nc" id="L165">        logger.debug(USERITEMS+&quot;: &quot; + model.getAttribute(USERITEMS));</span>
-<span class="nc" id="L166">        logger.debug(USERST+&quot;: &quot; + model.getAttribute(LOGGEDUSER));</span>
-
-<span class="nc" id="L168">        return &quot;redirect:/profile&quot;;</span>
+<span class="nc" id="L160">        return &quot;redirect:/profile&quot;;</span>
     }
 
     @GetMapping(value = &quot;/profile/marksold/{id}&quot;)
@@ -173,7 +165,7 @@ import org.apache.log4j.Logger;
 
         // TODO: verificar se o loggedUser está logged in
 
-<span class="nc" id="L176">        logger.debug(&quot;ID para sold: &quot; + id);</span>
+<span class="nc" id="L168">        logger.debug(&quot;ID para sold: &quot; + id);</span>
 
         /*
         * - tirar dos publicados
@@ -194,15 +186,15 @@ import org.apache.log4j.Logger;
         // itemService.updateItem(sold);
         // logger.debug(&quot;3.-----&quot;);
 
-<span class="nc" id="L197">        Set&lt;Item&gt; allItems = this.getLoggedUser().getPublishedItems();</span>
+<span class="nc" id="L189">        Set&lt;Item&gt; allItems = this.getLoggedUser().getPublishedItems();</span>
 
-<span class="nc" id="L199">        logger.debug(ATRIBATUAL);</span>
-<span class="nc" id="L200">        model.addAttribute(USERITEMS, allItems);</span>
-<span class="nc" id="L201">        model.addAttribute(LOGGEDUSER, this.getLoggedUser());</span>
-<span class="nc" id="L202">        logger.debug(USERITEMS+&quot;: &quot; + model.getAttribute(USERITEMS));</span>
-<span class="nc" id="L203">        logger.debug(USERST+&quot;: &quot; + model.getAttribute(LOGGEDUSER));</span>
+<span class="nc" id="L191">        logger.debug(ATRIBATUAL);</span>
+<span class="nc" id="L192">        model.addAttribute(USERITEMS, allItems);</span>
+<span class="nc" id="L193">        model.addAttribute(LOGGEDUSER, this.getLoggedUser());</span>
+<span class="nc" id="L194">        logger.debug(USERITEMS+&quot;: &quot; + model.getAttribute(USERITEMS));</span>
+<span class="nc" id="L195">        logger.debug(USERST+&quot;: &quot; + model.getAttribute(LOGGEDUSER));</span>
 
-<span class="nc" id="L205">        return &quot;redirect:/profile&quot;;</span>
+<span class="nc" id="L197">        return &quot;redirect:/profile&quot;;</span>
     }
 
     @GetMapping(value = &quot;/profile/deleteSold/{id}&quot;)
@@ -210,7 +202,7 @@ import org.apache.log4j.Logger;
 
         // TODO: verificar se o loggedUser está logged in
 
-<span class="nc" id="L213">        logger.debug(&quot;ID para delete: &quot; + id);</span>
+<span class="nc" id="L205">        logger.debug(&quot;ID para delete: &quot; + id);</span>
 
         // Item deleted = itemService.getItemById(id);
 
@@ -221,118 +213,112 @@ import org.apache.log4j.Logger;
         // itemService.deleteItem(id);
         // logger.debug(&quot;3.-----&quot;);
 
-<span class="nc" id="L224">        Set&lt;Item&gt; allItems = this.getLoggedUser().getSoldItems();</span>
+<span class="nc" id="L216">        Set&lt;Item&gt; allItems = this.getLoggedUser().getSoldItems();</span>
 
-<span class="nc" id="L226">        logger.debug(ATRIBATUAL);</span>
-<span class="nc" id="L227">        model.addAttribute(&quot;userSoldItems&quot;, allItems);</span>
-<span class="nc" id="L228">        model.addAttribute(LOGGEDUSER, this.getLoggedUser());</span>
-<span class="nc" id="L229">        logger.debug(USERITEMS+&quot;: &quot; + model.getAttribute(USERITEMS));</span>
-<span class="nc" id="L230">        logger.debug(USERST+&quot;: &quot; + model.getAttribute(LOGGEDUSER));</span>
+<span class="nc" id="L218">        logger.debug(ATRIBATUAL);</span>
+<span class="nc" id="L219">        model.addAttribute(&quot;userSoldItems&quot;, allItems);</span>
+<span class="nc" id="L220">        model.addAttribute(LOGGEDUSER, this.getLoggedUser());</span>
+<span class="nc" id="L221">        logger.debug(USERITEMS+&quot;: &quot; + model.getAttribute(USERITEMS));</span>
+<span class="nc" id="L222">        logger.debug(USERST+&quot;: &quot; + model.getAttribute(LOGGEDUSER));</span>
 
-<span class="nc" id="L232">        return &quot;redirect:/sold-items&quot;;</span>
+<span class="nc" id="L224">        return &quot;redirect:/sold-items&quot;;</span>
     }
 
 
     @GetMapping(value = &quot;/about&quot;)
     public String aboutUs() {
-<span class="nc" id="L238">        return &quot;about-us&quot;;</span>
+<span class="nc" id="L230">        return &quot;about-us&quot;;</span>
     }
 
     @GetMapping(value = &quot;/announce&quot;)
     public String addItem(ItemForm itemForm, Model model, @RequestParam(name = &quot;submitted&quot;, required = false) boolean submitted,
                           @RequestParam(name = &quot;noImages&quot;, required = false) boolean noImages,
                           @RequestParam(name = &quot;hasErrors&quot;, required = false) boolean hasErrors) {
-<span class="nc bnc" id="L245" title="All 2 branches missed.">        if(this.getLoggedUser() == null){</span>
-<span class="nc" id="L246">            return &quot;redirect:/login&quot;;</span>
+<span class="nc bnc" id="L237" title="All 2 branches missed.">        if(this.getLoggedUser() == null){</span>
+<span class="nc" id="L238">            return &quot;redirect:/login&quot;;</span>
         }
 
-<span class="nc" id="L249">        model.addAttribute(&quot;hasErrors&quot;, hasErrors);</span>
-<span class="nc" id="L250">        model.addAttribute(&quot;noImages&quot;, noImages);</span>
-<span class="nc" id="L251">        model.addAttribute(SUBMITTED, submitted);</span>
-<span class="nc" id="L252">        model.addAttribute(&quot;categories&quot;, categories);</span>
+<span class="nc" id="L241">        model.addAttribute(&quot;hasErrors&quot;, hasErrors);</span>
+<span class="nc" id="L242">        model.addAttribute(&quot;noImages&quot;, noImages);</span>
+<span class="nc" id="L243">        model.addAttribute(SUBMITTED, submitted);</span>
+<span class="nc" id="L244">        model.addAttribute(&quot;categories&quot;, categories);</span>
 
-<span class="nc" id="L254">        PictureListDto pictureListForm = new PictureListDto();</span>
+<span class="nc" id="L246">        PictureListDto pictureListForm = new PictureListDto();</span>
 
         // 5 images, at max
-<span class="nc bnc" id="L257" title="All 2 branches missed.">        for (int i = 1; i &lt;= 5; i++) {</span>
-<span class="nc" id="L258">            pictureListForm.addImage(new Image());</span>
+<span class="nc bnc" id="L249" title="All 2 branches missed.">        for (int i = 1; i &lt;= 5; i++) {</span>
+<span class="nc" id="L250">            pictureListForm.addImage(new Image());</span>
         }
 
-<span class="nc" id="L261">        model.addAttribute(&quot;imagesList&quot;,pictureListForm);</span>
+<span class="nc" id="L253">        model.addAttribute(&quot;imagesList&quot;,pictureListForm);</span>
         //model.addAttribute(&quot;itemForm&quot;, new ItemForm());
-<span class="nc" id="L263">        return &quot;add-item&quot;;</span>
+<span class="nc" id="L255">        return &quot;add-item&quot;;</span>
     }
 
     @PostMapping(value = &quot;/announce&quot;)
     public String postItem(@Valid ItemForm itemForm, BindingResult bindingResult, @ModelAttribute PictureListDto imagesList, RedirectAttributes ra) {
 
-<span class="nc bnc" id="L269" title="All 2 branches missed.">        if(bindingResult.hasErrors()){</span>
+<span class="nc bnc" id="L261" title="All 2 branches missed.">        if(bindingResult.hasErrors()){</span>
             // if the provided data is invalid
-<span class="nc" id="L271">            logger.debug(&quot;INPUTS INVALIDOS!&quot;);</span>
-<span class="nc" id="L272">            ra.addAttribute(SUBMITTED, false);</span>
-<span class="nc" id="L273">            ra.addAttribute(&quot;hasErrors&quot;, true);</span>
-<span class="nc" id="L274">            return REDIRECTANNOUNCE;</span>
+<span class="nc" id="L263">            logger.debug(&quot;INPUTS INVALIDOS!&quot;);</span>
+<span class="nc" id="L264">            ra.addAttribute(SUBMITTED, false);</span>
+<span class="nc" id="L265">            ra.addAttribute(&quot;hasErrors&quot;, true);</span>
+<span class="nc" id="L266">            return REDIRECTANNOUNCE;</span>
         }
 
-<span class="nc" id="L277">        int emptyEntries = 0;</span>
-<span class="nc bnc" id="L278" title="All 2 branches missed.">        for(Image im : imagesList.getImages()){</span>
-<span class="nc bnc" id="L279" title="All 2 branches missed.">            if(im.getUrl().trim().equals(&quot;&quot;))</span>
-<span class="nc" id="L280">                emptyEntries+=1; // count empty entries</span>
-<span class="nc" id="L281">        }</span>
+<span class="nc" id="L269">        int emptyEntries = 0;</span>
+<span class="nc bnc" id="L270" title="All 2 branches missed.">        for(Image im : imagesList.getImages()){</span>
+<span class="nc bnc" id="L271" title="All 2 branches missed.">            if(im.getUrl()==null)</span>
+<span class="nc" id="L272">                emptyEntries+=1; // count empty entries</span>
+<span class="nc" id="L273">        }</span>
 
         // if all images urls are empty strings
-<span class="nc bnc" id="L284" title="All 2 branches missed.">        if(emptyEntries==imagesList.getImages().size()){</span>
-<span class="nc" id="L285">            ra.addAttribute(&quot;noImages&quot;, true);</span>
-<span class="nc" id="L286">            ra.addAttribute(SUBMITTED, false);</span>
-<span class="nc" id="L287">            return REDIRECTANNOUNCE;</span>
+<span class="nc bnc" id="L276" title="All 2 branches missed.">        if(emptyEntries==imagesList.getImages().size()){</span>
+<span class="nc" id="L277">            ra.addAttribute(&quot;noImages&quot;, true);</span>
+<span class="nc" id="L278">            ra.addAttribute(SUBMITTED, false);</span>
+<span class="nc" id="L279">            return REDIRECTANNOUNCE;</span>
         }
 
+
+
         // setup item with valid provided data
-        // Item newItem = new Item();
-        // newItem.setNome(itemForm.getNome());
-        // newItem.setCategoria(itemForm.getCategoria());
-        // newItem.setDescricao(itemForm.getDescricao());
-        // newItem.setPreco(itemForm.getPreco());
-        // newItem.setQuantidade(itemForm.getQuantidade());
+<span class="nc" id="L285">        Item newItem = new Item();</span>
+<span class="nc" id="L286">        newItem.setName(itemForm.getNome());</span>
+<span class="nc" id="L287">        newItem.setCategory(itemForm.getCategoria());</span>
+<span class="nc" id="L288">        newItem.setDescription(itemForm.getDescricao());</span>
+<span class="nc" id="L289">        newItem.setPrice(itemForm.getPreco());</span>
+<span class="nc" id="L290">        newItem.setQuantity(itemForm.getQuantidade());</span>
 
-        // logger.debug(&quot;1!&quot;);
-        // for(Image im : imagesList.getImages()){
-        //     if(im.getUrl().trim().equals(&quot;&quot;))
-        //         continue; // skip empty inputs
-        //     newItem.addImage(im.getUrl());
-        // }
-        // newItem.setOwner(this.getLoggedUser().getId());
-        // logger.debug(&quot;2!&quot;);
-        // //logger.debug(&quot;newItem recebido: &quot;+ newItem.toString());
-        // //logger.debug(&quot;imagesList: &quot; + imagesList.toString());
-        // logger.debug(&quot;loggerUser antes do add: &quot; + this.getLoggedUser().toString());
-        // itemService.save(newItem);
-        // logger.debug(&quot;3!&quot;);
-        // this.getLoggedUser().addItem(newItem);
-        // logger.debug(&quot;4!&quot;);
-        // userService.updateUser(this.getLoggedUser());
-        // logger.debug(&quot;5!&quot;);
-        // ra.addAttribute(SUBMITTED, true);
+<span class="nc bnc" id="L292" title="All 2 branches missed.">        for(Image im : imagesList.getImages()){</span>
+<span class="nc bnc" id="L293" title="All 2 branches missed.">            if(im.getUrl()==null){</span>
+<span class="nc" id="L294">                continue;</span>
+            }
+<span class="nc" id="L296">            newItem.addImage(im.getUrl());</span>
+<span class="nc" id="L297">        }</span>
 
-        // logger.debug(&quot;Item submetido: &quot; + newItem.toString());
+<span class="nc" id="L299">        itemService.addNewProduct(newItem, this.getLoggedUser());</span>
 
-<span class="nc" id="L319">        return REDIRECTANNOUNCE;</span>
+<span class="nc" id="L301">        ra.addAttribute(SUBMITTED, true);</span>
+
+<span class="nc" id="L303">        logger.debug(&quot;Item submetido: &quot; + newItem.toString());</span>
+
+<span class="nc" id="L305">        return REDIRECTANNOUNCE;</span>
     }
 
 
     @GetMapping(value = &quot;/favourites&quot;)
     public String favouritesAds() {
-<span class="nc" id="L325">        return &quot;dashboard-favourite-ads&quot;;</span>
+<span class="nc" id="L311">        return &quot;dashboard-favourite-ads&quot;;</span>
     }
 
     @GetMapping(value = &quot;/sold-items&quot;)
     public String soldItems(Model model) {
-<span class="nc" id="L330">        Set&lt;Item&gt; allItems = this.getLoggedUser().getSoldItems();</span>
+<span class="nc" id="L316">        Set&lt;Item&gt; allItems = this.getLoggedUser().getSoldItems();</span>
 
-<span class="nc" id="L332">        model.addAttribute(&quot;userSoldItems&quot;, allItems);</span>
-<span class="nc" id="L333">        model.addAttribute(LOGGEDUSER, getLoggedUser());</span>
+<span class="nc" id="L318">        model.addAttribute(&quot;userSoldItems&quot;, allItems);</span>
+<span class="nc" id="L319">        model.addAttribute(LOGGEDUSER, getLoggedUser());</span>
 
-<span class="nc" id="L335">        return &quot;dashboard-sold-items&quot;;</span>
+<span class="nc" id="L321">        return &quot;dashboard-sold-items&quot;;</span>
     }
 
     @GetMapping(value = &quot;/product&quot;)
@@ -342,9 +328,9 @@ import org.apache.log4j.Logger;
         // i.addComment(new Comment(&quot;André Amarante&quot;, &quot;Always wanted one!&quot;));
         // i.addComment(new Comment(&quot;Joana Silva&quot;, &quot;Very high price. Would you be willing to lower it?&quot;));
         // model.addAttribute(&quot;item&quot;, i);
-<span class="nc" id="L345">        model.addAttribute(&quot;searchparams&quot;, new SearchParams());</span>
+<span class="nc" id="L331">        model.addAttribute(&quot;searchparams&quot;, new SearchParams());</span>
 
-<span class="nc" id="L347">        return &quot;product-post&quot;;</span>
+<span class="nc" id="L333">        return &quot;product-post&quot;;</span>
     }
 
     @PostMapping(value = &quot;/product&quot;)
@@ -355,19 +341,19 @@ import org.apache.log4j.Logger;
         // i.addComment(new Comment(&quot;Joana Silva&quot;, &quot;Very high price. Would you be willing to lower it?&quot;));
         // i.addComment(new Comment(&quot;Alexandre Lopes&quot;, &quot;Cool product.&quot;));
         // model.addAttribute(&quot;item&quot;, i);
-<span class="nc" id="L358">        model.addAttribute(&quot;searchparams&quot;, new SearchParams());</span>
+<span class="nc" id="L344">        model.addAttribute(&quot;searchparams&quot;, new SearchParams());</span>
 
-<span class="nc" id="L360">        return &quot;product-post&quot;;</span>
+<span class="nc" id="L346">        return &quot;product-post&quot;;</span>
     }
 
     @GetMapping(value = &quot;/terms-conditions&quot;)
     public String termsConditions() {
-<span class="nc" id="L365">        return &quot;terms-conditions&quot;;</span>
+<span class="nc" id="L351">        return &quot;terms-conditions&quot;;</span>
     }
 
     private User getLoggedUser() {
-<span class="nc" id="L369">        Authentication auth = SecurityContextHolder.getContext().getAuthentication();</span>
-<span class="nc" id="L370">        return userService.getByEmail(auth.getName());</span>
+<span class="nc" id="L355">        Authentication auth = SecurityContextHolder.getContext().getAuthentication();</span>
+<span class="nc" id="L356">        return userService.getByEmail(auth.getName());</span>
     }
 
 }

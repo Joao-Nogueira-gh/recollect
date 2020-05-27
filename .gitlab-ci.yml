@@ -21,6 +21,7 @@ stages:
   - build
   - test
   - package
+  - deploy
 
 connect:
   stage: connect
@@ -76,6 +77,15 @@ package:
   script:
     - mvn clean package -Dtest=\!\*ItemTest
 
+deploy:
+  stage: deploy
+  only:
+    - master
+  script:
+    - apt-get install -y python-pip
+    - pip install docker-compose
+    - docker-compose up -d --build
+
 
 sonarcloud-check:
   image: maven:3.6.3-jdk-11
@@ -88,5 +98,3 @@ sonarcloud-check:
   only:
     - merge_requests
     - master
-    - develop
-    - feature/login_backend
