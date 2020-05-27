@@ -1,5 +1,6 @@
 package ua.tqs.ReCollect.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -19,6 +20,9 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepo;
+
+    @Autowired
+    private LocationService locationService;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -62,6 +66,22 @@ public class UserService {
     public User getByEmail(String email) {
 
         return userRepo.findByEmail(email);
+
+    }
+
+    public List<User> getUsersByLocation(String distrito, String concelho) {
+
+        if(distrito != null ^ concelho != null) {
+
+			return new ArrayList<User>();
+
+		} else if (distrito == null && concelho == null) {
+
+			return this.getAll();
+
+		}
+
+        return userRepo.findByLocation(locationService.getLocation(distrito, concelho));
 
     }
 

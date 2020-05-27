@@ -79,7 +79,7 @@ public class ApiIntegrationTest {
         User u1 = new User("USER 1", "user1@email.com", "password", "123456789",
                 locationService.getLocation("Aveiro", "Aveiro"));
         User u2 = new User("USER 2", "user2@email.com", "password", "987654321",
-                locationService.getLocation("Aveiro", "Aveiro"));
+                locationService.getLocation("Viseu", "Viseu"));
 
         userService.save(u1);
         userService.save(u2);
@@ -263,10 +263,28 @@ public class ApiIntegrationTest {
             new ParameterizedTypeReference<List<User>>() {
             });
 
-    List<User> body = entity.getBody();
+        List<User> body = entity.getBody();
 
         for (User user : body) {
             assertEquals(null, user.getPassword(), "ERROR: Password leaked");
+        }
+
+    }
+
+    @Test
+    public void getUsersByLocation() {
+
+        ResponseEntity<List<User>> entity = restClient.exchange(
+            "/api/users/?district=Viseu&county=Viseu", HttpMethod.GET, null,
+            new ParameterizedTypeReference<List<User>>() {
+            });
+
+        List<User> users = entity.getBody();
+
+        for (User user : users) {
+            
+            assertEquals("USER 2", user.getName());
+
         }
 
     }
