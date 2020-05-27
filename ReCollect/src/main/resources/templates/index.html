@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 
   <!-- SITE TITTLE -->
@@ -66,17 +66,17 @@
 
 						</ul>
 						<ul class="navbar-nav ml-auto mt-10">
-							<li class="nav-item">
+							<li class="nav-item" sec:authorize="!isAuthenticated()"> <!-- not working -->
 								<a class="nav-link login-button" href="/login">Login</a>
 							</li>
-							<li class="nav-item">
+							<li class="nav-item" sec:authorize="isAuthenticated()"> <!-- not working -->
 								<a class="nav-link login-button" href="/profile">Profile</a>
 							</li>
 							<li class="nav-item">
 								<a class="nav-link text-white add-button" href="/announce"><i class="fa fa-plus-circle"></i> Announce</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" href="/product"><i class="fa fa-product-hunt"></i> Products</a>
+								<a class="nav-link" href="/category"><i class="fa fa-product-hunt"></i> Products</a>
 							</li>
 						</ul>
 					</div>
@@ -125,7 +125,7 @@
 						<div class="container">
 							<div class="row justify-content-center">
 								<div class="col-lg-12 col-md-12 align-content-center">
-										<form method="post" th:action="@{/}" th:object="${searchParams}">
+									<form method="post" th:action="@{/}" th:object="${searchParams}">
 											<div class="form-row">
 												<div class="form-group col-md-4">
 													<input type="text" class="form-control my-2 my-lg-1" id="inputtext4" placeholder="What are you looking for" th:field="*{searchterm}">
@@ -151,8 +151,13 @@
 												</div>
 											</div>
 										</form>
+									<div th:if="${hasErrors}">
+										<div class="alert alert-danger" role="alert" id="invalidSearchMessage">
+											A category must be provided for this search.
+										</div>
 									</div>
 								</div>
+							</div>
 					</div>
 				</div>
 				

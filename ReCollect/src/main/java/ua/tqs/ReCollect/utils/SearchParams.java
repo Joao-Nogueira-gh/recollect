@@ -1,9 +1,13 @@
 package ua.tqs.ReCollect.utils;
 
 
+import javax.validation.constraints.NotNull;
+
 public class SearchParams {
 
+    @NotNull
     private String category;
+
     private String searchterm;
 
     public SearchParams() {

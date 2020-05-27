@@ -9,10 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import ua.tqs.ReCollect.model.Comment;
-import ua.tqs.ReCollect.model.Item;
-import ua.tqs.ReCollect.model.ItemDTO;
-import ua.tqs.ReCollect.model.User;
+import ua.tqs.ReCollect.model.*;
 import ua.tqs.ReCollect.repository.ItemRepository;
 
 @Service
@@ -94,6 +91,14 @@ public class ItemService {
         item.setOwner(item.getSeller());
         item.setSeller(null);
 	}
+
+	public List<Item> getItemsByCategoryAndSearchTerm(String searchTerm, Categories category){
+        return itemRepo.findByNameContainingAndCategory(searchTerm, category);
+    }
+
+    public List<Item> getItemsByCategory(Categories category){
+        return itemRepo.findByCategory(category);
+    }
 }
 
   
