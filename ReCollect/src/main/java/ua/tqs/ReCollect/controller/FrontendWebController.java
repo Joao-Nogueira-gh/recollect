@@ -147,6 +147,22 @@ public class FrontendWebController {
         return REDIRECT_SEARCH_RESULTS;
     }
 
+    @GetMapping(value = "/home_category/{category}")
+    public String showCategoryProducts(@PathVariable(name = "category") String category, RedirectAttributes ra){
+        List<Item> searchResults;
+
+        Categories categoryEnum = Categories.valueOf(category);
+        searchResults = itemService.getItemsByCategory(categoryEnum);
+
+        // get only items on sale
+        CollectionUtils.filter(searchResults, i -> ((Item) i).getSeller()==null);
+
+        ra.addAttribute("searchResults", searchResults);
+        ra.addAttribute("category", categoryEnum);
+
+        return REDIRECT_SEARCH_RESULTS;
+    }
+
 
     @GetMapping(value = "/ad-listing")
     public String adListing() {
