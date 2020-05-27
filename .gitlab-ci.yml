@@ -11,7 +11,7 @@ variables:
   MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
   SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
   GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
-
+  SPRING_DATASOURCE_URL: jdbc:mysql://mysql/reCollect?createDatabaseIfNotExist=true&serverTimezone=Europe/London&useSSL=false
     
 before_script:
   - cd ReCollect/

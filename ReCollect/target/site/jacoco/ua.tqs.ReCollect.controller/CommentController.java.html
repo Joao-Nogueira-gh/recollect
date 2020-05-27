@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CommentController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ReCollect</a> &gt; <a href="index.source.html" class="el_package">ua.tqs.ReCollect.controller</a> &gt; <span class="el_source">CommentController.java</span></div><h1>CommentController.java</h1><pre class="source lang-java linenums">package ua.tqs.ReCollect.controller;
+
+import java.math.BigDecimal;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import ua.tqs.ReCollect.model.Categories;
+import ua.tqs.ReCollect.model.Comment;
+import ua.tqs.ReCollect.model.Item;
+import ua.tqs.ReCollect.model.User;
+import ua.tqs.ReCollect.service.CommentService;
+import ua.tqs.ReCollect.service.ItemService;
+import ua.tqs.ReCollect.service.UserService;
+
+@Controller
+<span class="fc" id="L20">public class CommentController {</span>
+
+    @Autowired
+    private ItemService itemService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired 
+    private CommentService commentService;
+    
+<span class="fc" id="L31">    static final Logger logger = Logger.getLogger(ItemController.class);</span>
+
+	@GetMapping(path=&quot;/testcc/&quot;)
+	public String test(Model model) {
+        //setup
+<span class="nc" id="L36">        itemService.deleteAll();</span>
+<span class="nc" id="L37">        commentService.deleteAll();</span>
+<span class="nc" id="L38">        User currUser = userService.getCurrentUser();</span>
+<span class="nc" id="L39">        Item i1= new Item(&quot;Moeda&quot;, 3, new BigDecimal(3.0), &quot;Moeda fixe&quot;, Categories.MISC);</span>
+<span class="nc" id="L40">        itemService.addNewProduct(i1, currUser);</span>
+<span class="nc" id="L41">        logger.debug(itemService.getAll());</span>
+
+        //actual feature
+        //get text box input, logged in user, and current item being viewed
+<span class="nc" id="L45">        Comment com1=new Comment(&quot;comment text&quot;,currUser,itemService.getAll().get(0));</span>
+<span class="nc" id="L46">        commentService.addNewComment(com1);</span>
+        //get whatever u want with the getters, Item, User or Text
+<span class="nc" id="L48">        commentService.getAll().get(0).getItem();</span>
+<span class="nc" id="L49">        logger.debug(commentService.getAll());</span>
+        //these 2 other lists are updated, the item comments and user comments, even tho you cant
+        //see it here, because db updates too slowly
+<span class="nc" id="L52">        logger.debug(itemService.getAll().get(0).getComment());</span>
+<span class="nc" id="L53">        logger.debug(currUser.getComment());</span>
+
+        //this is also working, it seems (no @Test tests, but it is working)
+<span class="nc" id="L56">        commentService.deleteComment(commentService.getAll().get(0));</span>
+
+
+<span class="nc" id="L59">        return &quot;emptyTest&quot;;</span>
+    }
+    @GetMapping(path=&quot;/testccactual/&quot;)
+	public String testactualstate(Model model) {
+        //test actual state of things since loggers are faster than bd updating
+<span class="nc" id="L64">        User currUser = userService.getCurrentUser();</span>
+<span class="nc" id="L65">        logger.debug(commentService.getAll());</span>
+<span class="nc" id="L66">        logger.debug(itemService.getAll().get(0).getComment());</span>
+<span class="nc" id="L67">        logger.debug(currUser.getComment());</span>
+<span class="nc" id="L68">        logger.debug(itemService.getAll());</span>
+<span class="nc" id="L69">        return &quot;emptyTest&quot;;</span>
+    }
+    
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>
