@@ -132,6 +132,17 @@ public class ApiIntegrationTest {
     }
 
     @Test
+    public void getJust3Items() {
+
+        ResponseEntity<List<Item>> entity = restClient.exchange("/api/items?limit=3", HttpMethod.GET, null,
+                new ParameterizedTypeReference<List<Item>>() {
+                });
+
+        assertEquals(3, entity.getBody().size());
+
+    }
+
+    @Test
     public void getAllBooks() {
 
         ResponseEntity<List<Item>> entity = restClient.exchange("/api/items?category=BOOKS", HttpMethod.GET, null,

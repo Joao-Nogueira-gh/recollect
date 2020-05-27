@@ -20,18 +20,20 @@ public class ItemRestController {
 	@GetMapping("/api/items")
 	@ResponseBody
 	public List<Item> itemIndex(@RequestParam(required = false) String category,
-			@RequestParam(required = false) String owner, @RequestParam(required = false) String orderBy) {
-		
+			@RequestParam(required = false) String owner, @RequestParam(required = false) String orderBy,
+			@RequestParam(required = false) Integer limit) {
+
 		String processedOwner;
 
-		if(owner != null) {
+		if (owner != null) {
 			processedOwner = owner.replace("'", "");
 		} else {
 			processedOwner = owner;
 		}
 
-		return itemService.fetchItemsApi(category, processedOwner, orderBy);
+		System.out.println(limit);
+
+		return itemService.fetchItemsApi(category, processedOwner, orderBy, limit);
 	}
-	
 
 }

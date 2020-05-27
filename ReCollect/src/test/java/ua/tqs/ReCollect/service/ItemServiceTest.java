@@ -192,7 +192,7 @@ public class ItemServiceTest {
 
         given(itemRepo.findByCategory(Categories.BOOKS)).willReturn(itemList);
 
-        assertEquals(itemList, itemService.fetchItemsApi("BOOKS", null, null), "Error: no books found");
+        assertEquals(itemList, itemService.fetchItemsApi("BOOKS", null, null, null), "Error: no books found");
 
     }
 

@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.EnumUtils;
 import org.apache.log4j.Logger;
@@ -171,21 +172,14 @@ public class ItemService {
     // price or date
     private List<Item> fetchItemsByCategoryAndSeller(String cat, String email, String orderBy) {
 
-        return itemRepo.findByCategoryAndOwner(Categories.valueOf(cat), userService.getByEmail(email), Sort.by(Sort.Direction.ASC, orderBy));
+        return itemRepo.findByCategoryAndOwner(Categories.valueOf(cat), userService.getByEmail(email),
+                Sort.by(Sort.Direction.ASC, orderBy));
 
     }
 
-    public List<Item> fetchItemsApi(String cat, String seller, String orderBy) {
+    public List<Item> fetchItemsApi(String cat, String seller, String orderBy, Integer limit) {
 
-        if (cat == null && seller == null && orderBy == null) {
-
-            return this.getAll();
-
-        } else if (cat == null && seller == null && orderBy != null) {
-
-            return this.getAll(orderBy);
-
-        }
+        List<Item> ret;
 
         // Basic Validation
         if ((seller != null && !userService.userExists(seller))
@@ -195,22 +189,33 @@ public class ItemService {
             return new ArrayList<Item>();
         }
 
-        if (orderBy == null) {
+
+        if (cat == null && seller == null && orderBy == null) {
+
+            ret = this.getAll();
+
+            System.out.println(ret);
+
+        } else if (cat == null && seller == null && orderBy != null) {
+
+            ret = this.getAll(orderBy);
+
+        } else if (orderBy == null) {
 
             if (cat == null) {
 
                 // Query based on seller
-                return this.fetchItemsBySeller(seller);
+                ret = this.fetchItemsBySeller(seller);
 
             } else if (seller == null) {
 
                 // Query based on cat
-                return this.fetchItemsByCategory(cat);
+                ret = this.fetchItemsByCategory(cat);
 
             } else {
 
                 // Query based on both
-                return this.fetchItemsByCategoryAndSeller(cat, seller);
+                ret = this.fetchItemsByCategoryAndSeller(cat, seller);
 
             }
 
@@ -219,21 +224,33 @@ public class ItemService {
             if (cat == null) {
 
                 // Query based on seller
-                return this.fetchItemsBySeller(seller, orderBy);
+                ret = this.fetchItemsBySeller(seller, orderBy);
 
             } else if (seller == null) {
 
                 // Query based on cat
-                return this.fetchItemsByCategory(cat, orderBy);
+                ret = this.fetchItemsByCategory(cat, orderBy);
 
             } else {
 
                 // Query based on both
-                return this.fetchItemsByCategoryAndSeller(cat, seller, orderBy);
+                ret = this.fetchItemsByCategoryAndSeller(cat, seller, orderBy);
 
             }
 
         }
+
+        if (limit == null) {
+
+            return ret;
+
+        }
+
+        System.out.println(ret.size());
+
+        System.out.println(ret.stream().limit(limit).collect(Collectors.toList()).size());
+
+        return ret.stream().limit(limit).collect(Collectors.toList());
 
     }
 
