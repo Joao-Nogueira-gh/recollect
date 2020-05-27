@@ -36,6 +36,8 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
     public List<Item> findByCategoryAndOwner(Categories category, User user, Sort sort);
 
+    
+
 }
 
 

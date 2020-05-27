@@ -1,6 +1,7 @@
 package ua.tqs.ReCollect.repository;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -30,9 +31,8 @@ class UserRepositoryTest {
     }
 
     @Test
-    void getUserByEmail() {
-        User savedUser = entityManager.persistAndFlush(
-                new User("User123", "user@email.com", "password", "123123123"));
+    public void getUserByEmail() {
+        User savedUser = entityManager.persistAndFlush(new User("User123", "user@email.com", "password", "123123123"));
 
         User user = userRepo.findByEmail("user@email.com");
 

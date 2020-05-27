@@ -1,4 +1,4 @@
-package ua.tqs.ReCollect;
+package ua.tqs.ReCollect.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -252,6 +252,22 @@ public class ApiIntegrationTest {
         }
 
         assertEquals(i6.getName(), body.get(0).getName(), "ERROR: Not sorted properly");
+
+    }
+
+    @Test
+    public void noPwdsSent() {
+
+        ResponseEntity<List<User>> entity = restClient.exchange(
+            "/api/users/", HttpMethod.GET, null,
+            new ParameterizedTypeReference<List<User>>() {
+            });
+
+    List<User> body = entity.getBody();
+
+        for (User user : body) {
+            assertEquals(null, user.getPassword(), "ERROR: Password leaked");
+        }
 
     }
 
