@@ -193,7 +193,7 @@ public class ApiIntegrationTest {
     @Test
     public void getSortedUser2() {
 
-        ResponseEntity<List<Item>> entity = restClient.exchange("/api/items?owner='user2@email.com'&orderBy=creationDate",
+        ResponseEntity<List<Item>> entity = restClient.exchange("/api/items?owner='user2@email.com'&orderBy=price",
                 HttpMethod.GET, null, new ParameterizedTypeReference<List<Item>>() {
                 });
 
