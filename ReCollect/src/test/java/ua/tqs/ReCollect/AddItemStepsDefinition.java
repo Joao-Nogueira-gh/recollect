@@ -37,7 +37,7 @@ public class AddItemStepsDefinition {
 
     @When("Alexandra fills in all the fields with Alexandras product information")
     public void alexandra_fills_in_all_the_fields_with_Alexandras_product_information() {
-        announcePage.fillForm("Banda desenhada Marvel", "BOOKS", "produto excelente", "5", "1", "https://cdn.catawiki.net/assets/marketing/stories-images/4757-7326c52efe4952575f17182fdd3944dcb079c2ba-og_image.jpg");
+        announcePage.fillForm("Banda desenhada Marvel", "produto excelente", "5", "1", "https://cdn.catawiki.net/assets/marketing/stories-images/4757-7326c52efe4952575f17182fdd3944dcb079c2ba-og_image.jpg");
     }
 
     @When("clicks the Submit Item button")
@@ -79,7 +79,7 @@ public class AddItemStepsDefinition {
 
     @When("Francisco fills in some of the fields with Franciscos product information")
     public void roberto_fills_in_some_of_the_fields_with_Franciscos_product_information() {
-        announcePage.fillForm("", "BOOKS", "produto excelente", "5", "1", "https://cdn.catawiki.net/assets/marketing/stories-images/4757-7326c52efe4952575f17182fdd3944dcb079c2ba-og_image.jpg");
+        announcePage.fillForm("", "produto excelente", "5", "1", "https://cdn.catawiki.net/assets/marketing/stories-images/4757-7326c52efe4952575f17182fdd3944dcb079c2ba-og_image.jpg");
 
     }
 

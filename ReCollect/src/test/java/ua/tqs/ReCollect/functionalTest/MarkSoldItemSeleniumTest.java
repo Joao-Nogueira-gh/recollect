@@ -1,17 +1,18 @@
 package ua.tqs.ReCollect.functionalTest;
 
 import org.junit.jupiter.api.Test;
+
 import static org.junit.Assert.assertTrue;
 
-public class RemoveItemTest extends FunctionalTest {
+public class MarkSoldItemSeleniumTest extends FunctionalTest{
 
-    public RemoveItemTest() {
+    public MarkSoldItemSeleniumTest(){
         super();
         setUp();
     }
 
     @Test
-    public void deleteItemSuccess(){
+    public void markItemAsSold(){
         //Fazer o login
         driver.get("http://localhost:8080/profile");
         LoginPage loginPage = new LoginPage(driver);
@@ -23,9 +24,14 @@ public class RemoveItemTest extends FunctionalTest {
 
         assertTrue(myAdsPage.isInitialized());
         int currentOnSaleCount = myAdsPage.getOnSaleCount();
+        int currentSoldCount = myAdsPage.getSoldCount();
 
-        myAdsPage.deleteItem();
+        assertTrue(currentOnSaleCount!=0);
+
+        myAdsPage.markItemAsSold();
+
         assertTrue(myAdsPage.onSaleCountDecremented(currentOnSaleCount));
+        assertTrue(myAdsPage.soldCountIncremented(currentSoldCount));
 
     }
 }

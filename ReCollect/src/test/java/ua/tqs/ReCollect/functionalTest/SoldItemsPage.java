@@ -1,14 +1,13 @@
 package ua.tqs.ReCollect.functionalTest;
 
-import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-public class MyAdsPage extends PageObject {
+public class SoldItemsPage extends PageObject {
 
-    @FindBy(id = "myAdsTitle")
-    private WebElement myAdsTitle;
+    @FindBy(id = "soldItemsTitle")
+    private WebElement soldItemsTitle;
 
     @FindBy(tagName = "body")
     private WebElement body;
@@ -22,15 +21,15 @@ public class MyAdsPage extends PageObject {
     @FindBy(id = "delete-item-button")
     private WebElement deleteButton;
 
-    @FindBy(id = "mark-sold-button")
-    private WebElement markSoldButton;
+    @FindBy(id = "back-sale-item-button")
+    private WebElement backSaleItemButton;
 
-    public MyAdsPage(WebDriver driver) {
+    public SoldItemsPage(WebDriver driver) {
         super(driver);
     }
 
     public boolean isInitialized(){
-        return myAdsTitle.isDisplayed();
+        return soldItemsTitle.isDisplayed();
     }
 
     public boolean itemIsPresent(String itemTitle){
@@ -42,14 +41,16 @@ public class MyAdsPage extends PageObject {
         deleteButton.click();
     }
 
-    public void markItemAsSold() { markSoldButton.click(); }
-
-    public boolean onSaleCountDecremented(int count){
-        return Integer.parseInt(onSaleCount.getText())==count-1;
+    public void putBackOnSale(){
+        backSaleItemButton.click();
     }
 
-    public boolean soldCountIncremented(int count){
-        return Integer.parseInt(soldCount.getText())==count+1;
+    public boolean soldCountDecremented(int count){
+        return Integer.parseInt(soldCount.getText())==count-1;
+    }
+
+    public boolean onSaleCountIncremented(int count){
+        return Integer.parseInt(onSaleCount.getText())==count+1;
     }
 
     public int getOnSaleCount() {

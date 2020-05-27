@@ -1,11 +1,13 @@
 package ua.tqs.ReCollect.controller;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.CollectionUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import ua.tqs.ReCollect.model.Categories;
 import ua.tqs.ReCollect.model.Item;
 import ua.tqs.ReCollect.model.User;
 import ua.tqs.ReCollect.service.ItemService;
@@ -36,13 +39,19 @@ public class FrontendWebController {
 
     static final Logger logger = Logger.getLogger(FrontendWebController.class);
 
-    private static final String CATEGORYHTML = "category";
+
     private static final String USERITEMS = "userItems";
     private static final String USERST = "user";
     private static final String SUBMITTED = "submitted";
     private static final String LOGGEDUSER = "loggedUser";
     private static final String ATRIBATUAL = "-------- Atributos atualizados --------";
+    private static final int MAX_ITEM_PICTURES = 5;
+    // REDIRECTS AND PAGE NAMES
+    private static final String PRODUCT_SEARCH_RESULTS = "product-search-results";
+    private static final String PRODUCT_POST = "product-post";
     private static final String REDIRECTANNOUNCE = "redirect:/announce";
+    private static final String REDIRECT_SEARCH_RESULTS = "redirect:/category";
+    private static final String REDIRECT_HOME= "redirect:/";
 
     @Autowired
     ItemService itemService;
@@ -53,64 +62,106 @@ public class FrontendWebController {
     ArrayList<Category> categories = Category.getCategories();
 
     @GetMapping(value = "/")
-    public String home(Model model) {
-        model.addAttribute("item", new Item());
+    public String home(SearchParams searchParams, Model model, @RequestParam(name = "hasErrors", required = false) boolean hasErrors) {
         model.addAttribute("categories", categories);
-        model.addAttribute("searchParams", new SearchParams());
+        //model.addAttribute("searchParams", new SearchParams());
+        model.addAttribute("hasErrors", hasErrors);
         return "index";
     }
 
-    @GetMapping(value = "/category")
-    public String category() {
-        return CATEGORYHTML;
+    @PostMapping(value = "/")
+    public String searchProducts(@Valid SearchParams searchParams, BindingResult bindingResult, RedirectAttributes ra) {
+        if(bindingResult.hasErrors()){
+            // if, for some reason, there's no category, search is invalid
+            logger.debug("NÃO FOI FORNECIDA CATEGORIA!");
+            ra.addAttribute("hasErrors", true);
+            return REDIRECT_HOME;
+        }
+
+        List<Item> searchResults;
+
+        String searchTerm = searchParams.getSearchterm();
+        Categories category = Categories.valueOf(searchParams.getCategory());
+
+        if(searchTerm==null || searchTerm.equals("")){
+            searchResults = itemService.getItemsByCategory(category);
+        }
+        else{
+            searchResults = itemService.getItemsByCategoryAndSearchTerm(searchTerm, category);
+        }
+
+        // get only items on sale
+        CollectionUtils.filter(searchResults, i -> ((Item) i).getSeller()==null);
+
+        ra.addAttribute("searchResults", searchResults);
+        ra.addAttribute("category", category);
+
+        return REDIRECT_SEARCH_RESULTS;
+    }
+
+    @GetMapping(value = "/category") // url for product search results
+    public String searchResultsPage(SearchParams searchParams,
+                                    Model model,
+                                    @RequestParam(name = "hasErrors", required = false) boolean hasErrors,
+                                    @RequestParam(name = "searchResults") List<Item> searchResults,
+                                    @RequestParam(name = "category", required = false) Categories category){
+
+        logger.debug("searchResults to recebidos -> " + searchResults.toString());
+
+        model.addAttribute("hasErros", hasErrors);
+        model.addAttribute("searchResults", searchResults);
+        model.addAttribute("category", category);
+        //model.addAttribute("searchParams", new SearchParams());
+        model.addAttribute("categories", categories);
+
+        return PRODUCT_SEARCH_RESULTS;
     }
 
     @PostMapping(value = "/category")
-    public String categorysearch(@ModelAttribute SearchParams searchparams, BindingResult result, ModelMap model) {
-        logger.debug("Selected category: " + searchparams.getCategory());
-        model.addAttribute("category", searchparams.getCategory());
+    public String categorysearch(@Valid SearchParams searchParams, BindingResult bindingResult, RedirectAttributes ra) {
+        if(bindingResult.hasErrors()){
+            // if, for some reason, there's no category, search is invalid
+            logger.debug("NÃO FOI FORNECIDA CATEGORIA!");
+            ra.addAttribute("hasErrors", true);
+            return REDIRECT_SEARCH_RESULTS;
+        }
 
-        return CATEGORYHTML;
+        List<Item> searchResults;
+
+        String searchTerm = searchParams.getSearchterm();
+        Categories category = Categories.valueOf(searchParams.getCategory());
+
+        if(searchTerm==null || searchTerm.equals("")){
+            searchResults = itemService.getItemsByCategory(category);
+        }
+        else{
+            searchResults = itemService.getItemsByCategoryAndSearchTerm(searchTerm, category);
+        }
+
+        CollectionUtils.filter(searchResults, i -> ((Item) i).getSeller()==null);
+
+        logger.debug("searchResults to post -> " + searchResults.toString());
+        ra.addAttribute("searchResults", searchResults);
+        ra.addAttribute("category", category);
+
+        return REDIRECT_SEARCH_RESULTS;
     }
 
-    // @PostMapping(value = "/login")
-    // public String login(@ModelAttribute LoginForm loginForm, RedirectAttributes ra) {
-    //     String providedEmail = loginForm.getEmail();
-    //     String providedPassword = loginForm.getPassword();
-    //     logger.debug("providedEmail -> " + providedEmail);
-    //     logger.debug("providedPassword -> " + providedPassword);
+    @GetMapping(value = "/home_category/{category}")
+    public String showCategoryProducts(@PathVariable(name = "category") String category, RedirectAttributes ra){
+        List<Item> searchResults;
 
+        Categories categoryEnum = Categories.valueOf(category);
+        searchResults = itemService.getItemsByCategory(categoryEnum);
 
-    //     User userFromDB = userService.getByEmail(providedEmail);
+        // get only items on sale
+        CollectionUtils.filter(searchResults, i -> ((Item) i).getSeller()==null);
 
-    //     // TODO: só para testes
-    //     //--------------------------
-    //     userFromDB = userService.getByEmail("alex@email.pt");
-    //     providedEmail = "alex@email.pt";
-    //     providedPassword = "pass";
-    //     //--------------------------
+        ra.addAttribute("searchResults", searchResults);
+        ra.addAttribute("category", categoryEnum);
 
-    //     logger.debug("userfromDB -> " + userFromDB);
-
-    //     if(userFromDB!=null){
-    //         if(providedPassword.trim().equals(userFromDB.getPassword())){
-    //             logger.debug("login success!");
-    //             ra.addAttribute("success", true);
-    //         }
-    //         else{
-    //             logger.debug("login error!");
-    //             ra.addAttribute("showError", true);
-    //             ra.addAttribute("success", false);
-    //         }
-    //     }
-    //     else{
-    //         logger.debug("login error!");
-    //         ra.addAttribute("showError", true);
-    //         ra.addAttribute("success", false);
-    //     }
-
-    //     return "redirect:/login";
-    // }
+        return REDIRECT_SEARCH_RESULTS;
+    }
 
 
     @GetMapping(value = "/ad-listing")
@@ -124,12 +175,22 @@ public class FrontendWebController {
     }
 
     @GetMapping(value = "/edit-profile")
-    public String editProfile() {
+    public String editProfile(Model model) {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User loggedUser = userService.getByEmail(auth.getName());
+
+        model.addAttribute(LOGGEDUSER, loggedUser);
+
         return "edit-profile";
     }
 
     @GetMapping(value = "/profile")
     public String userProfile(Model model) {
+
+        if(this.getLoggedUser() == null){
+            return "redirect:/login";
+        }
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User loggedUser = userService.getByEmail(auth.getName());
@@ -144,6 +205,11 @@ public class FrontendWebController {
 
     @GetMapping(value = "/profile/delete/{id}")
     public String deleteItem(Model model, @PathVariable(name = "id") Long id) {
+
+        if(this.getLoggedUser() == null){
+            return "redirect:/login";
+        }
+
         User loggedUser = this.getLoggedUser();
 
         Item deleted = itemService.getItemById(id);
@@ -151,40 +217,47 @@ public class FrontendWebController {
 
         Set<Item> allItems = loggedUser.getPublishedItems();
 
-        //logger.debug(ATRIBATUAL);
         model.addAttribute(USERITEMS, allItems);
         model.addAttribute(LOGGEDUSER, loggedUser);
-        //logger.debug(USERITEMS+": " + model.getAttribute(USERITEMS));
-        //logger.debug(USERST+": " + model.getAttribute(LOGGEDUSER));
 
         return "redirect:/profile";
     }
 
+    @GetMapping(value = "/sold-items/deleteSold/{id}")
+    public String deleteSoldItem(Model model, @PathVariable(name = "id") Long id) {
+
+        if(this.getLoggedUser() == null){
+            return "redirect:/login";
+        }
+
+        logger.debug("ID para delete: " + id);
+
+        Item deleted = itemService.getItemById(id);
+        itemService.removeProduct(deleted);
+
+        Set<Item> allItems = this.getLoggedUser().getSoldItems();
+
+        logger.debug(ATRIBATUAL);
+        model.addAttribute("userSoldItems", allItems);
+        model.addAttribute(LOGGEDUSER, this.getLoggedUser());
+        logger.debug(USERITEMS+": " + model.getAttribute(USERITEMS));
+        logger.debug(USERST+": " + model.getAttribute(LOGGEDUSER));
+
+        return "redirect:/sold-items";
+    }
+
+
     @GetMapping(value = "/profile/marksold/{id}")
     public String markAsSoldItem(Model model, @PathVariable(name = "id") Long id) {
 
-        // TODO: verificar se o loggedUser está logged in
+        if(this.getLoggedUser() == null){
+            return "redirect:/login";
+        }
 
         logger.debug("ID para sold: " + id);
 
-        /*
-        * - tirar dos publicados
-        * - meter nos vendidos
-        * - owner do item a null
-        * - seller do item ele próprio
-        * */
-
-        // Item sold = itemService.getItemById(id);
-        // this.getLoggedUser().removeItemPublicado(sold);
-        // sold.setOwner(null);
-        // sold.setSeller(this.getLoggedUser().getId());
-        // this.getLoggedUser().addSoldItem(sold);
-        // logger.debug("1. loggedUser: " + this.getLoggedUser());
-        // userService.updateUser(this.getLoggedUser());
-
-        // logger.debug("2.-----");
-        // itemService.updateItem(sold);
-        // logger.debug("3.-----");
+        Item sold = itemService.getItemById(id);
+        itemService.markAsSold(sold);
 
         Set<Item> allItems = this.getLoggedUser().getPublishedItems();
 
@@ -197,32 +270,29 @@ public class FrontendWebController {
         return "redirect:/profile";
     }
 
-    @GetMapping(value = "/profile/deleteSold/{id}")
-    public String deleteSoldItem(Model model, @PathVariable(name = "id") Long id) {
+    @GetMapping(value = "/sold-items/backOnSale/{id}")
+    public String putItemBackOnSale(Model model, @PathVariable(name = "id") Long id) {
 
-        // TODO: verificar se o loggedUser está logged in
+        if(this.getLoggedUser() == null){
+            return "redirect:/login";
+        }
 
-        logger.debug("ID para delete: " + id);
+        logger.debug("ID para sold: " + id);
 
-        // Item deleted = itemService.getItemById(id);
-
-        // this.getLoggedUser().removeSoldItem(deleted);
-        // logger.debug("1. loggedUser: " + this.getLoggedUser());
-        // userService.updateUser(this.getLoggedUser());
-        // logger.debug("2.-----");
-        // itemService.deleteItem(id);
-        // logger.debug("3.-----");
+        Item backOnSale = itemService.getItemById(id);
+        itemService.revertSale(backOnSale);
 
         Set<Item> allItems = this.getLoggedUser().getSoldItems();
 
         logger.debug(ATRIBATUAL);
-        model.addAttribute("userSoldItems", allItems);
+        model.addAttribute(USERITEMS, allItems);
         model.addAttribute(LOGGEDUSER, this.getLoggedUser());
         logger.debug(USERITEMS+": " + model.getAttribute(USERITEMS));
         logger.debug(USERST+": " + model.getAttribute(LOGGEDUSER));
 
         return "redirect:/sold-items";
     }
+
 
 
     @GetMapping(value = "/about")
@@ -245,13 +315,12 @@ public class FrontendWebController {
 
         PictureListDto pictureListForm = new PictureListDto();
 
-        // 5 images, at max
-        for (int i = 1; i <= 5; i++) {
+        // create space for MAX_ITEM_PICTURES, maximum
+        for (int i = 1; i <= MAX_ITEM_PICTURES; i++) {
             pictureListForm.addImage(new Image());
         }
 
         model.addAttribute("imagesList",pictureListForm);
-        //model.addAttribute("itemForm", new ItemForm());
         return "add-item";
     }
 
@@ -266,6 +335,7 @@ public class FrontendWebController {
             return REDIRECTANNOUNCE;
         }
 
+        // check for missing URLs (to later check if at least one was provided)
         int emptyEntries = 0;
         for(Image im : imagesList.getImages()){
             if(im.getUrl()==null)
@@ -278,8 +348,6 @@ public class FrontendWebController {
             ra.addAttribute(SUBMITTED, false);
             return REDIRECTANNOUNCE;
         }
-
-
 
         // setup item with valid provided data
         Item newItem = new Item();
@@ -297,11 +365,8 @@ public class FrontendWebController {
         }
 
         itemService.addNewProduct(newItem, this.getLoggedUser());
-
         ra.addAttribute(SUBMITTED, true);
-
         logger.debug("Item submetido: " + newItem.toString());
-
         return REDIRECTANNOUNCE;
     }
 
@@ -314,36 +379,37 @@ public class FrontendWebController {
     @GetMapping(value = "/sold-items")
     public String soldItems(Model model) {
         Set<Item> allItems = this.getLoggedUser().getSoldItems();
-
         model.addAttribute("userSoldItems", allItems);
         model.addAttribute(LOGGEDUSER, getLoggedUser());
-
         return "dashboard-sold-items";
     }
 
+    @GetMapping(value = "/product/{id}")
+    public String productPost(Model model, @PathVariable(name = "id") Long id, RedirectAttributes ra) {
+        //System.err.println("id -> " + id);
+        //model.addAttribute("searchparams", new SearchParams());
+        Item item = itemService.getItemById(id);
+
+        //System.err.println("item recebido 1 -> " + item.toString());
+        ra.addAttribute("item", item);
+        return "redirect:/product";
+    }
+
     @GetMapping(value = "/product")
-    public String productPost(Model model) {
-
-        // Item i = new Item("Hp Dual Core 2gb Ram-Slim Laptop Available In Very Low Price", "Only three of these were made!",2009.99, 1);
-        // i.addComment(new Comment("André Amarante", "Always wanted one!"));
-        // i.addComment(new Comment("Joana Silva", "Very high price. Would you be willing to lower it?"));
-        // model.addAttribute("item", i);
+    public String productPage(Model model, @RequestParam(name = "item", required = false) Item item) {
+        model.addAttribute("categories", categories);
         model.addAttribute("searchparams", new SearchParams());
-
-        return "product-post";
+        //System.err.println("item recebido 2 -> " + item.toString());
+        model.addAttribute("item", item);
+        return PRODUCT_POST;
     }
 
     @PostMapping(value = "/product")
-    public String productComment(@ModelAttribute String s, BindingResult result, ModelMap model) {
+    public String productComment(Model model) {
+        model.addAttribute("categories", categories);
 
-        // Item i = new Item("Hp Dual Core 2gb Ram-Slim Laptop Available In Very Low Price", "Only three of these were made!",2009.99, 1);
-        // i.addComment(new Comment("André Amarante", "Always wanted one!"));
-        // i.addComment(new Comment("Joana Silva", "Very high price. Would you be willing to lower it?"));
-        // i.addComment(new Comment("Alexandre Lopes", "Cool product."));
-        // model.addAttribute("item", i);
-        model.addAttribute("searchparams", new SearchParams());
+        return PRODUCT_POST;
 
-        return "product-post";
     }
 
     @GetMapping(value = "/terms-conditions")

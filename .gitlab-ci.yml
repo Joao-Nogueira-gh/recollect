@@ -62,7 +62,7 @@ test:
   services:
     - mysql:5.7
   script:
-    - mvn clean test -Dtest=\!\*ItemTest
+    - mvn clean test -Dtest=\!\*SeleniumTest
 
 package:
   image: maven
@@ -75,7 +75,7 @@ package:
   services:
     - mysql:5.7
   script:
-    - mvn clean package -Dtest=\!\*ItemTest
+    - mvn clean package -Dtest=\!\*SeleniumTest
 
 deploy:
   stage: deploy
