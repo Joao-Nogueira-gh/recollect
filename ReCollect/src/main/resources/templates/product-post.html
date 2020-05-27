@@ -81,6 +81,14 @@
 		<div class="row">
 			<!-- Left sidebar -->
 			<div class="col-md-8">
+				<div th:if="${commentHasError}">
+					<div class="alert alert-danger alert-dismissible fade show" role="alert" id="invalidCommentMessage">
+						Could not submit your comment. Maybe you tried to insert an empty comment.
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+				</div>
 				<div class="product-details">
 					<h1 class="product-title" th:text="${item.name}">-- title --</h1>
 					<div class="product-meta">
@@ -95,7 +103,7 @@
 					<div class="product-slider">
 						<th:block th:each="imageURL : ${item.getImages()}">
 							<div class="product-slider-item my-4">
-								<img class="img-fluid w-100" th:attr="data-image=${imageURL.toString()}"  th:src="${imageURL.toString()}" alt="product-img">
+								<img class="img-fluid w-100" th:data-image="${imageURL.toString()}"  th:src="${imageURL.toString()}" alt="product-img" style="height:500px; object-fit: cover">
 							</div>
 						</th:block>
 					</div>
@@ -137,15 +145,16 @@
 
 												</p>
 											</div>
+											<!-- show delete button only for the user who made the comment -->
+											<div th:if="${loggedUser.email.equals(comment.getUser().email)}">
+												<a href="#" data-toggle="tooltip" data-placement="top" title="Delete comment" class="delete" id="delete-comment-button">
+													<i class="fa fa-trash"></i>
+												</a>
+											</div>
 										</div>
 									</div>
 									<div class="review-submission">
 										<h3 class="tab-title">Submit your review</h3>
-										<div th:if="${commentHasError}">
-											<div class="alert alert-danger" role="alert" id="invalidCommentMessage">
-												Could not submit your comment. Maybe you tried to insert an empty comment.
-											</div>
-										</div>
 										<div class="review-submit">
 											<form th:action="@{'/product/comment/'+ ${item.id}}" method="POST" class="row" th:object="${commentForm}" >
 												<div class="col-12">
@@ -175,7 +184,11 @@
 						<h4 th:text="${item.owner.name}">...</h4>
 						<p th:text="${item.owner.email}">...</p>
 						<ul class="list-inline mt-20">
-							<li class="list-inline-item"><div class="btn btn-contact d-inline-block  btn-primary px-lg-5 my-1 px-md-3" th:text="${item.owner.phone}">...</div></li>
+							<li class="list-inline-item">
+								<div class="btn btn-contact d-inline-block  btn-primary px-lg-5 my-1 px-md-3">
+									<i class="fas fa-phone-alt"></i>  <span th:text="${item.owner.phone.isEmpty() ? 'Not available' : item.owner.phone}"></span>
+								</div>
+							</li>
 						</ul>
 					</div>
 					<!-- Safety tips widget -->
@@ -184,7 +197,6 @@
 						<ul>
 							<li>Meet seller at a public place</li>
 							<li>Check the item before you buy</li>
-							<li>Pay only after collecting the item</li>
 							<li>Pay only after collecting the item</li>
 						</ul>
 					</div>

@@ -75,9 +75,7 @@
 							<li class="nav-item">
 								<a class="nav-link text-white add-button" href="/announce"><i class="fa fa-plus-circle"></i> Announce</a>
 							</li>
-							<li class="nav-item">
-								<a class="nav-link" href="/category"><i class="fa fa-product-hunt"></i> Products</a>
-							</li>
+							<!--<li class="nav-item"><a class="nav-link" href="/category"><i class="fa fa-product-hunt"></i> Products</a></li>-->
 						</ul>
 					</div>
 				</nav>
@@ -174,7 +172,7 @@
 									<div class="thumb-content">
 										<div class="price" th:text="${item.price}">...</div>
 										<a th:href="${'/product/' + item.id}">
-											<img class="card-img-top img-fluid" th:src="${item.getImages().get(0).toString()}" alt="Card image cap">
+											<img class="card-img-top img-fluid" th:src="${item.getImages().get(0).toString()}" alt="Card image cap" style="height:200px; object-fit: cover">
 										</a>
 									</div>
 									<div class="card-body">
@@ -187,7 +185,7 @@
 												<div><i class="fa fa-calendar"></i> <span th:text="${item.creationDate}"></span> ...</div>
 											</li>
 										</ul>
-										<p class="card-text" th:text="${item.description}">...</p>
+										<p class="card-text" th:text="${item.description}" style="overflow: hidden; white-space: normal; text-overflow: ellipsis; height: 40px">...</p>
 										<div class="product-ratings">
 											<ul class="list-inline">
 												<li class="list-inline-item selected"><i class="fa fa-star"></i></li>

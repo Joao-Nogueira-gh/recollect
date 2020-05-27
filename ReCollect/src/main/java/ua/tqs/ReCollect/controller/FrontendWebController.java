@@ -47,10 +47,11 @@ public class FrontendWebController {
     // REDIRECTS AND PAGE NAMES
     private static final String PRODUCT_SEARCH_RESULTS = "product-search-results";
     private static final String PRODUCT_POST = "product-post";
-    private static final String REDIRECT_PRODUCT_POST = "redirect:/product";
+    private static final String REDIRECT_PRODUCT = "redirect:/product";
     private static final String REDIRECTANNOUNCE = "redirect:/announce";
     private static final String REDIRECT_SEARCH_RESULTS = "redirect:/category";
     private static final String REDIRECT_HOME= "redirect:/";
+    private static final String ERROR_PAGE = "error";
 
     @Autowired
     ItemService itemService;
@@ -63,11 +64,18 @@ public class FrontendWebController {
 
     ArrayList<Category> categories = Category.getCategories();
 
+    @GetMapping(value = "/error")
+    public String error(){
+        return ERROR_PAGE;
+    }
+
     @GetMapping(value = "/")
     public String home(SearchParams searchParams, Model model, @RequestParam(name = "hasErrors", required = false) boolean hasErrors) {
         model.addAttribute("categories", categories);
         model.addAttribute("hasErrors", hasErrors);
         List<Item> recentItems = itemService.get20NewestItems();
+        // get only items on sale
+        CollectionUtils.filter(recentItems, i -> ((Item) i).getSeller()==null);
         model.addAttribute("recentItems", recentItems);
         return "index";
     }
@@ -395,7 +403,7 @@ public class FrontendWebController {
 
         //System.err.println("item recebido 1 -> " + item.toString());
         ra.addAttribute("item", item);
-        return "redirect:/product";
+        return REDIRECT_PRODUCT;
     }
 
     @GetMapping(value = "/product")
@@ -403,6 +411,7 @@ public class FrontendWebController {
                               Model model,
                               @RequestParam(name = "item", required = false) Item item,
                               @RequestParam(name = "commentHasError", required = false) boolean commentHasError) {
+        model.addAttribute("loggedUser", this.getLoggedUser());
         model.addAttribute("categories", categories);
         model.addAttribute("searchparams", new SearchParams());
         //System.err.println("item recebido 2 -> " + item.toString());
@@ -420,7 +429,7 @@ public class FrontendWebController {
     }
 
     @PostMapping(value = "/product/comment/{id}")
-    public String addComment(@Valid CommentForm commentForm, BindingResult bindingResult, Model model, @PathVariable(name = "id") Long id, RedirectAttributes ra) {
+    public String addComment(@Valid CommentForm commentForm, BindingResult bindingResult, @PathVariable(name = "id") Long id, RedirectAttributes ra) {
 
         Item commentedItem = itemService.getItemById(id);
 
@@ -429,7 +438,15 @@ public class FrontendWebController {
             logger.debug("COMENTARIO INVALIDOS!");
             ra.addAttribute("item", commentedItem);
             ra.addAttribute("commentHasError", true);
-            return REDIRECT_PRODUCT_POST;
+            return REDIRECT_PRODUCT;
+        }
+
+        if(commentForm.getConteudo().trim().equals("")){
+            // if the provided data is invalid
+            logger.debug("COMENTARIO VAZIO!");
+            ra.addAttribute("item", commentedItem);
+            ra.addAttribute("commentHasError", true);
+            return REDIRECT_PRODUCT;
         }
 
 
@@ -437,9 +454,9 @@ public class FrontendWebController {
         commentService.addNewComment(comment);
         // get the most recent snapshop for that item, after the comment was made
         commentedItem = itemService.getItemById(id);
-        model.addAttribute("item", commentedItem);
+        ra.addAttribute("item", commentedItem);
 
-        return REDIRECT_PRODUCT_POST;
+        return REDIRECT_PRODUCT;
 
     }
 

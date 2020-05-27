@@ -81,7 +81,7 @@ function buildFooter() {
                     <!-- footer logo -->
                     <img src="images/logo-footer.png" alt="reCollect">
                     <!-- description -->
-                    <p class="alt-color">ReCollect is a platform that allows users to sell their old collections, from simple things such as figurines sold some years ago in stores to rarer items like limited editions of a certain product (book, game, etc.). Here, the buyers can find items they need in order to complete their collections or even start brand new ones!</p>
+                    <!-- <p class="alt-color">ReCollect is a platform that allows users to sell their old collections, from simple things such as figurines sold some years ago in stores to rarer items like limited editions of a certain product (book, game, etc.). Here, the buyers can find items they need in order to complete their collections or even start brand new ones!</p> -->
                 </div>
             </div>
             <!-- Link list -->

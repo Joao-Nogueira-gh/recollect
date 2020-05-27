@@ -142,7 +142,7 @@
 										<div class="thumb-content">
 											<div class="price" th:text="${item.price}">...</div>
 											<a th:href="${'/product/' + item.id}">
-												<img class="card-img-top img-fluid" th:src="${item.getImages().get(0).toString()}" alt="Card image cap">
+												<img class="card-img-top img-fluid" th:src="${item.getImages().get(0).toString()}" alt="Card image cap" style="height:150px; object-fit: cover">
 											</a>
 										</div>
 										<div class="card-body">
