@@ -87,7 +87,7 @@ package:
     - mvn clean package -Dtest=\!\*SeleniumTest
   artifacts:
     paths:
-      - target/
+      - ./target/*.jar
 
 deploy:
   image: docker
