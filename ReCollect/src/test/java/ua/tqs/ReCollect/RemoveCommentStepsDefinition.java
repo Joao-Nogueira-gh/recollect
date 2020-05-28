@@ -15,21 +15,21 @@ import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static ua.tqs.ReCollect.functionalTest.AddCommentSeleniumTest.COMENTARIO_TESTE_SELENIUM;
+import static ua.tqs.ReCollect.functionalTest.RemoveCommentSeleniumTest.COMENTARIO_TESTE_SELENIUM_DELETE;
 
-public class AddCommentStepsDefinition {
+public class RemoveCommentStepsDefinition {
 
     private final WebDriver driver = new ChromeDriver();
-
 
     AnnouncePage announcePage;
     LoginPage loginPage;
     MyAdsPage myAdsPage;
     ProductPage productPage;
     ProductPage productPage1;
+    ProductPage productPage2;
 
-    @Given("Alexandra is logged in")
-    public void alexandra_is_logged_in() {
+    @Given("Francisco is logged in")
+    public void francisco_is_logged_in() {
         //Fazer o login
         driver.get("http://localhost:8080/announce");
         loginPage = new LoginPage(driver);
@@ -47,8 +47,8 @@ public class AddCommentStepsDefinition {
         assertTrue(resultPage.submittedSuccess());
     }
 
-    @Given("Alexandra is on an on-sale product page")
-    public void alexandra_is_on_an_on_sale_product_page() {
+    @Given("Francisco is on an on-sale product page")
+    public void francisco_is_on_an_on_sale_product_page() {
         driver.get("http://localhost:8080/profile");
         myAdsPage = new MyAdsPage(driver);
         assertTrue(myAdsPage.isInitialized());
@@ -58,38 +58,28 @@ public class AddCommentStepsDefinition {
         assertTrue(productPage.isInitialized());
     }
 
-    @When("Alexandra selects the reviews section")
-    public void alexandra_selects_the_reviews_section() {
+    @When("Francisco selects the reviews section")
+    public void francisco_selects_the_reviews_section() {
         productPage.clickReviewTab();
     }
 
-    @When("Alexandra writes a comment in the text area")
-    public void alexandra_writes_a_comment_in_the_text_area() {
+    @When("Francisco clicks the delete button on one of his comments")
+    public void francisco_clicks_the_delete_button_on_one_of_his_comments() {
         driver.manage().timeouts().implicitlyWait(7, TimeUnit.SECONDS);
-        assertTrue(productPage.isInitialized());
-        productPage.writeComment(COMENTARIO_TESTE_SELENIUM);
-    }
-
-    @When("Alexandra clicks the submit button")
-    public void alexandra_clicks_the_submit_button() {
-        driver.manage().timeouts().implicitlyWait(7, TimeUnit.SECONDS);
-        assertTrue(productPage.isInitialized());
+        // write a comment to delete
+        productPage.writeComment(COMENTARIO_TESTE_SELENIUM_DELETE);
         productPage1 = productPage.submitComment();
         assertTrue(productPage1.isInitialized());
-    }
-
-    @Then("the comment is displayed in the platform")
-    public void the_comment_is_displayed_in_the_platform() {
-        assertThrows(NoSuchElementException.class, productPage1::existsErrorMessage);
         productPage1.clickReviewTab();
-        assertTrue(productPage1.commentIsPresent(COMENTARIO_TESTE_SELENIUM));
+        assertTrue(productPage1.commentDeletedIsPresent(COMENTARIO_TESTE_SELENIUM_DELETE));
+
+        productPage2 = productPage1.deleteComment();
     }
 
-    @Then("the system shows an error message")
-    public void the_system_shows_an_error_message() {
-        assertTrue(productPage1.existsErrorMessage());
+    @Then("the comment disappears from the platform")
+    public void the_comment_disappears_from_the_platform() {
+        assertThrows(NoSuchElementException.class, productPage2::commentDeletedIsPresent);
     }
-
 
 
 

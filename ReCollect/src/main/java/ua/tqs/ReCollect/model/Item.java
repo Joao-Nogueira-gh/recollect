@@ -2,7 +2,11 @@ package ua.tqs.ReCollect.model;
 
 import java.math.BigDecimal;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -81,7 +85,7 @@ public class Item {
     public Item(){
         this.favedBy=new HashSet<>();
         this.images=new ArrayList<>();
-        this.comments= new TreeSet<>();
+        this.comments= new HashSet<>();
     }
 
     public Item(String name, int quantity, BigDecimal price, String description, Categories category) {
@@ -93,7 +97,7 @@ public class Item {
 
         this.favedBy=new HashSet<>();
         this.images=new ArrayList<>();
-        this.comments= new TreeSet<>();
+        this.comments= new HashSet<>();
     }
 
     public Long getId() {

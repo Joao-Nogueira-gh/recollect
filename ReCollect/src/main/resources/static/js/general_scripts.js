@@ -2,16 +2,17 @@ const appName = "reCollect";
 
 
 $(document).ready(function(){
+    //document.getElementsByTagName("html")[0].setAttribute("xmlns:sec","http://www.thymeleaf.org/extras/spring-security");
+
     const tagline = document.getElementsByTagName("title")[0];
     tagline.innerText = appName;
     tagline.innerHTML = appName;
 
-    buildNavbar();
+    //buildNavbar();
     buildFooter();
     buildFooterBottom();
 
 });
-
 
 
 
@@ -39,10 +40,10 @@ function buildNavbar() {
 
                         </ul>
                         <ul class="navbar-nav ml-auto mt-10">
-                            <li class="nav-item">
+                            <li class="nav-item" sec:authorize="!isAuthenticated()">
 								<a class="nav-link login-button" href="/login">Login</a>
 							</li>
-							<li class="nav-item">
+							<li class="nav-item" sec:authorize="isAuthenticated()">
 								<a class="nav-link login-button" href="/profile">Profile</a>
 							</li>
 						

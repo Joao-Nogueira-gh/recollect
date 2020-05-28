@@ -176,15 +176,9 @@ public class FrontendWebController {
     }
 
 
-    @GetMapping(value = "/ad-listing")
-    public String adListing() {
-        return "Ad-listing";
-    }
 
-    @GetMapping(value = "/ad-list-view")
-    public String adListView() {
-        return "ad-list-view";
-    }
+
+
 
     @GetMapping(value = "/edit-profile")
     public String editProfile(Model model) {
@@ -476,10 +470,6 @@ public class FrontendWebController {
 
     }
 
-    @GetMapping(value = "/terms-conditions")
-    public String termsConditions() {
-        return "terms-conditions";
-    }
 
     private User getLoggedUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 
   <!-- SITE TITTLE -->
@@ -39,7 +39,49 @@
 
 <body class="body-wrapper">
 
-<div id="navbar"></div>
+<!--==================================
+=            	Navbar               =
+===================================-->
+<div id="navbar">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<nav class="navbar navbar-expand-lg navbar-light navigation">
+					<a class="navbar-brand" href="/">
+						<img src="images/logo.png" alt="">
+					</a>
+					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+							aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+						<span class="navbar-toggler-icon"></span>
+					</button>
+					<div class="collapse navbar-collapse" id="navbarSupportedContent">
+						<ul class="navbar-nav ml-auto main-nav ">
+							<li class="nav-item">
+								<a class="nav-link" href="/">Home</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="/about">About us</a>
+							</li>
+
+						</ul>
+						<ul class="navbar-nav ml-auto mt-10">
+							<li class="nav-item" sec:authorize="!isAuthenticated()">
+								<a class="nav-link login-button" href="/login">Login</a>
+							</li>
+							<li class="nav-item" sec:authorize="isAuthenticated()">
+								<a class="nav-link login-button" href="/profile">Profile</a>
+							</li>
+
+							<li class="nav-item">
+								<a class="nav-link text-white add-button" href="/announce"><i class="fa fa-plus-circle"></i> Announce</a>
+							</li>
+						</ul>
+					</div>
+				</nav>
+			</div>
+		</div>
+	</div>
+</div>
 
 <section class="page-search">
 	<div class="container">
@@ -147,7 +189,7 @@
 											</div>
 											<!-- show delete button only for the user who made the comment -->
 											<div th:if="${loggedUser.email.equals(comment.getUser().email)}">
-												<a th:href="${'/product/comment/delete/' + comment.id}" data-toggle="tooltip" data-placement="top" title="Delete comment" class="delete" id="delete-comment-button">
+												<a th:href="${'/product/comment/delete/' + comment.id}" data-toggle="tooltip" data-placement="top" title="Delete comment" class="delete" th:id="${'comment-delete-' + comment.getText()}">
 													<i class="fa fa-trash"></i>
 												</a>
 											</div>
@@ -188,6 +230,18 @@
 							<li class="list-inline-item">
 								<div class="btn btn-contact d-inline-block  btn-primary px-lg-5 my-1 px-md-3">
 									<i class="fas fa-phone-alt"></i>  <span th:text="${item.owner.phone==null ? 'Not available' : (item.owner.phone.isEmpty() ? 'Not available' : item.owner.phone)}"></span>
+								</div>
+							</li>
+						</ul>
+					</div>
+					<!-- mark as favourite widget -->
+					<div class="widget text-center">
+						<ul class="list-inline">
+							<li class="list-inline-item">
+								<div class="btn btn-contact d-inline-block  btn-primary px-lg-5 my-1 px-md-3">
+									<!-- TODO: alternate between solid and regular heart icon -->
+									<i class="far fa-heart"></i> Mark as favourite <span></span>
+									<!--<i class="fas fa-heart"></i> Remove from favourites <span></span> -->
 								</div>
 							</li>
 						</ul>

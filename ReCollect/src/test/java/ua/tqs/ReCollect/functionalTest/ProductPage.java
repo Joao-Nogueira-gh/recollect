@@ -27,6 +27,12 @@ public class ProductPage extends PageObject {
     @FindBy(id = "comment-text-commentTest")
     private WebElement comentarioTesteText;
 
+    @FindBy(id = "comment-text-commentDelete")
+    private WebElement comentarioDeleteText;
+
+    @FindBy(id = "comment-delete-commentDelete")
+    private WebElement deleteCommentButton;
+
     public boolean isInitialized(){
         return productTitleHeader.isDisplayed();
     }
@@ -40,6 +46,10 @@ public class ProductPage extends PageObject {
         return comentarioTesteText.getAttribute("innerText").equals(conteudo);
     }
 
+    public boolean commentDeletedIsPresent(String conteudo){
+        return comentarioDeleteText.getAttribute("innerText").equals(conteudo);
+    }
+
     public void clickReviewTab(){
         reviewsTab.click();
     }
@@ -50,8 +60,17 @@ public class ProductPage extends PageObject {
     }
 
     public void writeComment(String conteudo){
+        this.reviewArea.click();
         this.reviewArea.clear();
         reviewArea.sendKeys(conteudo);
     }
 
+    public ProductPage deleteComment(){
+        deleteCommentButton.click();
+        return new ProductPage(driver);
+    }
+
+    public boolean commentDeletedIsPresent() {
+        return comentarioDeleteText.isDisplayed();
+    }
 }
