@@ -108,6 +108,7 @@ deploy:
     - apk upgrade
     - apk add --no-cache py-pip python-dev libffi-dev openssl-dev gcc libc-dev make
     - pip install docker-compose
+    - mvn clean package -DskipTests=true
     - docker-compose up -d --build
 
 
