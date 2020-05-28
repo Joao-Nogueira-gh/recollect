@@ -36,7 +36,7 @@ connect:
   services:
     - mysql:5.7
   before_script:
-    - apk --no-cache add mysql-client
+    - apt install -y mysql-client
     - mysql --version
   script:
     - echo "SELECT 'OK';" | mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql "${MYSQL_DATABASE}"
@@ -109,9 +109,9 @@ deploy:
     - master
     - cd
   script:
-    - apk update
-    - apk upgrade
-    - apk add --no-cache py-pip python-dev libffi-dev openssl-dev gcc libc-dev make
+    - apt update
+    - apt upgrade
+    - apt add -y py-pip python-dev libffi-dev openssl-dev gcc libc-dev make
     - pip install docker-compose
     - docker-compose up -d --build
 
