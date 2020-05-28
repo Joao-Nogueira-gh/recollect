@@ -16,7 +16,7 @@ variables:
   MYSQL_DATABASE: "reCollect"
   MYSQL_USER: "adminrc"
   MYSQL_PASSWORD: "admin"
-  MYSQL_ROOT_PASSWORD: "root"
+  MYSQL_ROOT_PASSWORD: "admin"
     
 before_script:
   - cd ReCollect/
@@ -36,9 +36,10 @@ connect:
     - mysql:5.7
   before_script:
     - sudo apt install -y mysql-client
+    - sudo apt install -y mysql-server
     - mysql --version
   script:
-    - echo "SELECT 'OK';" | mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=localhost "${MYSQL_DATABASE}"
+    - echo "SELECT 'OK';" | mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" "${MYSQL_DATABASE}"
 
 build:
   image: maven
