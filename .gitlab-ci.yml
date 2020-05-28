@@ -93,7 +93,7 @@ deploy:
     #- sudo apt upgrade -y
     #- sudo apt install -y py-pip python-dev libffi-dev openssl-dev gcc libc-dev make
     - pip install docker-compose
-    - docker-compose down
+    #- docker-compose down
     - docker-compose up -d --build
 
 
