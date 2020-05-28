@@ -89,7 +89,7 @@ package:
     - ls target
   artifacts:
     paths:
-      - target/*.jar
+      - ReCollect/target/*.jar
 
 deploy:
   image: docker
