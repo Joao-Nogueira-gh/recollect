@@ -19,54 +19,127 @@ before_script:
 
 stages:
   - connect
+  - connectVM
   - build
+  - buildVM
   - test
+  - testVM
   - package
-  - deploy
+  - packageVM
+  - deployVM
 
-  variables:
-    DOCKER_DRIVER: overlay2
 
 connect:
   stage: connect
+  variables:
+    DOCKER_DRIVER: overlay2
+    SPRING_DATASOURCE_URL: jdbc:mysql://mysql/reCollect?createDatabaseIfNotExist=true&serverTimezone=Europe/London&useSSL=false
+  services:
+    - mysql:5.7
+  before_script:
+    - apk --no-cache add mysql-client
+    - mysql --version
+  except:
+    - master
+    - cd
+  script:
+    - echo "SELECT 'OK';" | mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql "${MYSQL_DATABASE}"
+
+
+connectVM:
+  stage: connectVM
   tags:
-    - docker
+    - vmonly
   services:
     - mysql:5.7
   before_script:
     - sudo apt install -y mysql-client
     - sudo apt install -y mysql-server
     - mysql --version
+  only:
+    - master
+    - cd
   script:
     - echo "SELECT 'OK';" | mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" "${MYSQL_DATABASE}"
 
 build:
   image: maven
   stage: build
-  tags:
-    - docker
+  variables:
+    DOCKER_DRIVER: overlay2
+    SPRING_DATASOURCE_URL: jdbc:mysql://mysql/reCollect?createDatabaseIfNotExist=true&serverTimezone=Europe/London&useSSL=false
   services:
     - mysql:5.7
+  except:
+    - master
+    - cd
+  script:
+    - mvn clean compile
+
+buildVM:
+  image: maven
+  stage: buildVM
+  tags:
+    - vmonly
+  services:
+    - mysql:5.7
+  only:
+    - master
+    - cd
   script:
     - mvn clean compile
 
 test:
   image: maven
   stage: test
-  tags:
-    - docker
+  variables:
+    DOCKER_DRIVER: overlay2
+    SPRING_DATASOURCE_URL: jdbc:mysql://mysql/reCollect?createDatabaseIfNotExist=true&serverTimezone=Europe/London&useSSL=false
   services:
     - mysql:5.7
+  except:
+    - master
+    - cd
+  script:
+    - mvn clean test -Dtest=\!\*SeleniumTest
+
+testVM:
+  image: maven
+  stage: testVM
+  tags:
+    - vmonly
+  services:
+    - mysql:5.7
+  only:
+    - master
+    - cd
   script:
     - mvn clean test -Dtest=\!\*SeleniumTest
 
 package:
   image: maven
-  tags:
-    - docker
   stage: package
+  variables:
+    DOCKER_DRIVER: overlay2
+    SPRING_DATASOURCE_URL: jdbc:mysql://mysql/reCollect?createDatabaseIfNotExist=true&serverTimezone=Europe/London&useSSL=false
   services:
     - mysql:5.7
+  except:
+    - master
+    - cd
+  script:
+    - mvn clean package -Dtest=\!\*SeleniumTest
+
+packageVM:
+  image: maven
+  tags:
+    - vmonly
+  stage: packageVM
+  services:
+    - mysql:5.7
+  only:
+    - master
+    - cd
   script:
     - mvn clean package -Dtest=\!\*SeleniumTest
     - ls 
@@ -75,11 +148,11 @@ package:
     paths:
       - ReCollect/target/*.jar
 
-deploy:
+deployVM:
   image: docker
-  stage: deploy
+  stage: deployVM
   tags:
-    - docker
+    - vmonly
   services:
     - mysql:5.7
     - docker:dind
@@ -88,12 +161,7 @@ deploy:
     - master
     - cd
   script:
-    #- sudo apt update
-    #- sudo apt upgrade -y
-    #- sudo apt install -y py-pip python-dev libffi-dev openssl-dev gcc libc-dev make
-    #- pip install docker-compose
-    #- docker-compose down
-    - docker-compose up -d --build
+    - docker-compose up -d --build --force-recreate
 
 
 sonarcloud-check:
