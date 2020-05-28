@@ -77,6 +77,7 @@ public class FrontendWebController {
         // get only items on sale
         CollectionUtils.filter(recentItems, i -> ((Item) i).getSeller()==null);
         model.addAttribute("recentItems", recentItems);
+        System.err.println("loggedUser -> " + this.getLoggedUser());
         return "index";
     }
 
@@ -428,6 +429,20 @@ public class FrontendWebController {
 
     }
 
+    @GetMapping(value = "/product/comment/delete/{id}")
+    public String deleteComment(RedirectAttributes ra, @PathVariable(name = "id") Long id) {
+
+        Comment deleted = commentService.getCommentById(id);
+        Long itemId = deleted.getItem().getId();
+        commentService.deleteComment(deleted);
+
+        Item commentedItem = itemService.getItemById(itemId);
+
+        ra.addAttribute("item", commentedItem);
+
+        return REDIRECT_PRODUCT;
+    }
+
     @PostMapping(value = "/product/comment/{id}")
     public String addComment(@Valid CommentForm commentForm, BindingResult bindingResult, @PathVariable(name = "id") Long id, RedirectAttributes ra) {
 
@@ -441,6 +456,7 @@ public class FrontendWebController {
             return REDIRECT_PRODUCT;
         }
 
+        // just in case
         if(commentForm.getConteudo().trim().equals("")){
             // if the provided data is invalid
             logger.debug("COMENTARIO VAZIO!");

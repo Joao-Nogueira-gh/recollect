@@ -8,7 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 @Table(name = "comment")
-public class Comment {
+public class Comment implements Comparable<Comment> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -89,5 +89,11 @@ public class Comment {
     public String toString() {
         return "Comment [id=" + id + ", item=" + item.getName() + ", text=" + text + ", timestamp=" + timestamp + ", user=" + user.getName()
                 + "]";
-    }  
+    }
+
+
+    @Override
+    public int compareTo(Comment comment) {
+        return this.timestamp.compareTo(comment.timestamp);
+    }
 }
