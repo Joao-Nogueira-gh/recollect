@@ -5,48 +5,87 @@ services:
 - maven
 - mysql:5.7
 
-
 variables:
-  DOCKER_DRIVER: overlay2
   MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
   SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
-  GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
-
+  SPRING_DATASOURCE_URL: jdbc:mysql://localhost/reCollect?createDatabaseIfNotExist=true&serverTimezone=Europe/London&useSSL=false
+  MYSQL_DATABASE: "reCollect"
+  MYSQL_USER: "adminrc"
+  MYSQL_PASSWORD: "admin"
+  MYSQL_ROOT_PASSWORD: "admin"
     
 before_script:
   - cd ReCollect/
 
 stages:
   - connect
+  - connectVM
   - build
+  - buildVM
   - test
+  - testVM
   - package
+  - packageVM
+  - deployVM
+
 
 connect:
   stage: connect
   variables:
-    MYSQL_DATABASE: "reCollect"
-    MYSQL_USER: "adminrc"
-    MYSQL_PASSWORD: "admin"
-    MYSQL_ROOT_PASSWORD: "root"
+    DOCKER_DRIVER: overlay2
+    SPRING_DATASOURCE_URL: jdbc:mysql://mysql/reCollect?createDatabaseIfNotExist=true&serverTimezone=Europe/London&useSSL=false
   services:
     - mysql:5.7
   before_script:
     - apk --no-cache add mysql-client
     - mysql --version
+  except:
+    - master
+    - cd
   script:
     - echo "SELECT 'OK';" | mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql "${MYSQL_DATABASE}"
+
+
+connectVM:
+  stage: connectVM
+  tags:
+    - vmonly
+  services:
+    - mysql:5.7
+  before_script:
+    - sudo apt install -y mysql-client
+    - sudo apt install -y mysql-server
+    - mysql --version
+  only:
+    - master
+    - cd
+  script:
+    - echo "SELECT 'OK';" | mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" "${MYSQL_DATABASE}"
 
 build:
   image: maven
   stage: build
   variables:
-    MYSQL_DATABASE: "reCollect"
-    MYSQL_USER: "adminrc"
-    MYSQL_PASSWORD: "admin"
-    MYSQL_ROOT_PASSWORD: "root"
+    DOCKER_DRIVER: overlay2
+    SPRING_DATASOURCE_URL: jdbc:mysql://mysql/reCollect?createDatabaseIfNotExist=true&serverTimezone=Europe/London&useSSL=false
   services:
     - mysql:5.7
+  except:
+    - master
+    - cd
+  script:
+    - mvn clean compile
+
+buildVM:
+  image: maven
+  stage: buildVM
+  tags:
+    - vmonly
+  services:
+    - mysql:5.7
+  only:
+    - master
+    - cd
   script:
     - mvn clean compile
 
@@ -54,12 +93,26 @@ test:
   image: maven
   stage: test
   variables:
-    MYSQL_DATABASE: "reCollect"
-    MYSQL_USER: "adminrc"
-    MYSQL_PASSWORD: "admin"
-    MYSQL_ROOT_PASSWORD: "root"
+    DOCKER_DRIVER: overlay2
+    SPRING_DATASOURCE_URL: jdbc:mysql://mysql/reCollect?createDatabaseIfNotExist=true&serverTimezone=Europe/London&useSSL=false
   services:
     - mysql:5.7
+  except:
+    - master
+    - cd
+  script:
+    - mvn clean test -Dtest=\!\*SeleniumTest
+
+testVM:
+  image: maven
+  stage: testVM
+  tags:
+    - vmonly
+  services:
+    - mysql:5.7
+  only:
+    - master
+    - cd
   script:
     - mvn clean test -Dtest=\!\*SeleniumTest
 
@@ -67,18 +120,54 @@ package:
   image: maven
   stage: package
   variables:
-    MYSQL_DATABASE: "reCollect"
-    MYSQL_USER: "adminrc"
-    MYSQL_PASSWORD: "admin"
-    MYSQL_ROOT_PASSWORD: "root"
+    DOCKER_DRIVER: overlay2
+    SPRING_DATASOURCE_URL: jdbc:mysql://mysql/reCollect?createDatabaseIfNotExist=true&serverTimezone=Europe/London&useSSL=false
   services:
     - mysql:5.7
+  except:
+    - master
+    - cd
   script:
     - mvn clean package -Dtest=\!\*SeleniumTest
+
+packageVM:
+  image: maven
+  tags:
+    - vmonly
+  stage: packageVM
+  services:
+    - mysql:5.7
+  only:
+    - master
+    - cd
+  script:
+    - mvn clean package -Dtest=\!\*SeleniumTest
+    - ls 
+    - ls target
+  artifacts:
+    paths:
+      - ReCollect/target/*.jar
+
+deployVM:
+  image: docker
+  stage: deployVM
+  tags:
+    - vmonly
+  services:
+    - mysql:5.7
+    - docker:dind
+    - maven
+  only:
+    - master
+    - cd
+  script:
+    - docker-compose up -d --build --force-recreate
 
 
 sonarcloud-check:
   image: maven:3.6.3-jdk-11
+  variables:
+    GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
   cache:
     key: "${CI_JOB_NAME}"
     paths:
@@ -88,5 +177,5 @@ sonarcloud-check:
   only:
     - merge_requests
     - master
-    - develop
-    - feature/login_backend
+
+

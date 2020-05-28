@@ -18,5 +18,5 @@ while ! mysql --protocol TCP -u "$MYSQL_USER" -p "$MYSQL_PASSWORD" -e "show data
         break
     fi;
 done
-  
-exec $cmd
+
+/bin/bash
