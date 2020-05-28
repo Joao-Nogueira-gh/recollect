@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +17,14 @@ public class ItemRestController {
 
 	@Autowired
 	private ItemService itemService;
+
+	@GetMapping("/api/item/{id}")
+	@ResponseBody
+	public Item singleItem(@PathVariable Long id) {
+
+		return itemService.getSingleItem(id);
+
+	}
 
 	@GetMapping("/api/items")
 	@ResponseBody

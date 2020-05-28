@@ -2,6 +2,8 @@ package ua.tqs.ReCollect.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,12 +31,11 @@ public class UserService {
 
     static final Logger logger = Logger.getLogger(UserService.class);
 
-
     public List<User> getAll() {
         return userRepo.findAll();
     }
 
-    public boolean userExists(String email){
+    public boolean userExists(String email) {
         return userRepo.existsByEmail(email);
     }
 
@@ -69,54 +70,84 @@ public class UserService {
 
     }
 
-    public List<User> getUsersByLocation(String distrito, String concelho) {
+    public List<User> getUsersByLocation(String distrito, String concelho, Integer limit) {
 
-        if(distrito != null ^ concelho != null) {
+        List<User> ret;
 
-			return new ArrayList<User>();
+        if (distrito != null ^ concelho != null) {
 
-		} else if (distrito == null && concelho == null) {
+            return new ArrayList<User>();
 
-			return this.getAll();
+        } else if (distrito == null && concelho == null) {
 
-		}
+            ret = this.getAll();
 
-        return userRepo.findByLocation(locationService.getLocation(distrito, concelho));
+        } else {
+
+            ret = userRepo.findByLocation(locationService.getLocation(distrito, concelho));
+
+        }
+
+        if (limit == null) {
+
+            return ret;
+
+        }
+
+        return ret.stream().limit(limit).collect(Collectors.toList());
 
     }
 
-    public UserDTO convertToDTO(User user){
+    public UserDTO convertToDTO(User user) {
 
-        UserDTO dto=new UserDTO(user.getName(), user.getEmail(), user.getPhone(), user.getPassword());
-        
-        if (user.getLocation()!=null){
-            dto.setLocation(user.getLocation().getCounty()+"-"+user.getLocation().getDistrict());
+        UserDTO dto = new UserDTO(user.getName(), user.getEmail(), user.getPhone(), user.getPassword());
+
+        if (user.getLocation() != null) {
+            dto.setLocation(user.getLocation().getCounty() + "-" + user.getLocation().getDistrict());
         }
         for (Item i : user.getFavoriteItems()) {
-            dto.addFavoriteItems(i.getName()+";"+i.getQuantity()+";"+i.getPrice()+";"+i.getDescription()+";"+i.getCategory());
+            dto.addFavoriteItems(i.getName() + ";" + i.getQuantity() + ";" + i.getPrice() + ";" + i.getDescription()
+                    + ";" + i.getCategory());
         }
         for (Item i : user.getSoldItems()) {
-            dto.addSoldItems(i.getName()+";"+i.getQuantity()+";"+i.getPrice()+";"+i.getDescription()+";"+i.getCategory());
+            dto.addSoldItems(i.getName() + ";" + i.getQuantity() + ";" + i.getPrice() + ";" + i.getDescription() + ";"
+                    + i.getCategory());
         }
         for (Item i : user.getPublishedItems()) {
-            dto.addPublishedItems(i.getName()+";"+i.getQuantity()+";"+i.getPrice()+";"+i.getDescription()+";"+i.getCategory());
+            dto.addPublishedItems(i.getName() + ";" + i.getQuantity() + ";" + i.getPrice() + ";" + i.getDescription()
+                    + ";" + i.getCategory());
         }
 
         return dto;
 
     }
 
-    //might need to have several methods, or flags
-    //this specific one is because of the register
-    public User convertToUser(UserDTO userdto){
-        
+    // might need to have several methods, or flags
+    // this specific one is because of the register
+    public User convertToUser(UserDTO userdto) {
+
         return new User(userdto.getName(), userdto.getEmail(), userdto.getPassword(), userdto.getPhoneNumber());
 
     }
-    public User getCurrentUser(){
+
+    public User getCurrentUser() {
         Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
         String email = loggedInUser.getName();
         return userRepo.findByEmail(email);
     }
+
+    public User getById(Long id) {
+
+        Optional<User> optUser = this.userRepo.findById(id);
+
+        if(optUser.isPresent()) {
+
+            return optUser.get();
+            
+        }
+
+        return null;
+
+	}
 
 }

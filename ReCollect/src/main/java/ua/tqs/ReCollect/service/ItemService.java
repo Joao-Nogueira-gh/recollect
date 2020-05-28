@@ -194,8 +194,6 @@ public class ItemService {
 
             ret = this.getAll();
 
-            System.out.println(ret);
-
         } else if (cat == null && seller == null && orderBy != null) {
 
             ret = this.getAll(orderBy);
@@ -246,10 +244,6 @@ public class ItemService {
 
         }
 
-        System.out.println(ret.size());
-
-        System.out.println(ret.stream().limit(limit).collect(Collectors.toList()).size());
-
         return ret.stream().limit(limit).collect(Collectors.toList());
 
     }
@@ -257,5 +251,19 @@ public class ItemService {
     private boolean orderByIsValid(String orderBy) {
         return orderBy.equals("price") || orderBy.equals("creationDate");
     }
+
+	public Item getSingleItem(Long id) {
+        
+        Optional<Item> optItem = this.itemRepo.findById(id);
+
+        if(optItem.isPresent()) {
+
+            return optItem.get();
+            
+        }
+
+        return null;
+        
+	}
 
 }
