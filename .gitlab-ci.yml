@@ -10,9 +10,13 @@ variables:
   MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
   SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
   # GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
-  SPRING_DATASOURCE_URL: jdbc:mysql://mysql/reCollect?createDatabaseIfNotExist=true&serverTimezone=Europe/London&useSSL=false
+  SPRING_DATASOURCE_URL: jdbc:mysql://localhost/reCollect?createDatabaseIfNotExist=true&serverTimezone=Europe/London&useSSL=false
   DOCKER_HOST: tcp://docker:2375
   DOCKER_TLS_CERTDIR: ""
+  MYSQL_DATABASE: "reCollect"
+  MYSQL_USER: "adminrc"
+  MYSQL_PASSWORD: "admin"
+  MYSQL_ROOT_PASSWORD: "root"
     
 before_script:
   - cd ReCollect/
@@ -28,29 +32,19 @@ connect:
   stage: connect
   tags:
     - docker
-  variables:
-    MYSQL_DATABASE: "reCollect"
-    MYSQL_USER: "adminrc"
-    MYSQL_PASSWORD: "admin"
-    MYSQL_ROOT_PASSWORD: "root"
   services:
     - mysql:5.7
   before_script:
     - sudo apt install -y mysql-client
     - mysql --version
   script:
-    - echo "SELECT 'OK';" | mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql "${MYSQL_DATABASE}"
+    - echo "SELECT 'OK';" | mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=localhost "${MYSQL_DATABASE}"
 
 build:
   image: maven
   stage: build
   tags:
     - docker
-  variables:
-    MYSQL_DATABASE: "reCollect"
-    MYSQL_USER: "adminrc"
-    MYSQL_PASSWORD: "admin"
-    MYSQL_ROOT_PASSWORD: "root"
   services:
     - mysql:5.7
   script:
@@ -61,11 +55,6 @@ test:
   stage: test
   tags:
     - docker
-  variables:
-    MYSQL_DATABASE: "reCollect"
-    MYSQL_USER: "adminrc"
-    MYSQL_PASSWORD: "admin"
-    MYSQL_ROOT_PASSWORD: "root"
   services:
     - mysql:5.7
   script:
@@ -76,11 +65,6 @@ package:
   tags:
     - docker
   stage: package
-  variables:
-    MYSQL_DATABASE: "reCollect"
-    MYSQL_USER: "adminrc"
-    MYSQL_PASSWORD: "admin"
-    MYSQL_ROOT_PASSWORD: "root"
   services:
     - mysql:5.7
   script:
@@ -96,11 +80,6 @@ deploy:
   stage: deploy
   tags:
     - docker
-  variables:
-    MYSQL_DATABASE: "reCollect"
-    MYSQL_USER: "adminrc"
-    MYSQL_PASSWORD: "admin"
-    MYSQL_ROOT_PASSWORD: "root"
   services:
     - mysql:5.7
     - docker:dind
