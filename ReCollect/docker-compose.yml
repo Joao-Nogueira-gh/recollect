@@ -12,4 +12,3 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/reCollect?createDatabaseIfNotExist=true&serverTimezone=Europe/London&autoReconnect=true&useSSL=false
     restart: always
     network_mode: "host"
-         
