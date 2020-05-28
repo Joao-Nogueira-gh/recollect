@@ -36,7 +36,7 @@ connect:
   services:
     - mysql:5.7
   before_script:
-    - apt install -y mysql-client
+    - sudo apt install -y mysql-client
     - mysql --version
   script:
     - echo "SELECT 'OK';" | mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql "${MYSQL_DATABASE}"
@@ -109,9 +109,9 @@ deploy:
     - master
     - cd
   script:
-    - apt update
-    - apt upgrade
-    - apt add -y py-pip python-dev libffi-dev openssl-dev gcc libc-dev make
+    - sudo apt update
+    - sudo apt upgrade
+    - sudo apt add -y py-pip python-dev libffi-dev openssl-dev gcc libc-dev make
     - pip install docker-compose
     - docker-compose up -d --build
 
