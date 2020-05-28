@@ -21,6 +21,7 @@ stages:
   - build
   - test
   - package
+  - deploy
 
 connect:
   stage: connect
