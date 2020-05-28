@@ -6,13 +6,13 @@ services:
 - mysql:5.7
 
 variables:
-  DOCKER_DRIVER: overlay2
+  #DOCKER_DRIVER: overlay2
   MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
   SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
   # GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
   SPRING_DATASOURCE_URL: jdbc:mysql://localhost/reCollect?createDatabaseIfNotExist=true&serverTimezone=Europe/London&useSSL=false
-  DOCKER_HOST: tcp://docker:2375
-  DOCKER_TLS_CERTDIR: ""
+  #DOCKER_HOST: tcp://docker:2375
+  #DOCKER_TLS_CERTDIR: ""
   MYSQL_DATABASE: "reCollect"
   MYSQL_USER: "adminrc"
   MYSQL_PASSWORD: "admin"
