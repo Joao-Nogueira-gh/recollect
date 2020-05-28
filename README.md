@@ -25,7 +25,7 @@ SonarCloud Analysis -> https://sonarcloud.io/dashboard?id=Joao-Nogueira-gh_recol
 $ ./start.sh
 ```
 
-For development and testing the same is ran, to have the DB and Admin containers running and then testing can be done normally. Change.
+For development and testing the same is ran, to have the DB and Admin containers running and then testing can be done normally. Change
 
 ## Unit Tests
 ```bash
