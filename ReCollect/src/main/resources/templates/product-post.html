@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 
   <!-- SITE TITTLE -->
@@ -39,7 +39,49 @@
 
 <body class="body-wrapper">
 
-<div id="navbar"></div>
+<!--==================================
+=            	Navbar               =
+===================================-->
+<div id="navbar">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<nav class="navbar navbar-expand-lg navbar-light navigation">
+					<a class="navbar-brand" href="/">
+						<img src="images/logo.png" alt="">
+					</a>
+					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+							aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+						<span class="navbar-toggler-icon"></span>
+					</button>
+					<div class="collapse navbar-collapse" id="navbarSupportedContent">
+						<ul class="navbar-nav ml-auto main-nav ">
+							<li class="nav-item">
+								<a class="nav-link" href="/">Home</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="/about">About us</a>
+							</li>
+
+						</ul>
+						<ul class="navbar-nav ml-auto mt-10">
+							<li class="nav-item" sec:authorize="!isAuthenticated()">
+								<a class="nav-link login-button" href="/login">Login</a>
+							</li>
+							<li class="nav-item" sec:authorize="isAuthenticated()">
+								<a class="nav-link login-button" href="/profile">Profile</a>
+							</li>
+
+							<li class="nav-item">
+								<a class="nav-link text-white add-button" href="/announce"><i class="fa fa-plus-circle"></i> Announce</a>
+							</li>
+						</ul>
+					</div>
+				</nav>
+			</div>
+		</div>
+	</div>
+</div>
 
 <section class="page-search">
 	<div class="container">
@@ -81,13 +123,21 @@
 		<div class="row">
 			<!-- Left sidebar -->
 			<div class="col-md-8">
+				<div th:if="${commentHasError}">
+					<div class="alert alert-danger alert-dismissible fade show" role="alert" id="invalidCommentMessage">
+						Could not submit your comment. Maybe you tried to insert an empty comment.
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+				</div>
 				<div class="product-details">
-					<h1 class="product-title" th:text="${item.name}">-- title --</h1>
+					<h1 id="product-title-header" class="product-title" th:text="${item.name}">-- title --</h1>
 					<div class="product-meta">
 						<ul class="list-inline">
 							<li class="list-inline-item"><i class="fa fa-user-o"></i> By <a href="" th:text="${item.owner.name}">-- title --</a></li>
 							<li class="list-inline-item"><i class="fa fa-folder-open-o"></i> Category<a href="" th:text="${item.category.toString()}">-- category --</a></li>
-							<li class="list-inline-item"><i class="fa fa-location-arrow"></i> Location<a href="" th:text="${item.owner.location.getDistrict() + ', ' + item.owner.location.getCounty()}">-- location --</a></li>
+							<li class="list-inline-item"><i class="fa fa-location-arrow"></i> Location<a href="" th:text="${item.getOwner().location == null ? 'Not available' : item.owner.location.getDistrict() + ', ' + item.owner.location.getCounty()}">-- location --</a></li>
 						</ul>
 					</div>
 
@@ -95,72 +145,37 @@
 					<div class="product-slider">
 						<th:block th:each="imageURL : ${item.getImages()}">
 							<div class="product-slider-item my-4">
-								<img class="img-fluid w-100" th:attr="data-image=${imageURL.toString()}"  th:src="${imageURL.toString()}" alt="product-img">
+								<img class="img-fluid w-100" th:data-image="${imageURL.toString()}"  th:src="${imageURL.toString()}" alt="product-img" style="height:500px; object-fit: cover">
 							</div>
 						</th:block>
-						<!--<div class="product-slider-item my-4" data-image="images/products/products-1.jpg">
-							<img class="img-fluid w-100" src="images/products/products-1.jpg" alt="product-img">
-						</div>
-						<div class="product-slider-item my-4" data-image="images/products/products-2.jpg">
-							<img class="d-block img-fluid w-100" src="images/products/products-2.jpg" alt="Second slide">
-						</div>
-						<div class="product-slider-item my-4" data-image="images/products/products-3.jpg">
-							<img class="d-block img-fluid w-100" src="images/products/products-3.jpg" alt="Third slide">
-						</div>
-						<div class="product-slider-item my-4" data-image="images/products/products-1.jpg">
-							<img class="d-block img-fluid w-100" src="images/products/products-1.jpg" alt="Third slide">
-						</div>
-						<div class="product-slider-item my-4" data-image="images/products/products-2.jpg">
-							<img class="d-block img-fluid w-100" src="images/products/products-2.jpg" alt="Third slide">
-						</div>-->
 					</div>
 					<!-- product slider -->
 
 					<div class="content mt-5 pt-5">
 						<ul class="nav nav-pills  justify-content-center" id="pills-tab" role="tablist">
 							<li class="nav-item">
-								<a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home"
-								 aria-selected="true">Product Details</a>
+								<a class="nav-link active" id="pills-product-details-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home"
+								   aria-selected="true">Product Details</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact"
-								 aria-selected="false">Reviews</a>
+								<a class="nav-link" id="pills-reviews-tab" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact"
+								   aria-selected="false">Reviews</a>
 							</li>
 						</ul>
 						<div class="tab-content" id="pills-tabContent">
-							<div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+							<div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-product-details-tab">
 								<h3 class="tab-title">Product Description</h3>
 								<p th:text="${item.description}"></p>
 
 							</div>
 
-							<div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
+							<div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-reviews-tab">
 								<h3 class="tab-title">Product Review</h3>
 								<div class="product-review">
 									<div class="media" th:each="comment : ${item.getComment()}">
 										<!-- Avater -->
 										<img src="images/user/user-thumb.jpg" alt="avater">
 										<div class="media-body">
-											<!-- Ratings -->
-											<div class="ratings">
-												<ul class="list-inline">
-													<li class="list-inline-item">
-														<i class="fa fa-star"></i>
-													</li>
-													<li class="list-inline-item">
-														<i class="fa fa-star"></i>
-													</li>
-													<li class="list-inline-item">
-														<i class="fa fa-star"></i>
-													</li>
-													<li class="list-inline-item">
-														<i class="fa fa-star"></i>
-													</li>
-													<li class="list-inline-item">
-														<i class="fa fa-star"></i>
-													</li>
-												</ul>
-											</div>
 											<div class="name">
 												<h5 th:text="${comment.getUser().name}"></h5>
 											</div>
@@ -168,31 +183,28 @@
 												<p th:text="${comment.getTimestamp().toString()}"></p>
 											</div>
 											<div class="review-comment">
-												<p th:text="${comment.getText()}">
+												<p th:text="${comment.getText()}" th:id="${'comment-text-' + comment.getText()}">
 
 												</p>
+											</div>
+											<!-- show delete button only for the user who made the comment -->
+											<div th:if="${loggedUser.email.equals(comment.getUser().email)}">
+												<a th:href="${'/product/comment/delete/' + comment.id}" data-toggle="tooltip" data-placement="top" title="Delete comment" class="delete" th:id="${'comment-delete-' + comment.getText()}">
+													<i class="fa fa-trash"></i>
+												</a>
 											</div>
 										</div>
 									</div>
 									<div class="review-submission">
 										<h3 class="tab-title">Submit your review</h3>
-										<!-- Rate -->
-										<div class="rate">
-											<div class="starrr"></div>
-										</div>
 										<div class="review-submit">
-											<form th:action="@{/product}" method="POST" class="row">
-												<div class="col-lg-6">
-													<input type="text" name="name" id="name" class="form-control" placeholder="Name">
-												</div>
-												<div class="col-lg-6">
-													<input type="email" name="email" id="email" class="form-control" placeholder="Email">
+											<form th:action="@{'/product/comment/'+ ${item.id}}" method="POST" class="row" th:object="${commentForm}" >
+												<div class="col-12">
+													<textarea th:field="*{conteudo}" name="review" id="review-textarea"
+															  rows="10" class="form-control" placeholder="Message"></textarea>
 												</div>
 												<div class="col-12">
-													<textarea name="review" id="review" rows="10" class="form-control" placeholder="Message"></textarea>
-												</div>
-												<div class="col-12">
-													<button type="submit" class="btn btn-main">Submit</button>
+													<button type="submit" class="btn btn-main" id="submit-comment-button">Submit</button>
 												</div>
 											</form>
 										</div>
@@ -207,34 +219,32 @@
 				<div class="sidebar">
 					<div class="widget price text-center">
 						<h4>Price</h4>
-						<p>$230</p>
+						<p th:text="${item.price + '€'}">...</p>
 					</div>
 					<!-- User Profile widget -->
 					<div class="widget user text-center">
 						<img class="rounded-circle img-fluid mb-5 px-5" src="images/user/user-thumb.jpg" alt="">
-						<h4><a href="">Jonathon Andrew</a></h4>
-						<p class="member-time">Member Since Jun 27, 2017</p>
-						<a href="">See all ads</a>
+						<h4 th:text="${item.owner.name}">...</h4>
+						<p th:text="${item.owner.email}">...</p>
 						<ul class="list-inline mt-20">
-							<li class="list-inline-item"><a href="" class="btn btn-contact d-inline-block  btn-primary px-lg-5 my-1 px-md-3">Contact</a></li>
-							<li class="list-inline-item"><a href="" class="btn btn-offer d-inline-block btn-primary ml-n1 my-1 px-lg-4 px-md-3">Make an
-									offer</a></li>
+							<li class="list-inline-item">
+								<div class="btn btn-contact d-inline-block  btn-primary px-lg-5 my-1 px-md-3">
+									<i class="fas fa-phone-alt"></i>  <span th:text="${item.owner.phone==null ? 'Not available' : (item.owner.phone.isEmpty() ? 'Not available' : item.owner.phone)}"></span>
+								</div>
+							</li>
 						</ul>
 					</div>
-					<!-- Map Widget -->
-					<!-- <div class="widget map">
-						<div class="map">
-							<div id="map_canvas" data-latitude="51.507351" data-longitude="-0.127758"></div>
-						</div>
-					</div> -->
-					<!-- Rate Widget -->
-					<div class="widget rate">
-						<!-- Heading -->
-						<h5 class="widget-header text-center">What would you rate
-							<br>
-							this product</h5>
-						<!-- Rate -->
-						<div class="starrr"></div>
+					<!-- mark as favourite widget -->
+					<div class="widget text-center">
+						<ul class="list-inline">
+							<li class="list-inline-item">
+								<div class="btn btn-contact d-inline-block  btn-primary px-lg-5 my-1 px-md-3">
+									<!-- TODO: alternate between solid and regular heart icon -->
+									<i class="far fa-heart"></i> Mark as favourite <span></span>
+									<!--<i class="fas fa-heart"></i> Remove from favourites <span></span> -->
+								</div>
+							</li>
+						</ul>
 					</div>
 					<!-- Safety tips widget -->
 					<div class="widget disclaimer">
@@ -242,7 +252,6 @@
 						<ul>
 							<li>Meet seller at a public place</li>
 							<li>Check the item before you buy</li>
-							<li>Pay only after collecting the item</li>
 							<li>Pay only after collecting the item</li>
 						</ul>
 					</div>
@@ -253,7 +262,7 @@
 							your fellow users.
 						</p>
 						<!-- Submit button -->
-						<a href="" class="btn btn-transparent-white">Submit Listing</a>
+						<a href="/announce" class="btn btn-transparent-white">Announce!</a>
 					</div>
 
 				</div>

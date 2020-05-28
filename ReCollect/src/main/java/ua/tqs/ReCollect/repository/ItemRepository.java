@@ -20,6 +20,9 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
     public void deleteById(Long id);
 
+    public List<Item> findTop20ByOrderByCreationDateAsc();
+
+    public List<Item> findTop20ByOrderByCreationDateDesc();
     public List<Item> findByCategory(Categories category);
 
     public List<Item> findByNameContaining(String name);

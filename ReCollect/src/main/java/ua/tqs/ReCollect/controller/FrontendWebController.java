@@ -22,15 +22,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import ua.tqs.ReCollect.model.Categories;
+import ua.tqs.ReCollect.model.Comment;
 import ua.tqs.ReCollect.model.Item;
 import ua.tqs.ReCollect.model.User;
+import ua.tqs.ReCollect.service.CommentService;
 import ua.tqs.ReCollect.service.ItemService;
 import ua.tqs.ReCollect.service.UserService;
-import ua.tqs.ReCollect.utils.Category;
-import ua.tqs.ReCollect.utils.Image;
-import ua.tqs.ReCollect.utils.ItemForm;
-import ua.tqs.ReCollect.utils.PictureListDto;
-import ua.tqs.ReCollect.utils.SearchParams;
+import ua.tqs.ReCollect.utils.*;
 import org.apache.log4j.Logger;
 
 
@@ -49,9 +47,11 @@ public class FrontendWebController {
     // REDIRECTS AND PAGE NAMES
     private static final String PRODUCT_SEARCH_RESULTS = "product-search-results";
     private static final String PRODUCT_POST = "product-post";
+    private static final String REDIRECT_PRODUCT = "redirect:/product";
     private static final String REDIRECTANNOUNCE = "redirect:/announce";
     private static final String REDIRECT_SEARCH_RESULTS = "redirect:/category";
     private static final String REDIRECT_HOME= "redirect:/";
+    private static final String ERROR_PAGE = "error";
 
     @Autowired
     ItemService itemService;
@@ -59,13 +59,25 @@ public class FrontendWebController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    CommentService commentService;
+
     ArrayList<Category> categories = Category.getCategories();
+
+    @GetMapping(value = "/error")
+    public String error(){
+        return ERROR_PAGE;
+    }
 
     @GetMapping(value = "/")
     public String home(SearchParams searchParams, Model model, @RequestParam(name = "hasErrors", required = false) boolean hasErrors) {
         model.addAttribute("categories", categories);
-        //model.addAttribute("searchParams", new SearchParams());
         model.addAttribute("hasErrors", hasErrors);
+        List<Item> recentItems = itemService.get20NewestItems();
+        // get only items on sale
+        CollectionUtils.filter(recentItems, i -> ((Item) i).getSeller()==null);
+        model.addAttribute("recentItems", recentItems);
+        System.err.println("loggedUser -> " + this.getLoggedUser());
         return "index";
     }
 
@@ -164,15 +176,9 @@ public class FrontendWebController {
     }
 
 
-    @GetMapping(value = "/ad-listing")
-    public String adListing() {
-        return "Ad-listing";
-    }
 
-    @GetMapping(value = "/ad-list-view")
-    public String adListView() {
-        return "ad-list-view";
-    }
+
+
 
     @GetMapping(value = "/edit-profile")
     public String editProfile(Model model) {
@@ -392,15 +398,20 @@ public class FrontendWebController {
 
         //System.err.println("item recebido 1 -> " + item.toString());
         ra.addAttribute("item", item);
-        return "redirect:/product";
+        return REDIRECT_PRODUCT;
     }
 
     @GetMapping(value = "/product")
-    public String productPage(Model model, @RequestParam(name = "item", required = false) Item item) {
+    public String productPage(CommentForm commentForm,
+                              Model model,
+                              @RequestParam(name = "item", required = false) Item item,
+                              @RequestParam(name = "commentHasError", required = false) boolean commentHasError) {
+        model.addAttribute("loggedUser", this.getLoggedUser());
         model.addAttribute("categories", categories);
         model.addAttribute("searchparams", new SearchParams());
         //System.err.println("item recebido 2 -> " + item.toString());
         model.addAttribute("item", item);
+        model.addAttribute("commentHasError", commentHasError);
         return PRODUCT_POST;
     }
 
@@ -412,10 +423,53 @@ public class FrontendWebController {
 
     }
 
-    @GetMapping(value = "/terms-conditions")
-    public String termsConditions() {
-        return "terms-conditions";
+    @GetMapping(value = "/product/comment/delete/{id}")
+    public String deleteComment(RedirectAttributes ra, @PathVariable(name = "id") Long id) {
+
+        Comment deleted = commentService.getCommentById(id);
+        Long itemId = deleted.getItem().getId();
+        commentService.deleteComment(deleted);
+
+        Item commentedItem = itemService.getItemById(itemId);
+
+        ra.addAttribute("item", commentedItem);
+
+        return REDIRECT_PRODUCT;
     }
+
+    @PostMapping(value = "/product/comment/{id}")
+    public String addComment(@Valid CommentForm commentForm, BindingResult bindingResult, @PathVariable(name = "id") Long id, RedirectAttributes ra) {
+
+        Item commentedItem = itemService.getItemById(id);
+
+        if(bindingResult.hasErrors()){
+            // if the provided data is invalid
+            logger.debug("COMENTARIO INVALIDOS!");
+            ra.addAttribute("item", commentedItem);
+            ra.addAttribute("commentHasError", true);
+            return REDIRECT_PRODUCT;
+        }
+
+        // just in case
+        if(commentForm.getConteudo().trim().equals("")){
+            // if the provided data is invalid
+            logger.debug("COMENTARIO VAZIO!");
+            ra.addAttribute("item", commentedItem);
+            ra.addAttribute("commentHasError", true);
+            return REDIRECT_PRODUCT;
+        }
+
+
+        Comment comment = new Comment(commentForm.getConteudo(), this.getLoggedUser(), commentedItem);
+        commentService.addNewComment(comment);
+        // get the most recent snapshop for that item, after the comment was made
+        commentedItem = itemService.getItemById(id);
+        ra.addAttribute("item", commentedItem);
+
+        return REDIRECT_PRODUCT;
+
+    }
+
 
     private User getLoggedUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();

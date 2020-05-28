@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 
   <!-- SITE TITTLE -->
@@ -41,7 +41,49 @@
 
 <body class="body-wrapper">
 
-<div id="navbar"></div>
+<!--==================================
+=            	Navbar               =
+===================================-->
+<div id="navbar">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<nav class="navbar navbar-expand-lg navbar-light navigation">
+					<a class="navbar-brand" href="/">
+						<img src="images/logo.png" alt="">
+					</a>
+					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+							aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+						<span class="navbar-toggler-icon"></span>
+					</button>
+					<div class="collapse navbar-collapse" id="navbarSupportedContent">
+						<ul class="navbar-nav ml-auto main-nav ">
+							<li class="nav-item">
+								<a class="nav-link" href="/">Home</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="/about">About us</a>
+							</li>
+
+						</ul>
+						<ul class="navbar-nav ml-auto mt-10">
+							<li class="nav-item" sec:authorize="!isAuthenticated()">
+								<a class="nav-link login-button" href="/login">Login</a>
+							</li>
+							<li class="nav-item" sec:authorize="isAuthenticated()">
+								<a class="nav-link login-button" href="/profile">Profile</a>
+							</li>
+
+							<li class="nav-item">
+								<a class="nav-link text-white add-button" href="/announce"><i class="fa fa-plus-circle"></i> Announce</a>
+							</li>
+						</ul>
+					</div>
+				</nav>
+			</div>
+		</div>
+	</div>
+</div>
 
 <section class="page-search">
 	<div class="container">
@@ -140,16 +182,16 @@
 								<div class="product-item bg-light">
 									<div class="card">
 										<div class="thumb-content">
-											<div class="price" th:text="${item.price}">$200</div>
+											<div class="price" th:text="${item.price}">...</div>
 											<a th:href="${'/product/' + item.id}">
-												<img class="card-img-top img-fluid" th:src="${item.getImages().get(0).toString()}" alt="Card image cap">
+												<img class="card-img-top img-fluid" th:src="${item.getImages().get(0).toString()}" alt="Card image cap" style="height:150px; object-fit: cover">
 											</a>
 										</div>
 										<div class="card-body">
 											<h4 class="card-title"><a th:href="${'/product/' + item.id}" th:text="${item.name}">...</a></h4>
 											<ul class="list-inline product-meta">
 												<li class="list-inline-item">
-													<div><i class="fa fa-folder-open-o"></i> Electronics</div>
+													<div><i class="fa fa-folder-open-o"></i> <span th:text="${item.category.toString()}"></span> ...</div>
 												</li>
 												<li class="list-inline-item">
 													<div><i class="fa fa-calendar"></i> <span th:text="${item.creationDate}"></span> ...</div>

@@ -89,5 +89,6 @@ public class Comment {
     public String toString() {
         return "Comment [id=" + id + ", item=" + item.getName() + ", text=" + text + ", timestamp=" + timestamp + ", user=" + user.getName()
                 + "]";
-    }  
+    }
+
 }

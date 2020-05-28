@@ -25,6 +25,9 @@ public class MyAdsPage extends PageObject {
     @FindBy(id = "mark-sold-button")
     private WebElement markSoldButton;
 
+    @FindBy(id = "view-button")
+    private WebElement viewButton;
+
     public MyAdsPage(WebDriver driver) {
         super(driver);
     }
@@ -43,6 +46,10 @@ public class MyAdsPage extends PageObject {
     }
 
     public void markItemAsSold() { markSoldButton.click(); }
+
+    public void viewItem() {
+        viewButton.click();
+    }
 
     public boolean onSaleCountDecremented(int count){
         return Integer.parseInt(onSaleCount.getText())==count-1;

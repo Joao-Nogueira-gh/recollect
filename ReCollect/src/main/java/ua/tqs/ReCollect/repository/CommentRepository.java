@@ -1,6 +1,7 @@
 package ua.tqs.ReCollect.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -11,4 +12,5 @@ import ua.tqs.ReCollect.model.Comment;
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     public List<Comment> findAll();
+
 }
