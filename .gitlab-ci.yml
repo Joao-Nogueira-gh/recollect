@@ -85,9 +85,14 @@ package:
     - mysql:5.7
   script:
     - mvn clean package -Dtest=\!\*SeleniumTest
+    - ls 
+    - ls target
+  artifacts:
+    paths:
+      - target/*.jar
 
 deploy:
-  image: maven
+  image: docker
   stage: deploy
   tags:
     - docker
@@ -108,7 +113,6 @@ deploy:
     - apk upgrade
     - apk add --no-cache py-pip python-dev libffi-dev openssl-dev gcc libc-dev make
     - pip install docker-compose
-    - mvn clean package -DskipTests=true
     - docker-compose up -d --build
 
 
