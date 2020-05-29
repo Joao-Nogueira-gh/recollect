@@ -36,7 +36,7 @@ public class CommentController {
         itemService.deleteAll();
         commentService.deleteAll();
         User currUser = userService.getCurrentUser();
-        Item i1= new Item("Moeda", 3, new BigDecimal(3.0), "Moeda fixe", Categories.MISC);
+        Item i1= new Item("Moeda", 3, BigDecimal.valueOf(3.0), "Moeda fixe", Categories.MISC);
         itemService.addNewProduct(i1, currUser);
         logger.debug(itemService.getAll());
 

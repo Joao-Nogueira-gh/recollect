@@ -56,7 +56,7 @@ public class FrontendWebController {
     private static final String REDIRECT_SEARCH_RESULTS = "redirect:/category";
     private static final String REDIRECT_HOME= "redirect:/";
     private static final String ERROR_PAGE = "error";
-    private static final String CATEGORIES = "categories";
+    private static final String CATEGORIES_MACRO = "categories";
     private static final String CATEGORY = "category";
     private static final String HAS_ERRORS = "hasErrors";
     private static final String SEARCH_RESULTS = "searchResults";
@@ -80,7 +80,7 @@ public class FrontendWebController {
 
     @GetMapping(value = "/")
     public String home(SearchParams searchParams, Model model, @RequestParam(name = HAS_ERRORS, required = false) boolean hasErrors) {
-        model.addAttribute(CATEGORIES, categories);
+        model.addAttribute(CATEGORIES_MACRO, categories);
         model.addAttribute(HAS_ERRORS, hasErrors);
         List<Item> recentItems = itemService.get20NewestItems();
         // get only items on sale
@@ -132,7 +132,7 @@ public class FrontendWebController {
         model.addAttribute("hasErros", hasErrors);
         model.addAttribute(SEARCH_RESULTS, searchResults);
         model.addAttribute(CATEGORY, category);
-        model.addAttribute(CATEGORIES, categories);
+        model.addAttribute(CATEGORIES_MACRO, categories);
 
         return PRODUCT_SEARCH_RESULTS;
     }
@@ -325,7 +325,7 @@ public class FrontendWebController {
         model.addAttribute(HAS_ERRORS, hasErrors);
         model.addAttribute("noImages", noImages);
         model.addAttribute(SUBMITTED, submitted);
-        model.addAttribute(CATEGORIES, categories);
+        model.addAttribute(CATEGORIES_MACRO, categories);
 
         PictureListDto pictureListForm = new PictureListDto();
 
@@ -400,7 +400,6 @@ public class FrontendWebController {
 
     @GetMapping(value = "/product/{id}")
     public String productPost(Model model, @PathVariable(name = "id") Long id, RedirectAttributes ra) {
-        //model.addAttribute("searchparams", new SearchParams());
         Item item = itemService.getItemById(id);
 
         ra.addAttribute("item", item);
@@ -413,7 +412,7 @@ public class FrontendWebController {
                               @RequestParam(name = "item", required = false) ItemDTO item,
                               @RequestParam(name = COMMENT_HAS_ERROR, required = false) boolean commentHasError) {
         model.addAttribute(LOGGEDUSER, this.getLoggedUser());
-        model.addAttribute(CATEGORIES, categories);
+        model.addAttribute(CATEGORIES_MACRO, categories);
         model.addAttribute("searchparams", new SearchParams());
         model.addAttribute("item", item);
         model.addAttribute(COMMENT_HAS_ERROR, commentHasError);
@@ -422,7 +421,7 @@ public class FrontendWebController {
 
     @PostMapping(value = "/product")
     public String productComment(Model model) {
-        model.addAttribute(CATEGORIES, categories);
+        model.addAttribute(CATEGORIES_MACRO, categories);
 
         return PRODUCT_POST;
 
