@@ -5,13 +5,13 @@ import java.util.Set;
 
 import javax.validation.Valid;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.core.CollectionUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -23,12 +23,17 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.tqs.ReCollect.model.Categories;
 import ua.tqs.ReCollect.model.Comment;
 import ua.tqs.ReCollect.model.Item;
+import ua.tqs.ReCollect.model.ItemDTO;
 import ua.tqs.ReCollect.model.User;
 import ua.tqs.ReCollect.service.CommentService;
 import ua.tqs.ReCollect.service.ItemService;
 import ua.tqs.ReCollect.service.UserService;
-import ua.tqs.ReCollect.utils.*;
-import org.apache.log4j.Logger;
+import ua.tqs.ReCollect.utils.Category;
+import ua.tqs.ReCollect.utils.CommentForm;
+import ua.tqs.ReCollect.utils.Image;
+import ua.tqs.ReCollect.utils.ItemForm;
+import ua.tqs.ReCollect.utils.PictureListDto;
+import ua.tqs.ReCollect.utils.SearchParams;
 
 
 @Controller
@@ -405,7 +410,7 @@ public class FrontendWebController {
     @GetMapping(value = "/product")
     public String productPage(CommentForm commentForm,
                               Model model,
-                              @RequestParam(name = "item", required = false) Item item,
+                              @RequestParam(name = "item", required = false) ItemDTO item,
                               @RequestParam(name = COMMENT_HAS_ERROR, required = false) boolean commentHasError) {
         model.addAttribute(LOGGEDUSER, this.getLoggedUser());
         model.addAttribute(CATEGORIES, categories);

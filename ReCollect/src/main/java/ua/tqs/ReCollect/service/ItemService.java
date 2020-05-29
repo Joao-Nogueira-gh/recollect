@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.net.URL;
 
 import org.apache.commons.lang3.EnumUtils;
 import org.apache.log4j.Logger;
@@ -96,6 +97,31 @@ public class ItemService {
             user.remFavItem(item);
         }
     }
+
+    public ItemDTO convertItem(Item item) {
+        ItemDTO dto = new ItemDTO(item.getName(), item.getQuantity(), item.getPrice(), item.getDescription());
+
+        for (URL image : item.getImages()) {
+            dto.addImages(image);
+        }
+        dto.setCreationDate(item.getCreationDate());
+
+        if (item.getOwner() != null) {
+            dto.setOwner(item.getOwner().getName());
+        } else if (item.getSeller() != null) {
+            dto.setOwner(item.getSeller().getName());
+        } else {
+            dto.setOwner("null");
+        }
+        for (Comment comment : item.getComment()) {
+            dto.addComments(comment.getText() + ";" + comment.getUser().getName());
+        }
+
+        dto.setCategory(String.valueOf(item.getCategory()));
+
+        return dto;
+    }
+
 
     /**
      * API Methods
