@@ -24,7 +24,7 @@ import ua.tqs.ReCollect.model.User;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
-public class ItemRepositoryTest {
+class ItemRepositoryTest {
 
     @Autowired
     private ItemRepository itemRepo;
@@ -73,14 +73,14 @@ public class ItemRepositoryTest {
     }
 
     @Test
-    public void test() {
+    void test() {
         itemRepo.deleteAll();
 
         assertEquals(0, itemRepo.findAll().size());
     }
 
     @Test
-    public void queries() {
+    void queries() {
 
 
         List<Item> expected = new ArrayList<>();
@@ -98,7 +98,7 @@ public class ItemRepositoryTest {
     }
 
     @Test
-    public void getOnlyBooks() {
+    void getOnlyBooks() {
 
         List<Item> books = itemRepo.findByCategory(Categories.BOOKS, null);
 
@@ -113,7 +113,7 @@ public class ItemRepositoryTest {
     }
 
     @Test
-    public void getCheapestCoin() {
+    void getCheapestCoin() {
 
         assertEquals(5, itemRepo.findAll().size());
 
@@ -153,7 +153,7 @@ public class ItemRepositoryTest {
 
     // Smelly test, cant figure out how to delay test execution without sleep
     @Test
-    public void get20SortedItems() {
+    void get20SortedItems() {
 
         List<Item> newest = itemRepo.findTop20ByOrderByCreationDateAsc();
         List<Item> oldest = itemRepo.findTop20ByOrderByCreationDateDesc();

@@ -13,6 +13,7 @@ import ua.tqs.ReCollect.functionalTest.MyAdsPage;
 import ua.tqs.ReCollect.functionalTest.SoldItemsPage;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class RemoveItemStepsDefinition {
@@ -114,6 +115,8 @@ public class RemoveItemStepsDefinition {
         int currentSoldCount = myAdsPage.getSoldCount();
 
         assertTrue(currentOnSaleCount!=0);
+
+        assertNotEquals(0, currentOnSaleCount);
 
         myAdsPage.markItemAsSold();
         assertTrue(myAdsPage.onSaleCountDecremented(currentOnSaleCount));

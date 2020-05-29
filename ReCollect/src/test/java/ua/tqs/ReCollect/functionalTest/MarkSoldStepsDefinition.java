@@ -6,6 +6,7 @@ import io.cucumber.java.en.When;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 public class MarkSoldStepsDefinition {
@@ -37,7 +38,7 @@ public class MarkSoldStepsDefinition {
 
     @Given("has at least one item in sales list")
     public void has_at_least_one_item_in_sold_items_list() {
-        assertTrue(currentOnSaleCount!=0);
+        assertNotEquals(0, currentOnSaleCount);
     }
 
     @When("clicks the mark as sold button")

@@ -1,6 +1,8 @@
 package ua.tqs.ReCollect.functionalTest;
 
 import org.junit.jupiter.api.Test;
+
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 public class RemoveItemSeleniumTest extends FunctionalTest {
@@ -11,7 +13,7 @@ public class RemoveItemSeleniumTest extends FunctionalTest {
     }
 
     @Test
-    public void deleteItemFromMyAds(){
+    void deleteItemFromMyAds(){
         //Fazer o login
         driver.get("http://localhost:8080/profile");
         LoginPage loginPage = new LoginPage(driver);
@@ -32,7 +34,7 @@ public class RemoveItemSeleniumTest extends FunctionalTest {
     }
 
     @Test
-    public void deleteItemFromSoldItems(){
+    void deleteItemFromSoldItems(){
         //Fazer o login
         driver.get("http://localhost:8080/profile");
         LoginPage loginPage = new LoginPage(driver);
@@ -49,7 +51,7 @@ public class RemoveItemSeleniumTest extends FunctionalTest {
 
         int soldCount = soldItemsPage.getSoldCount();
 
-        assertTrue(soldCount!=0);
+        assertNotEquals(0, soldCount);
 
         soldItemsPage.deleteItem();
         assertTrue(soldItemsPage.soldCountDecremented(soldCount));

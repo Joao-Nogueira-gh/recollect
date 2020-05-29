@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ItemService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ReCollect</a> &gt; <a href="index.source.html" class="el_package">ua.tqs.ReCollect.service</a> &gt; <span class="el_source">ItemService.java</span></div><h1>ItemService.java</h1><pre class="source lang-java linenums">package ua.tqs.ReCollect.service;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -16,17 +15,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import ua.tqs.ReCollect.model.Categories;
-import ua.tqs.ReCollect.model.Comment;
 import ua.tqs.ReCollect.model.Item;
-import ua.tqs.ReCollect.model.ItemDTO;
 import ua.tqs.ReCollect.model.User;
 import ua.tqs.ReCollect.repository.ItemRepository;
 import ua.tqs.ReCollect.repository.OffsetBasedPageRequest;
 
 @Service
-<span class="fc" id="L27">public class ItemService {</span>
+<span class="fc" id="L24">public class ItemService {</span>
 
-<span class="fc" id="L29">    static final Logger logger = Logger.getLogger(ItemService.class);</span>
+<span class="fc" id="L26">    static final Logger logger = Logger.getLogger(ItemService.class);</span>
 
     private static final int DEFAULT_LIMIT = 25;
 
@@ -37,93 +34,71 @@ import ua.tqs.ReCollect.repository.OffsetBasedPageRequest;
     private UserService userService;
 
     public Item getItemById(Long id) {
-<span class="nc" id="L40">        Optional&lt;Item&gt; result = itemRepo.findById(id);</span>
+<span class="nc" id="L37">        Optional&lt;Item&gt; result = itemRepo.findById(id);</span>
 
-<span class="nc" id="L42">        return result.orElse(null);</span>
+<span class="nc" id="L39">        return result.orElse(null);</span>
     }
 
     public List&lt;Item&gt; getAll() {
-<span class="fc" id="L46">        return itemRepo.findAll();</span>
+<span class="fc" id="L43">        return itemRepo.findAll();</span>
     }
 
     public void save(Item item) {
-<span class="fc" id="L50">        itemRepo.save(item);</span>
-<span class="fc" id="L51">    }</span>
+<span class="fc" id="L47">        itemRepo.save(item);</span>
+<span class="fc" id="L48">    }</span>
 
     public void deleteItem(Long id) {
-<span class="nc" id="L54">        itemRepo.deleteById(id);</span>
-<span class="nc" id="L55">    }</span>
+<span class="nc" id="L51">        itemRepo.deleteById(id);</span>
+<span class="nc" id="L52">    }</span>
 
     public void deleteAll() {
-<span class="fc" id="L58">        itemRepo.deleteAll();</span>
-<span class="fc" id="L59">    }</span>
+<span class="fc" id="L55">        itemRepo.deleteAll();</span>
+<span class="fc" id="L56">    }</span>
 
     // Needed it for tests
     public void setUserService(UserService userService) {
-<span class="fc" id="L63">        this.userService = userService;</span>
-<span class="fc" id="L64">    }</span>
+<span class="fc" id="L60">        this.userService = userService;</span>
+<span class="fc" id="L61">    }</span>
 
-    public ItemDTO convertItem(Item item) {
-<span class="fc" id="L67">        ItemDTO dto = new ItemDTO(item.getName(), item.getQuantity(), item.getPrice(), item.getDescription());</span>
-
-<span class="fc bfc" id="L69" title="All 2 branches covered.">        for (URL image : item.getImages()) {</span>
-<span class="fc" id="L70">            dto.addImages(image);</span>
-<span class="fc" id="L71">        }</span>
-<span class="fc" id="L72">        dto.setCreationDate(item.getCreationDate());</span>
-
-<span class="fc bfc" id="L74" title="All 2 branches covered.">        if (item.getOwner() != null) {</span>
-<span class="fc" id="L75">            dto.setOwner(item.getOwner().getName());</span>
-<span class="fc bfc" id="L76" title="All 2 branches covered.">        } else if (item.getSeller() != null) {</span>
-<span class="fc" id="L77">            dto.setOwner(item.getSeller().getName());</span>
-        } else {
-<span class="fc" id="L79">            dto.setOwner(&quot;null&quot;);</span>
-        }
-<span class="fc bfc" id="L81" title="All 2 branches covered.">        for (Comment comment : item.getComment()) {</span>
-<span class="fc" id="L82">            dto.addComments(comment.getText() + &quot;;&quot; + comment.getUser().getName());</span>
-<span class="fc" id="L83">        }</span>
-
-<span class="fc" id="L85">        dto.setCategory(String.valueOf(item.getCategory()));</span>
-
-<span class="fc" id="L87">        return dto;</span>
-    }
 
     @Transactional
     public void addNewProduct(Item item, User owner) {
-<span class="fc" id="L92">        save(item);</span>
-<span class="fc" id="L93">        item.setOwner(owner);</span>
-<span class="fc" id="L94">        save(item);</span>
-<span class="fc" id="L95">    }</span>
+<span class="fc" id="L66">        save(item);</span>
+<span class="fc" id="L67">        item.setOwner(owner);</span>
+<span class="fc" id="L68">        save(item);</span>
+<span class="fc" id="L69">    }</span>
 
     @Transactional
     public void removeProduct(Item item) {
-<span class="fc" id="L99">        itemRepo.delete(item);</span>
-<span class="fc" id="L100">    }</span>
+<span class="fc" id="L73">        itemRepo.delete(item);</span>
+<span class="fc" id="L74">    }</span>
 
     @Transactional
     public void markAsSold(Item item) {
-<span class="fc" id="L104">        item.setSeller(item.getOwner());</span>
-<span class="fc" id="L105">        item.setOwner(null);</span>
-<span class="fc" id="L106">    }</span>
+<span class="fc" id="L78">        item.setSeller(item.getOwner());</span>
+<span class="fc" id="L79">        item.setOwner(null);</span>
+<span class="fc" id="L80">    }</span>
 
     @Transactional
     public void revertSale(Item item) {
-<span class="fc" id="L110">        item.setOwner(item.getSeller());</span>
-<span class="fc" id="L111">        item.setSeller(null);</span>
-<span class="fc" id="L112">    }</span>
+<span class="fc" id="L84">        item.setOwner(item.getSeller());</span>
+<span class="fc" id="L85">        item.setSeller(null);</span>
+<span class="fc" id="L86">    }</span>
 
     @Transactional
     public void addFavorite(Item item, User user) {
-<span class="pc bpc" id="L116" title="1 of 2 branches missed.">        if (!user.getFavoriteItems().contains(item)) {</span>
-<span class="fc" id="L117">            user.addFavItem(item);</span>
+<span class="pc bpc" id="L90" title="1 of 2 branches missed.">        if (!user.getFavoriteItems().contains(item)) {</span>
+<span class="fc" id="L91">            user.addFavItem(item);</span>
         }
-<span class="fc" id="L119">    }</span>
+<span class="fc" id="L93">    }</span>
 
     @Transactional
     public void removeFavorite(Item item, User user) {
-<span class="pc bpc" id="L123" title="1 of 2 branches missed.">        if (user.getFavoriteItems().contains(item)) {</span>
-<span class="fc" id="L124">            user.remFavItem(item);</span>
+<span class="pc bpc" id="L97" title="1 of 2 branches missed.">        if (user.getFavoriteItems().contains(item)) {</span>
+<span class="fc" id="L98">            user.remFavItem(item);</span>
         }
-<span class="fc" id="L126">    }</span>
+<span class="fc" id="L100">    }</span>
+
 
     /**
      * API Methods
@@ -132,9 +107,9 @@ import ua.tqs.ReCollect.repository.OffsetBasedPageRequest;
 
     public List&lt;Item&gt; getAll(Pageable offset) {
 
-<span class="fc" id="L135">        Page&lt;Item&gt; page = itemRepo.findAll(offset);</span>
+<span class="fc" id="L110">        Page&lt;Item&gt; page = itemRepo.findAll(offset);</span>
 
-<span class="fc" id="L137">        return page.toList();</span>
+<span class="fc" id="L112">        return page.toList();</span>
 
     }
 
@@ -144,7 +119,7 @@ import ua.tqs.ReCollect.repository.OffsetBasedPageRequest;
      */
     private List&lt;Item&gt; fetchItemsByCategory(String cat, Pageable offset) {
 
-<span class="fc" id="L147">        return itemRepo.findByCategory(Categories.valueOf(cat), offset);</span>
+<span class="fc" id="L122">        return itemRepo.findByCategory(Categories.valueOf(cat), offset);</span>
 
     }
 
@@ -154,7 +129,7 @@ import ua.tqs.ReCollect.repository.OffsetBasedPageRequest;
      */
     private List&lt;Item&gt; fetchItemsBySeller(String email, Pageable offset) {
 
-<span class="fc" id="L157">        return itemRepo.findByOwner(userService.getByEmail(email), offset);</span>
+<span class="fc" id="L132">        return itemRepo.findByOwner(userService.getByEmail(email), offset);</span>
 
     }
 
@@ -163,28 +138,28 @@ import ua.tqs.ReCollect.repository.OffsetBasedPageRequest;
     // timestamps to be generated. Mocks won't suffice.
     public List&lt;Item&gt; get20NewestItems() {
 
-<span class="nc" id="L166">        return this.itemRepo.findTop20ByOrderByCreationDateAsc();</span>
+<span class="nc" id="L141">        return this.itemRepo.findTop20ByOrderByCreationDateAsc();</span>
 
     }
 
     public List&lt;Item&gt; get20OldestItems() {
 
-<span class="nc" id="L172">        return this.itemRepo.findTop20ByOrderByCreationDateDesc();</span>
+<span class="nc" id="L147">        return this.itemRepo.findTop20ByOrderByCreationDateDesc();</span>
 
     }
 
     public List&lt;Item&gt; getItemsByCategoryAndSearchTerm(String searchTerm, Categories category) {
-<span class="nc" id="L177">        return itemRepo.findByNameContainingAndCategory(searchTerm, category);</span>
+<span class="nc" id="L152">        return itemRepo.findByNameContainingAndCategory(searchTerm, category);</span>
     }
 
     public List&lt;Item&gt; getItemsByCategory(Categories category) {
-<span class="nc" id="L181">        return itemRepo.findByCategory(category);</span>
+<span class="nc" id="L156">        return itemRepo.findByCategory(category);</span>
     }
 
     // Return all Items from a given seller's e-mail and Category
     private List&lt;Item&gt; fetchItemsByCategoryAndSeller(String cat, String email, Pageable offset) {
 
-<span class="fc" id="L187">        return itemRepo.findByCategoryAndOwner(Categories.valueOf(cat), userService.getByEmail(email), offset);</span>
+<span class="fc" id="L162">        return itemRepo.findByCategoryAndOwner(Categories.valueOf(cat), userService.getByEmail(email), offset);</span>
 
     }
 
@@ -194,81 +169,81 @@ import ua.tqs.ReCollect.repository.OffsetBasedPageRequest;
         List&lt;Item&gt; ret;
         Pageable p;
 
-<span class="fc bfc" id="L197" title="All 2 branches covered.">        if (offset == null) {</span>
-<span class="fc" id="L198">            offset = 0;</span>
+<span class="fc bfc" id="L172" title="All 2 branches covered.">        if (offset == null) {</span>
+<span class="fc" id="L173">            offset = 0;</span>
         }
 
-<span class="pc bpc" id="L201" title="1 of 4 branches missed.">        if (limit == null || limit &gt; DEFAULT_LIMIT) {</span>
+<span class="pc bpc" id="L176" title="1 of 4 branches missed.">        if (limit == null || limit &gt; DEFAULT_LIMIT) {</span>
 
-<span class="fc" id="L203">            limit = DEFAULT_LIMIT;</span>
+<span class="fc" id="L178">            limit = DEFAULT_LIMIT;</span>
 
         }
 
-<span class="fc bfc" id="L207" title="All 2 branches covered.">        if (orderBy == null) {</span>
+<span class="fc bfc" id="L182" title="All 2 branches covered.">        if (orderBy == null) {</span>
 
-<span class="fc" id="L209">            p = new OffsetBasedPageRequest(offset, limit);</span>
+<span class="fc" id="L184">            p = new OffsetBasedPageRequest(offset, limit);</span>
 
         } else {
 
-<span class="fc" id="L213">            p = new OffsetBasedPageRequest(offset, limit, Direction.ASC, orderBy);</span>
+<span class="fc" id="L188">            p = new OffsetBasedPageRequest(offset, limit, Direction.ASC, orderBy);</span>
 
         }
 
         // Basic Validation
-<span class="pc bpc" id="L218" title="1 of 2 branches missed.">        if (basicValidation(cat, seller, orderBy)) {</span>
+<span class="pc bpc" id="L193" title="1 of 2 branches missed.">        if (basicValidation(cat, seller, orderBy)) {</span>
 
-<span class="nc" id="L220">            return new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L195">            return new ArrayList&lt;&gt;();</span>
         }
 
-<span class="fc bfc" id="L223" title="All 4 branches covered.">        if (cat == null &amp;&amp; seller == null) {</span>
+<span class="fc bfc" id="L198" title="All 4 branches covered.">        if (cat == null &amp;&amp; seller == null) {</span>
 
-<span class="fc" id="L225">            ret = this.getAll(p);</span>
+<span class="fc" id="L200">            ret = this.getAll(p);</span>
 
-<span class="fc bfc" id="L227" title="All 2 branches covered.">        } else if (cat == null) {</span>
+<span class="fc bfc" id="L202" title="All 2 branches covered.">        } else if (cat == null) {</span>
 
             // Query based on seller
-<span class="fc" id="L230">            ret = this.fetchItemsBySeller(seller, p);</span>
+<span class="fc" id="L205">            ret = this.fetchItemsBySeller(seller, p);</span>
 
-<span class="fc bfc" id="L232" title="All 2 branches covered.">        } else if (seller == null) {</span>
+<span class="fc bfc" id="L207" title="All 2 branches covered.">        } else if (seller == null) {</span>
 
             // Query based on cat
-<span class="fc" id="L235">            ret = this.fetchItemsByCategory(cat, p);</span>
+<span class="fc" id="L210">            ret = this.fetchItemsByCategory(cat, p);</span>
 
         } else {
 
             // Query based on both
-<span class="fc" id="L240">            ret = this.fetchItemsByCategoryAndSeller(cat, seller, p);</span>
+<span class="fc" id="L215">            ret = this.fetchItemsByCategoryAndSeller(cat, seller, p);</span>
 
         }
 
-<span class="fc" id="L244">        return filterResults(ret, sold);</span>
+<span class="fc" id="L219">        return filterResults(ret, sold);</span>
 
     }
 
     private boolean orderByIsValid(String orderBy) {
-<span class="pc bpc" id="L249" title="3 of 4 branches missed.">        return orderBy.equals(&quot;price&quot;) || orderBy.equals(&quot;creationDate&quot;);</span>
+<span class="pc bpc" id="L224" title="3 of 4 branches missed.">        return orderBy.equals(&quot;price&quot;) || orderBy.equals(&quot;creationDate&quot;);</span>
     }
 
     private boolean basicValidation(String cat, String seller, String orderBy) {
 
-<span class="pc bpc" id="L254" title="1 of 6 branches missed.">        return ((seller != null &amp;&amp; !userService.userExists(seller))</span>
-<span class="pc bpc" id="L255" title="1 of 4 branches missed.">                || (cat != null &amp;&amp; !EnumUtils.isValidEnum(Categories.class, cat))</span>
-<span class="pc bpc" id="L256" title="1 of 2 branches missed.">                || (orderBy != null &amp;&amp; !orderByIsValid(orderBy)));</span>
+<span class="pc bpc" id="L229" title="1 of 6 branches missed.">        return ((seller != null &amp;&amp; !userService.userExists(seller))</span>
+<span class="pc bpc" id="L230" title="1 of 4 branches missed.">                || (cat != null &amp;&amp; !EnumUtils.isValidEnum(Categories.class, cat))</span>
+<span class="pc bpc" id="L231" title="1 of 2 branches missed.">                || (orderBy != null &amp;&amp; !orderByIsValid(orderBy)));</span>
     }
 
     private List&lt;Item&gt; filterResults(List&lt;Item&gt; all, Boolean sold) {
 
-<span class="fc bfc" id="L261" title="All 2 branches covered.">        if (sold == null) {</span>
-<span class="fc" id="L262">            return all;</span>
+<span class="fc bfc" id="L236" title="All 2 branches covered.">        if (sold == null) {</span>
+<span class="fc" id="L237">            return all;</span>
         }
 
-<span class="fc bfc" id="L265" title="All 2 branches covered.">        if (sold) {</span>
+<span class="fc bfc" id="L240" title="All 2 branches covered.">        if (sold) {</span>
 
-<span class="pc bpc" id="L267" title="1 of 2 branches missed.">            return all.stream().filter(i -&gt; i.getSeller() != null).collect(Collectors.toList());</span>
+<span class="pc bpc" id="L242" title="1 of 2 branches missed.">            return all.stream().filter(i -&gt; i.getSeller() != null).collect(Collectors.toList());</span>
 
         } else {
 
-<span class="pc bpc" id="L271" title="1 of 2 branches missed.">            return all.stream().filter(i -&gt; i.getSeller() == null).collect(Collectors.toList());</span>
+<span class="pc bpc" id="L246" title="1 of 2 branches missed.">            return all.stream().filter(i -&gt; i.getSeller() == null).collect(Collectors.toList());</span>
 
         }
 
@@ -276,15 +251,15 @@ import ua.tqs.ReCollect.repository.OffsetBasedPageRequest;
 
     public Item getSingleItem(Long id) {
 
-<span class="nc" id="L279">        Optional&lt;Item&gt; optItem = this.itemRepo.findById(id);</span>
+<span class="nc" id="L254">        Optional&lt;Item&gt; optItem = this.itemRepo.findById(id);</span>
 
-<span class="nc bnc" id="L281" title="All 2 branches missed.">        if (optItem.isPresent()) {</span>
+<span class="nc bnc" id="L256" title="All 2 branches missed.">        if (optItem.isPresent()) {</span>
 
-<span class="nc" id="L283">            return optItem.get();</span>
+<span class="nc" id="L258">            return optItem.get();</span>
 
         }
 
-<span class="nc" id="L287">        return null;</span>
+<span class="nc" id="L262">        return null;</span>
 
     }
 

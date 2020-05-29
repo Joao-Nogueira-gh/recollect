@@ -2,9 +2,10 @@ package ua.tqs.ReCollect.functionalTest;
 
 import org.junit.jupiter.api.Test;
 
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
-public class MarkSoldItemSeleniumTest extends FunctionalTest{
+class MarkSoldItemSeleniumTest extends FunctionalTest{
 
     public MarkSoldItemSeleniumTest(){
         super();
@@ -12,7 +13,7 @@ public class MarkSoldItemSeleniumTest extends FunctionalTest{
     }
 
     @Test
-    public void markItemAsSold(){
+    void markItemAsSold(){
         //Fazer o login
         driver.get("http://localhost:8080/profile");
         LoginPage loginPage = new LoginPage(driver);
@@ -26,7 +27,7 @@ public class MarkSoldItemSeleniumTest extends FunctionalTest{
         int currentOnSaleCount = myAdsPage.getOnSaleCount();
         int currentSoldCount = myAdsPage.getSoldCount();
 
-        assertTrue(currentOnSaleCount!=0);
+        assertNotEquals(0, currentOnSaleCount);
 
         myAdsPage.markItemAsSold();
 

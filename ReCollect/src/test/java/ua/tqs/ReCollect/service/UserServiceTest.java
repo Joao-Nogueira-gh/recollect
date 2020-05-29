@@ -16,10 +16,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import ua.tqs.ReCollect.model.Item;
 import ua.tqs.ReCollect.model.Location;
 import ua.tqs.ReCollect.model.User;
-import ua.tqs.ReCollect.model.UserDTO;
 import ua.tqs.ReCollect.repository.UserRepository;
 
 
@@ -87,21 +85,6 @@ class UserServiceTest {
 
     }
 
-    @Test
-    void convertToDto(){
 
-        User user = new User("user", "mail@email.com", "pwd", "321321321", new Location("Aveiro", "Aveiro"));
-
-        user.addFavItem(new Item());
-        user.addPublishedItem(new Item());
-        user.addSoldItem(new Item());
-
-        UserDTO userDTO = userService.convertToDTO(user);
-
-        User convertedBack = userService.convertToUser(userDTO);
-
-        assertEquals(user.getName(), convertedBack.getName());
-
-    }
 
 }

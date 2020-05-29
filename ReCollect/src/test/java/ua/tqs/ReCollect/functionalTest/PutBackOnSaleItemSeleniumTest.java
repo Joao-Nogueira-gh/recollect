@@ -2,9 +2,10 @@ package ua.tqs.ReCollect.functionalTest;
 
 import org.junit.jupiter.api.Test;
 
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
-public class PutBackOnSaleItemSeleniumTest extends FunctionalTest {
+class PutBackOnSaleItemSeleniumTest extends FunctionalTest {
 
 
     public PutBackOnSaleItemSeleniumTest(){
@@ -13,7 +14,7 @@ public class PutBackOnSaleItemSeleniumTest extends FunctionalTest {
     }
 
     @Test
-    public void putItemBackOnSale(){
+    void putItemBackOnSale(){
         //Fazer o login
         driver.get("http://localhost:8080/profile");
         LoginPage loginPage = new LoginPage(driver);
@@ -34,7 +35,7 @@ public class PutBackOnSaleItemSeleniumTest extends FunctionalTest {
         System.err.println("sale count -> " + currentOnSaleCount);
         System.err.println("sold count -> " + currentSoldCount);
 
-        assertTrue(currentSoldCount!=0);
+        assertNotEquals(0, currentSoldCount);
 
         soldItemsPage.putBackOnSale();
 
