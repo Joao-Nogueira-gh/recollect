@@ -41,7 +41,7 @@ import ua.tqs.ReCollect.service.UserService;
  */
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class ApiIntegrationTest {
+class ApiIntegrationTest {
 
     @Autowired
     private TestRestTemplate restClient;
@@ -66,7 +66,7 @@ public class ApiIntegrationTest {
     private Item i6 = new Item("Mensagem", 1, new BigDecimal(100.0), "Do F. Pessoa", Categories.BOOKS);
 
     @BeforeEach
-    public void setUpTest() throws Exception {
+    void setUpTest() throws Exception {
 
         itemRepository.deleteAll();
         userRepository.deleteAll();
@@ -100,7 +100,7 @@ public class ApiIntegrationTest {
     }
 
     @AfterEach
-    public void resetDb() {
+    void resetDb() {
 
         itemRepository.deleteAll();
         userRepository.deleteAll();
@@ -108,7 +108,7 @@ public class ApiIntegrationTest {
     }
 
     @Test
-    public void checkIfSetUpSuccessful() {
+    void checkIfSetUpSuccessful() {
 
         assertEquals(2, userRepository.findAll().size());
         assertEquals(6, itemRepository.findAll().size());
@@ -116,7 +116,7 @@ public class ApiIntegrationTest {
     }
 
     @Test
-    public void getAllItems() {
+    void getAllItems() {
 
         ResponseEntity<List<Item>> entity = restClient.exchange("/api/items", HttpMethod.GET, null,
                 new ParameterizedTypeReference<List<Item>>() {
@@ -127,7 +127,7 @@ public class ApiIntegrationTest {
     }
 
     @Test
-    public void getJust3Items() {
+    void getJust3Items() {
 
         ResponseEntity<List<Item>> entity = restClient.exchange("/api/items?limit=3", HttpMethod.GET, null,
                 new ParameterizedTypeReference<List<Item>>() {
@@ -138,7 +138,7 @@ public class ApiIntegrationTest {
     }
 
     @Test
-    public void getLast3Items() {
+    void getLast3Items() {
 
         ResponseEntity<List<Item>> entity = restClient.exchange("/api/items?offset=3", HttpMethod.GET, null,
                 new ParameterizedTypeReference<List<Item>>() {
@@ -150,7 +150,7 @@ public class ApiIntegrationTest {
     }
 
     @Test
-    public void getAllBooks() {
+    void getAllBooks() {
 
         ResponseEntity<List<Item>> entity = restClient.exchange("/api/items?category=BOOKS", HttpMethod.GET, null,
                 new ParameterizedTypeReference<List<Item>>() {
@@ -169,7 +169,7 @@ public class ApiIntegrationTest {
     }
 
     @Test
-    public void getAllUser1() {
+    void getAllUser1() {
 
         ResponseEntity<List<Item>> entity = restClient.exchange("/api/items?owner='user1@email.com'", HttpMethod.GET,
                 null, new ParameterizedTypeReference<List<Item>>() {
@@ -188,7 +188,7 @@ public class ApiIntegrationTest {
     }
 
     @Test
-    public void getSortedBooks() {
+    void getSortedBooks() {
 
         ResponseEntity<List<Item>> entity = restClient.exchange("/api/items?category=BOOKS&orderBy=price",
                 HttpMethod.GET, null, new ParameterizedTypeReference<List<Item>>() {
@@ -209,7 +209,7 @@ public class ApiIntegrationTest {
     }
 
     @Test
-    public void getSortedUser2() {
+    void getSortedUser2() {
 
         ResponseEntity<List<Item>> entity = restClient.exchange("/api/items?owner='user2@email.com'&orderBy=price",
                 HttpMethod.GET, null, new ParameterizedTypeReference<List<Item>>() {
@@ -230,7 +230,7 @@ public class ApiIntegrationTest {
     }
 
     @Test
-    public void getAllUser1Books() {
+    void getAllUser1Books() {
 
         ResponseEntity<List<Item>> entity = restClient.exchange("/api/items?category=BOOKS&owner='user1@email.com'",
                 HttpMethod.GET, null, new ParameterizedTypeReference<List<Item>>() {
@@ -250,7 +250,7 @@ public class ApiIntegrationTest {
     }
 
     @Test
-    public void getSortedUser1Books() {
+    void getSortedUser1Books() {
 
         ResponseEntity<List<Item>> entity = restClient.exchange(
                 "/api/items?category=BOOKS&owner='user1@email.com'&orderBy=price", HttpMethod.GET, null,
@@ -273,7 +273,7 @@ public class ApiIntegrationTest {
     }
 
     @Test
-    public void noPwdsSent() {
+    void noPwdsSent() {
 
         ResponseEntity<List<User>> entity = restClient.exchange("/api/users/", HttpMethod.GET, null,
                 new ParameterizedTypeReference<List<User>>() {
@@ -288,7 +288,7 @@ public class ApiIntegrationTest {
     }
 
     @Test
-    public void getUsersByLocation() {
+    void getUsersByLocation() {
 
         ResponseEntity<List<User>> entity = restClient.exchange("/api/users/?district=Viseu&county=Viseu",
                 HttpMethod.GET, null, new ParameterizedTypeReference<List<User>>() {
@@ -305,7 +305,7 @@ public class ApiIntegrationTest {
     }
 
     @Test
-    public void getSecondUsers() {
+    void getSecondUsers() {
         ResponseEntity<List<User>> entity = restClient.exchange("/api/users/?offset=1", HttpMethod.GET, null,
                 new ParameterizedTypeReference<List<User>>() {
                 });
@@ -320,7 +320,7 @@ public class ApiIntegrationTest {
     }
 
     @Test
-    public void getSoldItems() {
+    void getSoldItems() {
         ResponseEntity<Set<Item>> entity = restClient.exchange("/api/sold", HttpMethod.GET, null,
                 new ParameterizedTypeReference<Set<Item>>() {
                 });
@@ -329,7 +329,7 @@ public class ApiIntegrationTest {
     }
 
     @Test
-    public void getItemsOnSale() {
+    void getItemsOnSale() {
         ResponseEntity<Set<Item>> entity = restClient.exchange("/api/on_sale", HttpMethod.GET, null,
                 new ParameterizedTypeReference<Set<Item>>() {
                 });

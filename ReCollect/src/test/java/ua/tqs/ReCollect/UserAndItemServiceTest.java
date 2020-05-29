@@ -26,7 +26,7 @@ import ua.tqs.ReCollect.service.ItemService;
 import ua.tqs.ReCollect.service.UserService;
 
 @ExtendWith(MockitoExtension.class)
-public class UserAndItemServiceTest {
+class UserAndItemServiceTest {
 
     @Mock
     private ItemRepository itemRepo;
@@ -45,7 +45,7 @@ public class UserAndItemServiceTest {
     private User user =new User("user2", "email@email.com", "xsff", "789456123");
 
     @Test
-    public void whenUserAddsFavoriteItem_ItemIsAddedToTheList() {
+    void whenUserAddsFavoriteItem_ItemIsAddedToTheList() {
 
         // setup
 
@@ -63,7 +63,7 @@ public class UserAndItemServiceTest {
     }
 
     @Test
-    public void whenUserRemovesFavoriteItem_ItemIsRemovedFromTheList() {
+    void whenUserRemovesFavoriteItem_ItemIsRemovedFromTheList() {
 
         // setup
 
@@ -86,7 +86,7 @@ public class UserAndItemServiceTest {
     }
 
     @Test
-    public void whenGetItemsByOwner_onlyOwnerItemsAreReturned() {
+    void whenGetItemsByOwner_onlyOwnerItemsAreReturned() {
 
         itemService.setUserService(userService);
 
@@ -112,7 +112,7 @@ public class UserAndItemServiceTest {
 
         for (Item item : usersItems) {
 
-            assertTrue(user.getName().equals(item.getOwner().getName()));
+            assertEquals(user.getName(), item.getOwner().getName());
 
         }
 

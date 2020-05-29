@@ -77,7 +77,7 @@ import ua.tqs.ReCollect.repository.UserRepository;
 
     public List&lt;User&gt; getAll(OffsetBasedPageRequest offset) {
 
-<span class="fc" id="L80">        return this.userRepo.findAll(offset).toList();</span>
+<span class="nc" id="L80">        return this.userRepo.findAll(offset).toList();</span>
 
     }
 
@@ -95,22 +95,22 @@ import ua.tqs.ReCollect.repository.UserRepository;
 
         }
 
-<span class="pc bpc" id="L98" title="1 of 6 branches missed.">        if (distrito != null ^ concelho != null) {</span>
+<span class="pc bpc" id="L98" title="1 of 6 branches missed.">        if (!(distrito == null ^ concelho == null)) {</span>
 
-<span class="nc" id="L100">            return new ArrayList&lt;User&gt;();</span>
+<span class="fc" id="L100">            return new ArrayList&lt;&gt;();</span>
 
-<span class="pc bpc" id="L102" title="1 of 4 branches missed.">        } else if (distrito == null &amp;&amp; concelho == null) {</span>
+<span class="nc bnc" id="L102" title="All 4 branches missed.">        } else if (distrito == null &amp;&amp; concelho == null) {</span>
 
-<span class="fc" id="L104">            ret = this.getAll(new OffsetBasedPageRequest(offset, limit));</span>
+<span class="nc" id="L104">            ret = this.getAll(new OffsetBasedPageRequest(offset, limit));</span>
 
         } else {
 
-<span class="fc" id="L108">            ret = userRepo.findByLocation(locationService.getLocation(distrito, concelho), new OffsetBasedPageRequest(offset, limit));</span>
+<span class="nc" id="L108">            ret = userRepo.findByLocation(locationService.getLocation(distrito, concelho), new OffsetBasedPageRequest(offset, limit));</span>
 
         }
 
 
-<span class="fc" id="L113">        return ret.stream().limit(limit).collect(Collectors.toList());</span>
+<span class="nc" id="L113">        return ret.stream().limit(limit).collect(Collectors.toList());</span>
 
     }
 

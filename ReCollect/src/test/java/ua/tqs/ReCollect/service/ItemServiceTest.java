@@ -183,7 +183,7 @@ public class ItemServiceTest {
     }
 
     @Test
-    public void whenBooksAreFetched_BooksAreReturned() {
+    void whenBooksAreFetched_BooksAreReturned() {
 
         Item item1 = new Item("Moeda", 3, new BigDecimal(3.0), "Moeda fixe", Categories.BOOKS);
 

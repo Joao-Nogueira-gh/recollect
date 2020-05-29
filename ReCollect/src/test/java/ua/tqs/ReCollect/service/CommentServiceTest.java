@@ -1,10 +1,6 @@
 package ua.tqs.ReCollect.service;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
-import org.junit.Test;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,14 +8,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import ua.tqs.ReCollect.model.Categories;
-import ua.tqs.ReCollect.model.Comment;
-import ua.tqs.ReCollect.model.Item;
-import ua.tqs.ReCollect.model.User;
 import ua.tqs.ReCollect.repository.CommentRepository;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
 public class CommentServiceTest {

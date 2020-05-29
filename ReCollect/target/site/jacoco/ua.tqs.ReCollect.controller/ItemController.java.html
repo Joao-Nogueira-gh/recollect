@@ -84,14 +84,14 @@ import ua.tqs.ReCollect.service.UserService;
 <span class="nc" id="L84">        logger.debug(itemService.getAll());</span>
         //logger.debug(itemService.getAll().get(0).getFavedBy());
 <span class="nc" id="L86">        logger.debug(currUser.getFavoriteItems()+&quot;\n&quot;);</span>
-<span class="nc" id="L87">        return &quot;emptyTest&quot;;</span>
+<span class="nc" id="L87">        return EMPTY_TEST_PAGE;</span>
     }
     @GetMapping(path=&quot;/testic4/&quot;)
 	public String test4(Model model) {
 <span class="nc" id="L91">        itemService.deleteAll();</span>
 <span class="nc" id="L92">        User currUser = userService.getCurrentUser();</span>
 
-<span class="nc" id="L94">        Item i1= new Item(&quot;Moeda&quot;, 3, new BigDecimal(3.0), &quot;Moeda fixe&quot;, Categories.MISC);</span>
+<span class="nc" id="L94">        Item i1= new Item(&quot;Moeda&quot;, 3, BigDecimal.valueOf(3.0), &quot;Moeda fixe&quot;, Categories.MISC);</span>
 
 <span class="nc" id="L96">        itemService.addNewProduct(i1, currUser);</span>
         //add to favorite list

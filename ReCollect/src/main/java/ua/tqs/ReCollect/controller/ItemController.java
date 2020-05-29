@@ -84,14 +84,14 @@ public class ItemController {
         logger.debug(itemService.getAll());
         //logger.debug(itemService.getAll().get(0).getFavedBy());
         logger.debug(currUser.getFavoriteItems()+"\n");
-        return "emptyTest";
+        return EMPTY_TEST_PAGE;
     }
     @GetMapping(path="/testic4/")
 	public String test4(Model model) {
         itemService.deleteAll();
         User currUser = userService.getCurrentUser();
 
-        Item i1= new Item("Moeda", 3, new BigDecimal(3.0), "Moeda fixe", Categories.MISC);
+        Item i1= new Item("Moeda", 3, BigDecimal.valueOf(3.0), "Moeda fixe", Categories.MISC);
 
         itemService.addNewProduct(i1, currUser);
         //add to favorite list

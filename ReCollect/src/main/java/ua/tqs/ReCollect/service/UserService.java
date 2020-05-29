@@ -95,9 +95,9 @@ public class UserService {
 
         }
 
-        if (distrito != null ^ concelho != null) {
+        if (!(distrito == null ^ concelho == null)) {
 
-            return new ArrayList<User>();
+            return new ArrayList<>();
 
         } else if (distrito == null && concelho == null) {
 

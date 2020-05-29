@@ -88,7 +88,7 @@ public class ItemService {
         save(item);
         item.setOwner(owner);
         save(item);
-	}
+    }
 
     @Transactional
     public void removeProduct(Item item) {
@@ -99,8 +99,7 @@ public class ItemService {
     public void markAsSold(Item item) {
         item.setSeller(item.getOwner());
         item.setOwner(null);
-	}
-
+    }
 
     @Transactional
     public void revertSale(Item item) {
@@ -154,7 +153,9 @@ public class ItemService {
         return itemRepo.findByOwner(userService.getByEmail(email), offset);
 
     }
-    // Cant be tested in the Service Unit test since they need BD integration for the 
+
+    // Cant be tested in the Service Unit test since they need BD integration for
+    // the
     // timestamps to be generated. Mocks won't suffice.
     public List<Item> get20NewestItems() {
 
@@ -165,14 +166,14 @@ public class ItemService {
     public List<Item> get20OldestItems() {
 
         return this.itemRepo.findTop20ByOrderByCreationDateDesc();
-        
-	}
 
-	public List<Item> getItemsByCategoryAndSearchTerm(String searchTerm, Categories category){
+    }
+
+    public List<Item> getItemsByCategoryAndSearchTerm(String searchTerm, Categories category) {
         return itemRepo.findByNameContainingAndCategory(searchTerm, category);
     }
 
-    public List<Item> getItemsByCategory(Categories category){
+    public List<Item> getItemsByCategory(Categories category) {
         return itemRepo.findByCategory(category);
     }
 
@@ -188,7 +189,7 @@ public class ItemService {
         List<Item> ret;
         Pageable p;
 
-        if(offset == null) {
+        if (offset == null) {
             offset = 0;
         }
 
@@ -198,7 +199,7 @@ public class ItemService {
 
         }
 
-        if(orderBy == null) {
+        if (orderBy == null) {
 
             p = new OffsetBasedPageRequest(offset, limit);
 
@@ -209,13 +210,10 @@ public class ItemService {
         }
 
         // Basic Validation
-        if ((seller != null && !userService.userExists(seller))
-                || (cat != null && !EnumUtils.isValidEnum(Categories.class, cat))
-                || (orderBy != null && !orderByIsValid(orderBy))) {
+        if (basicValidation(cat, seller, orderBy)) {
 
-            return new ArrayList<Item>();
+            return new ArrayList<>();
         }
-
 
         if (cat == null && seller == null) {
 
@@ -223,20 +221,20 @@ public class ItemService {
 
         } else if (cat == null) {
 
-                // Query based on seller
-                ret = this.fetchItemsBySeller(seller, p);
+            // Query based on seller
+            ret = this.fetchItemsBySeller(seller, p);
 
-            } else if (seller == null) {
+        } else if (seller == null) {
 
-                // Query based on cat
-                ret = this.fetchItemsByCategory(cat, p);
+            // Query based on cat
+            ret = this.fetchItemsByCategory(cat, p);
 
-            } else {
+        } else {
 
-                // Query based on both
-                ret = this.fetchItemsByCategoryAndSeller(cat, seller, p);
+            // Query based on both
+            ret = this.fetchItemsByCategoryAndSeller(cat, seller, p);
 
-            }
+        }
 
         return ret.stream().limit(limit).collect(Collectors.toList());
 
@@ -246,18 +244,25 @@ public class ItemService {
         return orderBy.equals("price") || orderBy.equals("creationDate");
     }
 
-	public Item getSingleItem(Long id) {
-        
+    private boolean basicValidation(String cat, String seller, String orderBy){
+
+        return ((seller != null && !userService.userExists(seller))
+        || (cat != null && !EnumUtils.isValidEnum(Categories.class, cat))
+        || (orderBy != null && !orderByIsValid(orderBy)));
+    }
+
+    public Item getSingleItem(Long id) {
+
         Optional<Item> optItem = this.itemRepo.findById(id);
 
-        if(optItem.isPresent()) {
+        if (optItem.isPresent()) {
 
             return optItem.get();
-            
+
         }
 
         return null;
-        
+
     }
 
 }

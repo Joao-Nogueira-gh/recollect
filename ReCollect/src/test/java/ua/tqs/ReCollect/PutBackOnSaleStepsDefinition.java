@@ -14,7 +14,7 @@ public class PutBackOnSaleStepsDefinition  {
 
     private final WebDriver driver = new ChromeDriver();
     private MyAdsPage myAdsPage;
-    private LoginPage loginPage;
+
     private SoldItemsPage soldItemsPage;
 
     private int currentOnSaleCount;

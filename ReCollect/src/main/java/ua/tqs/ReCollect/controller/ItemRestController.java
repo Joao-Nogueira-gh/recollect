@@ -40,8 +40,6 @@ public class ItemRestController {
 			processedOwner = owner;
 		}
 
-		System.out.println(limit);
-
 		return itemService.fetchItemsApi(category, processedOwner, orderBy, limit, offset);
 	}
 

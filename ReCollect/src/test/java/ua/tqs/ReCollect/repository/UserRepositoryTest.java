@@ -24,14 +24,14 @@ class UserRepositoryTest {
     private TestEntityManager entityManager;
 
     @Test
-    public void test() {
+    void test() {
         userRepo.deleteAll();
 
         assertEquals(0, userRepo.findAll().size());
     }
 
     @Test
-    public void getUserByEmail() {
+    void getUserByEmail() {
         User savedUser = entityManager.persistAndFlush(new User("User123", "user@email.com", "password", "123123123"));
 
         User user = userRepo.findByEmail("user@email.com");
