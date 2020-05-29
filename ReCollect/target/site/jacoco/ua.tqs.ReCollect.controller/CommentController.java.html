@@ -36,7 +36,7 @@ import ua.tqs.ReCollect.service.UserService;
 <span class="nc" id="L36">        itemService.deleteAll();</span>
 <span class="nc" id="L37">        commentService.deleteAll();</span>
 <span class="nc" id="L38">        User currUser = userService.getCurrentUser();</span>
-<span class="nc" id="L39">        Item i1= new Item(&quot;Moeda&quot;, 3, new BigDecimal(3.0), &quot;Moeda fixe&quot;, Categories.MISC);</span>
+<span class="nc" id="L39">        Item i1= new Item(&quot;Moeda&quot;, 3, BigDecimal.valueOf(3.0), &quot;Moeda fixe&quot;, Categories.MISC);</span>
 <span class="nc" id="L40">        itemService.addNewProduct(i1, currUser);</span>
 <span class="nc" id="L41">        logger.debug(itemService.getAll());</span>
 

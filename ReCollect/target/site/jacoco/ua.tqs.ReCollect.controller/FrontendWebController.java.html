@@ -56,7 +56,7 @@ import ua.tqs.ReCollect.utils.SearchParams;
     private static final String REDIRECT_SEARCH_RESULTS = &quot;redirect:/category&quot;;
     private static final String REDIRECT_HOME= &quot;redirect:/&quot;;
     private static final String ERROR_PAGE = &quot;error&quot;;
-    private static final String CATEGORIES = &quot;categories&quot;;
+    private static final String CATEGORIES_MACRO = &quot;categories&quot;;
     private static final String CATEGORY = &quot;category&quot;;
     private static final String HAS_ERRORS = &quot;hasErrors&quot;;
     private static final String SEARCH_RESULTS = &quot;searchResults&quot;;
@@ -80,7 +80,7 @@ import ua.tqs.ReCollect.utils.SearchParams;
 
     @GetMapping(value = &quot;/&quot;)
     public String home(SearchParams searchParams, Model model, @RequestParam(name = HAS_ERRORS, required = false) boolean hasErrors) {
-<span class="nc" id="L83">        model.addAttribute(CATEGORIES, categories);</span>
+<span class="nc" id="L83">        model.addAttribute(CATEGORIES_MACRO, categories);</span>
 <span class="nc" id="L84">        model.addAttribute(HAS_ERRORS, hasErrors);</span>
 <span class="nc" id="L85">        List&lt;Item&gt; recentItems = itemService.get20NewestItems();</span>
         // get only items on sale
@@ -132,7 +132,7 @@ import ua.tqs.ReCollect.utils.SearchParams;
 <span class="nc" id="L132">        model.addAttribute(&quot;hasErros&quot;, hasErrors);</span>
 <span class="nc" id="L133">        model.addAttribute(SEARCH_RESULTS, searchResults);</span>
 <span class="nc" id="L134">        model.addAttribute(CATEGORY, category);</span>
-<span class="nc" id="L135">        model.addAttribute(CATEGORIES, categories);</span>
+<span class="nc" id="L135">        model.addAttribute(CATEGORIES_MACRO, categories);</span>
 
 <span class="nc" id="L137">        return PRODUCT_SEARCH_RESULTS;</span>
     }
@@ -325,7 +325,7 @@ import ua.tqs.ReCollect.utils.SearchParams;
 <span class="nc" id="L325">        model.addAttribute(HAS_ERRORS, hasErrors);</span>
 <span class="nc" id="L326">        model.addAttribute(&quot;noImages&quot;, noImages);</span>
 <span class="nc" id="L327">        model.addAttribute(SUBMITTED, submitted);</span>
-<span class="nc" id="L328">        model.addAttribute(CATEGORIES, categories);</span>
+<span class="nc" id="L328">        model.addAttribute(CATEGORIES_MACRO, categories);</span>
 
 <span class="nc" id="L330">        PictureListDto pictureListForm = new PictureListDto();</span>
 
@@ -400,11 +400,10 @@ import ua.tqs.ReCollect.utils.SearchParams;
 
     @GetMapping(value = &quot;/product/{id}&quot;)
     public String productPost(Model model, @PathVariable(name = &quot;id&quot;) Long id, RedirectAttributes ra) {
-        //model.addAttribute(&quot;searchparams&quot;, new SearchParams());
-<span class="nc" id="L404">        Item item = itemService.getItemById(id);</span>
+<span class="nc" id="L403">        Item item = itemService.getItemById(id);</span>
 
-<span class="nc" id="L406">        ra.addAttribute(&quot;item&quot;, item);</span>
-<span class="nc" id="L407">        return REDIRECT_PRODUCT;</span>
+<span class="nc" id="L405">        ra.addAttribute(&quot;item&quot;, item);</span>
+<span class="nc" id="L406">        return REDIRECT_PRODUCT;</span>
     }
 
     @GetMapping(value = &quot;/product&quot;)
@@ -412,73 +411,73 @@ import ua.tqs.ReCollect.utils.SearchParams;
                               Model model,
                               @RequestParam(name = &quot;item&quot;, required = false) ItemDTO item,
                               @RequestParam(name = COMMENT_HAS_ERROR, required = false) boolean commentHasError) {
-<span class="nc" id="L415">        model.addAttribute(LOGGEDUSER, this.getLoggedUser());</span>
-<span class="nc" id="L416">        model.addAttribute(CATEGORIES, categories);</span>
-<span class="nc" id="L417">        model.addAttribute(&quot;searchparams&quot;, new SearchParams());</span>
-<span class="nc" id="L418">        model.addAttribute(&quot;item&quot;, item);</span>
-<span class="nc" id="L419">        model.addAttribute(COMMENT_HAS_ERROR, commentHasError);</span>
-<span class="nc" id="L420">        return PRODUCT_POST;</span>
+<span class="nc" id="L414">        model.addAttribute(LOGGEDUSER, this.getLoggedUser());</span>
+<span class="nc" id="L415">        model.addAttribute(CATEGORIES_MACRO, categories);</span>
+<span class="nc" id="L416">        model.addAttribute(&quot;searchparams&quot;, new SearchParams());</span>
+<span class="nc" id="L417">        model.addAttribute(&quot;item&quot;, item);</span>
+<span class="nc" id="L418">        model.addAttribute(COMMENT_HAS_ERROR, commentHasError);</span>
+<span class="nc" id="L419">        return PRODUCT_POST;</span>
     }
 
     @PostMapping(value = &quot;/product&quot;)
     public String productComment(Model model) {
-<span class="nc" id="L425">        model.addAttribute(CATEGORIES, categories);</span>
+<span class="nc" id="L424">        model.addAttribute(CATEGORIES_MACRO, categories);</span>
 
-<span class="nc" id="L427">        return PRODUCT_POST;</span>
+<span class="nc" id="L426">        return PRODUCT_POST;</span>
 
     }
 
     @GetMapping(value = &quot;/product/comment/delete/{id}&quot;)
     public String deleteComment(RedirectAttributes ra, @PathVariable(name = &quot;id&quot;) Long id) {
 
-<span class="nc" id="L434">        Comment deleted = commentService.getCommentById(id);</span>
-<span class="nc" id="L435">        Long itemId = deleted.getItem().getId();</span>
-<span class="nc" id="L436">        commentService.deleteComment(deleted);</span>
+<span class="nc" id="L433">        Comment deleted = commentService.getCommentById(id);</span>
+<span class="nc" id="L434">        Long itemId = deleted.getItem().getId();</span>
+<span class="nc" id="L435">        commentService.deleteComment(deleted);</span>
 
-<span class="nc" id="L438">        Item commentedItem = itemService.getItemById(itemId);</span>
+<span class="nc" id="L437">        Item commentedItem = itemService.getItemById(itemId);</span>
 
-<span class="nc" id="L440">        ra.addAttribute(&quot;item&quot;, commentedItem);</span>
+<span class="nc" id="L439">        ra.addAttribute(&quot;item&quot;, commentedItem);</span>
 
-<span class="nc" id="L442">        return REDIRECT_PRODUCT;</span>
+<span class="nc" id="L441">        return REDIRECT_PRODUCT;</span>
     }
 
     @PostMapping(value = &quot;/product/comment/{id}&quot;)
     public String addComment(@Valid CommentForm commentForm, BindingResult bindingResult, @PathVariable(name = &quot;id&quot;) Long id, RedirectAttributes ra) {
 
-<span class="nc" id="L448">        Item commentedItem = itemService.getItemById(id);</span>
+<span class="nc" id="L447">        Item commentedItem = itemService.getItemById(id);</span>
 
-<span class="nc bnc" id="L450" title="All 2 branches missed.">        if(bindingResult.hasErrors()){</span>
+<span class="nc bnc" id="L449" title="All 2 branches missed.">        if(bindingResult.hasErrors()){</span>
             // if the provided data is invalid
-<span class="nc" id="L452">            logger.debug(&quot;COMENTARIO INVALIDOS!&quot;);</span>
-<span class="nc" id="L453">            ra.addAttribute(&quot;item&quot;, commentedItem);</span>
-<span class="nc" id="L454">            ra.addAttribute(COMMENT_HAS_ERROR, true);</span>
-<span class="nc" id="L455">            return REDIRECT_PRODUCT;</span>
+<span class="nc" id="L451">            logger.debug(&quot;COMENTARIO INVALIDOS!&quot;);</span>
+<span class="nc" id="L452">            ra.addAttribute(&quot;item&quot;, commentedItem);</span>
+<span class="nc" id="L453">            ra.addAttribute(COMMENT_HAS_ERROR, true);</span>
+<span class="nc" id="L454">            return REDIRECT_PRODUCT;</span>
         }
 
         // just in case
-<span class="nc bnc" id="L459" title="All 2 branches missed.">        if(commentForm.getConteudo().trim().equals(&quot;&quot;)){</span>
+<span class="nc bnc" id="L458" title="All 2 branches missed.">        if(commentForm.getConteudo().trim().equals(&quot;&quot;)){</span>
             // if the provided data is invalid
-<span class="nc" id="L461">            logger.debug(&quot;COMENTARIO VAZIO!&quot;);</span>
-<span class="nc" id="L462">            ra.addAttribute(&quot;item&quot;, commentedItem);</span>
-<span class="nc" id="L463">            ra.addAttribute(COMMENT_HAS_ERROR, true);</span>
-<span class="nc" id="L464">            return REDIRECT_PRODUCT;</span>
+<span class="nc" id="L460">            logger.debug(&quot;COMENTARIO VAZIO!&quot;);</span>
+<span class="nc" id="L461">            ra.addAttribute(&quot;item&quot;, commentedItem);</span>
+<span class="nc" id="L462">            ra.addAttribute(COMMENT_HAS_ERROR, true);</span>
+<span class="nc" id="L463">            return REDIRECT_PRODUCT;</span>
         }
 
 
-<span class="nc" id="L468">        Comment comment = new Comment(commentForm.getConteudo(), this.getLoggedUser(), commentedItem);</span>
-<span class="nc" id="L469">        commentService.addNewComment(comment);</span>
+<span class="nc" id="L467">        Comment comment = new Comment(commentForm.getConteudo(), this.getLoggedUser(), commentedItem);</span>
+<span class="nc" id="L468">        commentService.addNewComment(comment);</span>
         // get the most recent snapshop for that item, after the comment was made
-<span class="nc" id="L471">        commentedItem = itemService.getItemById(id);</span>
-<span class="nc" id="L472">        ra.addAttribute(&quot;item&quot;, commentedItem);</span>
+<span class="nc" id="L470">        commentedItem = itemService.getItemById(id);</span>
+<span class="nc" id="L471">        ra.addAttribute(&quot;item&quot;, commentedItem);</span>
 
-<span class="nc" id="L474">        return REDIRECT_PRODUCT;</span>
+<span class="nc" id="L473">        return REDIRECT_PRODUCT;</span>
 
     }
 
 
     private User getLoggedUser() {
-<span class="nc" id="L480">        Authentication auth = SecurityContextHolder.getContext().getAuthentication();</span>
-<span class="nc" id="L481">        return userService.getByEmail(auth.getName());</span>
+<span class="nc" id="L479">        Authentication auth = SecurityContextHolder.getContext().getAuthentication();</span>
+<span class="nc" id="L480">        return userService.getByEmail(auth.getName());</span>
     }
 
 }
