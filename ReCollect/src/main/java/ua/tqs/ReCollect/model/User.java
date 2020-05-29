@@ -3,8 +3,23 @@ package ua.tqs.ReCollect.model;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.PreRemove;
+import javax.persistence.Table;
 import javax.validation.constraints.Email;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 @Entity
 @Table(name = "user")
@@ -24,12 +39,13 @@ public class User {
     private String email;
 
     @Column(name = "password")
+    @JsonIgnore
     private String password;
 
     @Column(name = "phone")
     private String phone;
 
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name="locationid", referencedColumnName = "id")
     private Location location;
 
@@ -43,22 +59,22 @@ public class User {
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(
     name = "fav_items", 
-    joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), 
-    inverseJoinColumns = @JoinColumn(name = "item_id", referencedColumnName = "id"))
-    private Set<Item> favoriteItems;
+    joinColumns = @JoinColumn(name = "favuserid", referencedColumnName = "id"), 
+    inverseJoinColumns = @JoinColumn(name = "favitemid", referencedColumnName = "id"))
+    private Set<Item> favoriteItems=new HashSet<>();
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Item> publishedItems;
+    private Set<Item> publishedItems=new HashSet<>();
 
     @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Item> soldItems;
+    private Set<Item> soldItems=new HashSet<>();
 
     @OneToMany(mappedBy="user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Comment> comments;
+    private Set<Comment> comments=new HashSet<>();
 
     @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles;
+    private Set<Role> roles=new HashSet<>();
 
     @Column(name = "active")
     private Boolean active;

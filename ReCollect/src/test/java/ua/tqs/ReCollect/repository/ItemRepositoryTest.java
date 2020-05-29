@@ -3,6 +3,7 @@ package ua.tqs.ReCollect.repository;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -14,6 +15,8 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 import ua.tqs.ReCollect.model.Categories;
 import ua.tqs.ReCollect.model.Item;
@@ -31,7 +34,6 @@ public class ItemRepositoryTest {
 
     @Autowired
     private TestEntityManager entityManager;
-
 
     User user = new User("Tiago", "email@ua", "password", "123123123");
 
@@ -76,6 +78,78 @@ public class ItemRepositoryTest {
 
         assertEquals(0, itemRepo.findAll().size());
     }
+
+    @Test
+    public void queries() {
+
+
+        List<Item> expected = new ArrayList<>();
+        List<Item> actual = itemRepo.findAll();
+
+        System.out.println(actual.size());
+
+        expected.add(i1);
+        expected.add(i2);
+        expected.add(i3);
+        expected.add(i4);
+        expected.add(i5);
+
+        assertEquals(expected.size(), actual.size());
+    }
+
+    @Test
+    public void getOnlyBooks() {
+
+        List<Item> books = itemRepo.findByCategory(Categories.BOOKS, null);
+
+        assertEquals(5, itemRepo.findAll().size());
+
+        for (Item item : books) {
+            
+            assertEquals(Categories.BOOKS, item.getCategory(), "Error: not a book");
+
+        }
+
+    }
+
+    @Test
+    public void getCheapestCoin() {
+
+        assertEquals(5, itemRepo.findAll().size());
+
+        assertEquals(i1.getName(), itemRepo.findByCategory(Categories.MISC, PageRequest.of(0, 25, Sort.by("price"))).get(0).getName());
+
+    }
+
+    // Can't get this test to work :/
+    // @Test
+    // public void whenGetItemsByOwner_onlyOwnerItemsAreReturned() {
+
+    //     Item i6 = new Item("Carica", 2, new BigDecimal(1.0), "Carica fixe", Categories.MISC);
+    //     Item i7 = new Item("BD do Big Wheel", 3, new BigDecimal(3.0), "Moeda fixe", Categories.BOOKS);
+
+    //     i6.setOwner(user);
+    //     i7.setOwner(user);
+
+    //     List<Item> userItems = new ArrayList<>();
+    //     userItems.add(i6);
+    //     userItems.add(i7);
+
+    //     entityManager.persistAndFlush(user);
+    //     entityManager.persistAndFlush(i6);
+    //     entityManager.persistAndFlush(i7);
+
+    //     List<Item> usersItems = itemRepo.findByOwner(user.getId());
+        
+    //     assertEquals(2, usersItems.size());
+
+    //     for (Item item : usersItems) {
+
+    //         assertTrue(user.getName().equals(item.getOwner().getName()));
+
+    //     }
+
+    // }
 
     // Smelly test, cant figure out how to delay test execution without sleep
     @Test

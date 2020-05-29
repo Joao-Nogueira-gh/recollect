@@ -1,5 +1,8 @@
 package ua.tqs.ReCollect.repository;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +11,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
-import ua.tqs.ReCollect.model.Location;
 import ua.tqs.ReCollect.model.User;
 
 @DataJpaTest
@@ -22,12 +24,15 @@ class UserRepositoryTest {
     private TestEntityManager entityManager;
 
     @Test
-    void getUserByEmail() {
-        Location l = new Location("Viseu", "SCD");
-        entityManager.persistAndFlush(l);
+    void test() {
+        userRepo.deleteAll();
 
-        User savedUser = entityManager.persistAndFlush(
-                new User("User123", "user@email.com", "password", "123123123", l));
+        assertEquals(0, userRepo.findAll().size());
+    }
+
+    @Test
+    void getUserByEmail() {
+        User savedUser = entityManager.persistAndFlush(new User("User123", "user@email.com", "password", "123123123"));
 
         User user = userRepo.findByEmail("user@email.com");
 

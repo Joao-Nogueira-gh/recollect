@@ -1,8 +1,8 @@
 package ua.tqs.ReCollect.service;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.BDDMockito.given;
 
 import java.math.BigDecimal;
@@ -25,6 +25,7 @@ import ua.tqs.ReCollect.model.Item;
 import ua.tqs.ReCollect.model.ItemDTO;
 import ua.tqs.ReCollect.model.User;
 import ua.tqs.ReCollect.repository.ItemRepository;
+import ua.tqs.ReCollect.repository.OffsetBasedPageRequest;
 
 @ExtendWith(MockitoExtension.class)
 public class ItemServiceTest {
@@ -180,5 +181,22 @@ public class ItemServiceTest {
         assertEquals(item.getOwner().getName(), "user");
 
     }
+
+    @Test
+    void whenBooksAreFetched_BooksAreReturned() {
+
+        Item item1 = new Item("Moeda", 3, new BigDecimal(3.0), "Moeda fixe", Categories.BOOKS);
+
+        List<Item> itemList=new ArrayList<>();
+
+        itemList.add(item1);
+
+        given(itemRepo.findByCategory(Categories.BOOKS, new OffsetBasedPageRequest(0, 25))).willReturn(itemList);
+
+        assertEquals(itemList, itemService.fetchItemsApi("BOOKS", null, null, null, null), "Error: no books found");
+
+    }
+
+
 
 }

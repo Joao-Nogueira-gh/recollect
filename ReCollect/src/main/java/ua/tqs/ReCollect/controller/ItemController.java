@@ -77,8 +77,25 @@ public class ItemController {
     }
     @GetMapping(path="/testic3/")
 	public String test3(Model model) {
+        //just for debugging, ignore
         //check actual state of stuff
         User currUser = userService.getCurrentUser();
+        
+        logger.debug(itemService.getAll());
+        //logger.debug(itemService.getAll().get(0).getFavedBy());
+        logger.debug(currUser.getFavoriteItems()+"\n");
+        return EMPTY_TEST_PAGE;
+    }
+    @GetMapping(path="/testic4/")
+	public String test4(Model model) {
+        itemService.deleteAll();
+        User currUser = userService.getCurrentUser();
+
+        Item i1= new Item("Moeda", 3, BigDecimal.valueOf(3.0), "Moeda fixe", Categories.MISC);
+
+        itemService.addNewProduct(i1, currUser);
+        //add to favorite list
+        itemService.addFavorite(itemService.getAll().get(0),currUser);
 
         logger.debug(itemService.getAll());
         logger.debug(currUser.getPublishedItems());

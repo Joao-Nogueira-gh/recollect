@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import ua.tqs.ReCollect.model.Comment;
-import ua.tqs.ReCollect.model.Item;
+
 import ua.tqs.ReCollect.repository.CommentRepository;
 
 @Service

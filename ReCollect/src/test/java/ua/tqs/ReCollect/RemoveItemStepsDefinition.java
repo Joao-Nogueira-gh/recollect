@@ -1,6 +1,6 @@
 package ua.tqs.ReCollect;
-import cucumber.api.java.en.And;
-import io.cucumber.java.After;
+
+
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -20,8 +20,7 @@ public class RemoveItemStepsDefinition {
     private final WebDriver driver = new ChromeDriver();
     private MyAdsPage myAdsPage;
     private LoginPage loginPage;
-    private AnnouncePage addItemResultPage;
-    private MyAdsPage resultPage;
+
     private int currentOnSaleCount;
     private SoldItemsPage soldItemsPage;
     private int soldCount;
