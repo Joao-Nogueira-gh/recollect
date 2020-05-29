@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import ua.tqs.ReCollect.model.Item;
 import ua.tqs.ReCollect.model.User;
 import ua.tqs.ReCollect.model.UserDTO;
+import ua.tqs.ReCollect.repository.OffsetBasedPageRequest;
 import ua.tqs.ReCollect.repository.UserRepository;
 
 @Service
@@ -72,22 +73,18 @@ public class UserService {
 
     }
 
-    public List<User> getUsersByLocation(String distrito, String concelho, Integer limit) {
+    public List<User> getAll(OffsetBasedPageRequest offset) {
+
+        return this.userRepo.findAll(offset).toList();
+
+    }
+
+    public List<User> getUsersByLocation(String distrito, String concelho, Integer limit, Integer offset) {
 
         List<User> ret;
 
-        if (distrito != null ^ concelho != null) {
-
-            return new ArrayList<User>();
-
-        } else if (distrito == null && concelho == null) {
-
-            ret = this.getAll();
-
-        } else {
-
-            ret = userRepo.findByLocation(locationService.getLocation(distrito, concelho));
-
+        if (offset == null) {
+            offset = 0;
         }
 
         if (limit == null || limit > DEFAULT_LIMIT) {
@@ -95,6 +92,21 @@ public class UserService {
             limit = DEFAULT_LIMIT;
 
         }
+
+        if (distrito != null ^ concelho != null) {
+
+            return new ArrayList<User>();
+
+        } else if (distrito == null && concelho == null) {
+
+            ret = this.getAll(new OffsetBasedPageRequest(offset, limit));
+
+        } else {
+
+            ret = userRepo.findByLocation(locationService.getLocation(distrito, concelho), new OffsetBasedPageRequest(offset, limit));
+
+        }
+
 
         return ret.stream().limit(limit).collect(Collectors.toList());
 

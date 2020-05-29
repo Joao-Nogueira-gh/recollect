@@ -18,7 +18,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.PageRequest;
 
 import ua.tqs.ReCollect.model.Categories;
 import ua.tqs.ReCollect.model.Comment;
@@ -26,6 +25,7 @@ import ua.tqs.ReCollect.model.Item;
 import ua.tqs.ReCollect.model.ItemDTO;
 import ua.tqs.ReCollect.model.User;
 import ua.tqs.ReCollect.repository.ItemRepository;
+import ua.tqs.ReCollect.repository.OffsetBasedPageRequest;
 
 @ExtendWith(MockitoExtension.class)
 public class ItemServiceTest {
@@ -191,7 +191,7 @@ public class ItemServiceTest {
 
         itemList.add(item1);
 
-        given(itemRepo.findByCategory(Categories.BOOKS, PageRequest.of(0, 25))).willReturn(itemList);
+        given(itemRepo.findByCategory(Categories.BOOKS, new OffsetBasedPageRequest(0, 25))).willReturn(itemList);
 
         assertEquals(itemList, itemService.fetchItemsApi("BOOKS", null, null, null, null), "Error: no books found");
 

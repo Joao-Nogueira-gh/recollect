@@ -10,9 +10,8 @@ import org.apache.commons.lang3.EnumUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +21,7 @@ import ua.tqs.ReCollect.model.Item;
 import ua.tqs.ReCollect.model.ItemDTO;
 import ua.tqs.ReCollect.model.User;
 import ua.tqs.ReCollect.repository.ItemRepository;
+import ua.tqs.ReCollect.repository.OffsetBasedPageRequest;
 
 @Service
 public class ItemService {
@@ -182,11 +182,11 @@ public class ItemService {
 
         if(orderBy == null) {
 
-            p = PageRequest.of(offset, offset + limit);
+            p = new OffsetBasedPageRequest(offset, limit);
 
         } else {
 
-            p = PageRequest.of(offset, offset + limit, Sort.by(orderBy));
+            p = new OffsetBasedPageRequest(offset, limit, Direction.ASC, orderBy);
 
         }
 

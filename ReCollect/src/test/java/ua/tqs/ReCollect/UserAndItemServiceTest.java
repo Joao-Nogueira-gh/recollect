@@ -1,8 +1,8 @@
 package ua.tqs.ReCollect;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.BDDMockito.given;
 
 import java.math.BigDecimal;
@@ -15,12 +15,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 
 import ua.tqs.ReCollect.model.Categories;
 import ua.tqs.ReCollect.model.Item;
 import ua.tqs.ReCollect.model.User;
 import ua.tqs.ReCollect.repository.ItemRepository;
+import ua.tqs.ReCollect.repository.OffsetBasedPageRequest;
 import ua.tqs.ReCollect.repository.UserRepository;
 import ua.tqs.ReCollect.service.ItemService;
 import ua.tqs.ReCollect.service.UserService;
@@ -104,7 +104,7 @@ public class UserAndItemServiceTest {
 
         given(userRepo.existsByEmail(email)).willReturn(true);
         given(userRepo.findByEmail(email)).willReturn(user);
-        given(itemRepo.findByOwner(user, PageRequest.of(0, 25))).willReturn(userItems);
+        given(itemRepo.findByOwner(user, new OffsetBasedPageRequest(0, 25))).willReturn(userItems);
 
         List<Item> usersItems = itemService.fetchItemsApi(null, email, null, null, null);
         

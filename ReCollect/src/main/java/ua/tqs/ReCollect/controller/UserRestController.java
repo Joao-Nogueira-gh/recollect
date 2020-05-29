@@ -29,9 +29,10 @@ public class UserRestController {
 	@GetMapping(path = "/api/users/")
 	@ResponseBody
 	public List<User> userIndex(@RequestParam(required = false) String district,
-			@RequestParam(required = false) String county, @RequestParam(required = false) Integer limit) {
+			@RequestParam(required = false) String county, @RequestParam(required = false) Integer limit,
+			@RequestParam(required = false) Integer offset) {
 
-		return userService.getUsersByLocation(district, county, limit);
+		return userService.getUsersByLocation(district, county, limit, offset);
 
 	}
 

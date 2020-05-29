@@ -28,17 +28,11 @@ import ua.tqs.ReCollect.service.UserService;
  * 
  * API Integration test
  * 
- * 0. Clear database 
- * 1. Add 2 new users to the database 
- * 2. Add a few items associated with these users 
- * 3. Make API calls: 
- *      * GET all items 
- *      * GET all items from a class 
- *      * GET all items from an owner 
- *      * GET sorted items from a class 
- *      * GET sorted items from an owner 
- *      * GET all items from a class and owner
- *      * GET sorted items from a class and owner 
+ * 0. Clear database 1. Add 2 new users to the database 2. Add a few items
+ * associated with these users 3. Make API calls: * GET all items * GET all
+ * items from a class * GET all items from an owner * GET sorted items from a
+ * class * GET sorted items from an owner * GET all items from a class and owner
+ * * GET sorted items from a class and owner
  * 
  * 4. Reset DB
  * 
@@ -143,6 +137,18 @@ public class ApiIntegrationTest {
     }
 
     @Test
+    public void getLast3Items() {
+
+        ResponseEntity<List<Item>> entity = restClient.exchange("/api/items?offset=3", HttpMethod.GET, null,
+                new ParameterizedTypeReference<List<Item>>() {
+                });
+
+        assertEquals(3, entity.getBody().size());
+        assertEquals(i4.getName(), entity.getBody().get(0).getName());
+
+    }
+
+    @Test
     public void getAllBooks() {
 
         ResponseEntity<List<Item>> entity = restClient.exchange("/api/items?category=BOOKS", HttpMethod.GET, null,
@@ -225,9 +231,8 @@ public class ApiIntegrationTest {
     @Test
     public void getAllUser1Books() {
 
-        ResponseEntity<List<Item>> entity = restClient.exchange(
-                "/api/items?category=BOOKS&owner='user1@email.com'", HttpMethod.GET, null,
-                new ParameterizedTypeReference<List<Item>>() {
+        ResponseEntity<List<Item>> entity = restClient.exchange("/api/items?category=BOOKS&owner='user1@email.com'",
+                HttpMethod.GET, null, new ParameterizedTypeReference<List<Item>>() {
                 });
 
         List<Item> body = entity.getBody();
@@ -269,10 +274,9 @@ public class ApiIntegrationTest {
     @Test
     public void noPwdsSent() {
 
-        ResponseEntity<List<User>> entity = restClient.exchange(
-            "/api/users/", HttpMethod.GET, null,
-            new ParameterizedTypeReference<List<User>>() {
-            });
+        ResponseEntity<List<User>> entity = restClient.exchange("/api/users/", HttpMethod.GET, null,
+                new ParameterizedTypeReference<List<User>>() {
+                });
 
         List<User> body = entity.getBody();
 
@@ -285,19 +289,33 @@ public class ApiIntegrationTest {
     @Test
     public void getUsersByLocation() {
 
-        ResponseEntity<List<User>> entity = restClient.exchange(
-            "/api/users/?district=Viseu&county=Viseu", HttpMethod.GET, null,
-            new ParameterizedTypeReference<List<User>>() {
-            });
+        ResponseEntity<List<User>> entity = restClient.exchange("/api/users/?district=Viseu&county=Viseu",
+                HttpMethod.GET, null, new ParameterizedTypeReference<List<User>>() {
+                });
 
         List<User> users = entity.getBody();
 
         for (User user : users) {
-            
+
             assertEquals("USER 2", user.getName());
 
         }
 
+    }
+
+    @Test
+    public void getSecondUsers() {
+        ResponseEntity<List<User>> entity = restClient.exchange("/api/users/?offset=1", HttpMethod.GET, null,
+                new ParameterizedTypeReference<List<User>>() {
+                });
+
+        List<User> users = entity.getBody();
+
+        for (User user : users) {
+
+            assertEquals("USER 2", user.getName());
+
+        }
     }
 
 }
