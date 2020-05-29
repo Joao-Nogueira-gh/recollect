@@ -61,6 +61,7 @@ connectVM:
     - cd
   script:
     - echo "SELECT 'OK';" | mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" "${MYSQL_DATABASE}"
+    - docker-compose down
 
 build:
   image: maven
