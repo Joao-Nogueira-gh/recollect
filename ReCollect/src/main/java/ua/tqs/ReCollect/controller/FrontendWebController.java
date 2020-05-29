@@ -23,7 +23,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.tqs.ReCollect.model.Categories;
 import ua.tqs.ReCollect.model.Comment;
 import ua.tqs.ReCollect.model.Item;
-import ua.tqs.ReCollect.model.ItemDTO;
 import ua.tqs.ReCollect.model.User;
 import ua.tqs.ReCollect.service.CommentService;
 import ua.tqs.ReCollect.service.ItemService;
@@ -402,18 +401,19 @@ public class FrontendWebController {
     public String productPost(Model model, @PathVariable(name = "id") Long id, RedirectAttributes ra) {
         Item item = itemService.getItemById(id);
 
-        ra.addAttribute("item", item);
+        ra.addAttribute("item", item.getId());
         return REDIRECT_PRODUCT;
     }
 
     @GetMapping(value = "/product")
     public String productPage(CommentForm commentForm,
                               Model model,
-                              @RequestParam(name = "item", required = false) ItemDTO item,
+                              @RequestParam(name = "item", required = false) Long id,
                               @RequestParam(name = COMMENT_HAS_ERROR, required = false) boolean commentHasError) {
         model.addAttribute(LOGGEDUSER, this.getLoggedUser());
         model.addAttribute(CATEGORIES_MACRO, categories);
         model.addAttribute("searchparams", new SearchParams());
+        Item item = itemService.getItemById(id);
         model.addAttribute("item", item);
         model.addAttribute(COMMENT_HAS_ERROR, commentHasError);
         return PRODUCT_POST;
