@@ -15,6 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 
 import ua.tqs.ReCollect.model.Categories;
 import ua.tqs.ReCollect.model.Item;
@@ -103,9 +104,9 @@ public class UserAndItemServiceTest {
 
         given(userRepo.existsByEmail(email)).willReturn(true);
         given(userRepo.findByEmail(email)).willReturn(user);
-        given(itemRepo.findByOwner(user)).willReturn(userItems);
+        given(itemRepo.findByOwner(user, PageRequest.of(0, 25))).willReturn(userItems);
 
-        List<Item> usersItems = itemService.fetchItemsApi(null, email, null, null);
+        List<Item> usersItems = itemService.fetchItemsApi(null, email, null, null, null);
         
         assertEquals(2, usersItems.size());
 

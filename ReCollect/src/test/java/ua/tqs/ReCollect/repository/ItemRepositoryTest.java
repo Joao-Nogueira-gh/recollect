@@ -14,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
 import ua.tqs.ReCollect.model.Categories;
@@ -83,7 +84,7 @@ public class ItemRepositoryTest {
     @Test
     public void getOnlyBooks() {
 
-        List<Item> books = itemRepo.findByCategory(Categories.BOOKS);
+        List<Item> books = itemRepo.findByCategory(Categories.BOOKS, null);
 
         assertEquals(5, itemRepo.findAll().size());
 
@@ -100,7 +101,7 @@ public class ItemRepositoryTest {
 
         assertEquals(5, itemRepo.findAll().size());
 
-        assertEquals(i1.getName(), itemRepo.findByCategory(Categories.MISC, Sort.by(Sort.Direction.ASC, "price")).get(0).getName());
+        assertEquals(i1.getName(), itemRepo.findByCategory(Categories.MISC, PageRequest.of(0, 25, Sort.by("price"))).get(0).getName());
 
     }
 

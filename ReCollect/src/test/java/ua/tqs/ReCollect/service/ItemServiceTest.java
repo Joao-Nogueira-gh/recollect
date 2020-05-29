@@ -1,8 +1,8 @@
 package ua.tqs.ReCollect.service;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.BDDMockito.given;
 
 import java.math.BigDecimal;
@@ -18,6 +18,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageRequest;
 
 import ua.tqs.ReCollect.model.Categories;
 import ua.tqs.ReCollect.model.Comment;
@@ -190,9 +191,9 @@ public class ItemServiceTest {
 
         itemList.add(item1);
 
-        given(itemRepo.findByCategory(Categories.BOOKS)).willReturn(itemList);
+        given(itemRepo.findByCategory(Categories.BOOKS, PageRequest.of(0, 25))).willReturn(itemList);
 
-        assertEquals(itemList, itemService.fetchItemsApi("BOOKS", null, null, null), "Error: no books found");
+        assertEquals(itemList, itemService.fetchItemsApi("BOOKS", null, null, null, null), "Error: no books found");
 
     }
 

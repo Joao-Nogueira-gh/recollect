@@ -9,6 +9,9 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.EnumUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -122,10 +125,16 @@ public class ItemService {
         }
     }
 
-    // Return all Items sorted by either Price or Date
-    private List<Item> getAll(String orderBy) {
+    /**
+     * API Methods
+     * 
+     */
 
-        return itemRepo.findAll(Sort.by(Sort.Direction.ASC, orderBy));
+    public List<Item> getAll(Pageable offset) {
+
+        Page<Item> page = itemRepo.findAll(offset);
+
+        return page.toList();
 
     }
 
@@ -133,16 +142,9 @@ public class ItemService {
      * Return all Items from a Category
      * 
      */
-    private List<Item> fetchItemsByCategory(String cat) {
+    private List<Item> fetchItemsByCategory(String cat, Pageable offset) {
 
-        return itemRepo.findByCategory(Categories.valueOf(cat));
-
-    }
-
-    // Sort option
-    private List<Item> fetchItemsByCategory(String cat, String orderBy) {
-
-        return itemRepo.findByCategory(Categories.valueOf(cat), Sort.by(Sort.Direction.ASC, orderBy));
+        return itemRepo.findByCategory(Categories.valueOf(cat), offset);
 
     }
 
@@ -150,38 +152,43 @@ public class ItemService {
      * Return all Items from a given seller's e-mail
      * 
      */
-    private List<Item> fetchItemsBySeller(String email) {
+    private List<Item> fetchItemsBySeller(String email, Pageable offset) {
 
-        return itemRepo.findByOwner(userService.getByEmail(email));
-
-    }
-
-    // Sort option
-    private List<Item> fetchItemsBySeller(String email, String orderBy) {
-
-        return itemRepo.findByOwner(userService.getByEmail(email), Sort.by(Sort.Direction.ASC, orderBy));
+        return itemRepo.findByOwner(userService.getByEmail(email), offset);
 
     }
 
     // Return all Items from a given seller's e-mail and Category
-    private List<Item> fetchItemsByCategoryAndSeller(String cat, String email) {
+    private List<Item> fetchItemsByCategoryAndSeller(String cat, String email, Pageable offset) {
 
-        return itemRepo.findByCategoryAndOwner(Categories.valueOf(cat), userService.getByEmail(email));
-
-    }
-
-    // Return all Items from a given seller's e-mail and Category sorted by either
-    // price or date
-    private List<Item> fetchItemsByCategoryAndSeller(String cat, String email, String orderBy) {
-
-        return itemRepo.findByCategoryAndOwner(Categories.valueOf(cat), userService.getByEmail(email),
-                Sort.by(Sort.Direction.ASC, orderBy));
+        return itemRepo.findByCategoryAndOwner(Categories.valueOf(cat), userService.getByEmail(email), offset);
 
     }
 
-    public List<Item> fetchItemsApi(String cat, String seller, String orderBy, Integer limit) {
+    public List<Item> fetchItemsApi(String cat, String seller, String orderBy, Integer limit, Integer offset) {
 
         List<Item> ret;
+        Pageable p;
+
+        if(offset == null) {
+            offset = 0;
+        }
+
+        if (limit == null || limit > DEFAULT_LIMIT) {
+
+            limit = DEFAULT_LIMIT;
+
+        }
+
+        if(orderBy == null) {
+
+            p = PageRequest.of(offset, offset + limit);
+
+        } else {
+
+            p = PageRequest.of(offset, offset + limit, Sort.by(orderBy));
+
+        }
 
         // Basic Validation
         if ((seller != null && !userService.userExists(seller))
@@ -192,59 +199,26 @@ public class ItemService {
         }
 
 
-        if (cat == null && seller == null && orderBy == null) {
+        if (cat == null && seller == null) {
 
-            ret = this.getAll();
+            ret = this.getAll(p);
 
-        } else if (cat == null && seller == null && orderBy != null) {
-
-            ret = this.getAll(orderBy);
-
-        } else if (orderBy == null) {
-
-            if (cat == null) {
+        } else if (cat == null) {
 
                 // Query based on seller
-                ret = this.fetchItemsBySeller(seller);
+                ret = this.fetchItemsBySeller(seller, p);
 
             } else if (seller == null) {
 
                 // Query based on cat
-                ret = this.fetchItemsByCategory(cat);
+                ret = this.fetchItemsByCategory(cat, p);
 
             } else {
 
                 // Query based on both
-                ret = this.fetchItemsByCategoryAndSeller(cat, seller);
+                ret = this.fetchItemsByCategoryAndSeller(cat, seller, p);
 
             }
-
-        } else {
-
-            if (cat == null) {
-
-                // Query based on seller
-                ret = this.fetchItemsBySeller(seller, orderBy);
-
-            } else if (seller == null) {
-
-                // Query based on cat
-                ret = this.fetchItemsByCategory(cat, orderBy);
-
-            } else {
-
-                // Query based on both
-                ret = this.fetchItemsByCategoryAndSeller(cat, seller, orderBy);
-
-            }
-
-        }
-
-        if (limit == null || limit > DEFAULT_LIMIT) {
-
-            limit = DEFAULT_LIMIT;
-
-        }
 
         return ret.stream().limit(limit).collect(Collectors.toList());
 

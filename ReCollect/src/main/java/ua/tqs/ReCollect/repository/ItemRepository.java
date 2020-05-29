@@ -3,7 +3,7 @@ package ua.tqs.ReCollect.repository;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -22,21 +22,11 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
     public void deleteById(Long id);
 
-    public List<Item> findAll(Sort sort);
+    public List<Item> findByCategory(Categories category, Pageable pageable);
 
-    public List<Item> findByCategory(Categories category);
+    public List<Item> findByOwner(User user, Pageable pageable);
 
-    public List<Item> findByCategory(Categories category, Sort sort);
-
-    public List<Item> findByOwner(User user);
-
-    public List<Item> findByOwner(User user, Sort sort);
-
-    public List<Item> findByCategoryAndOwner(Categories category, User user);
-
-    public List<Item> findByCategoryAndOwner(Categories category, User user, Sort sort);
-
-    
+    public List<Item> findByCategoryAndOwner(Categories category, User user, Pageable pageable);
 
 }
 

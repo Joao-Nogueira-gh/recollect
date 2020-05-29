@@ -30,7 +30,7 @@ public class ItemRestController {
 	@ResponseBody
 	public List<Item> itemIndex(@RequestParam(required = false) String category,
 			@RequestParam(required = false) String owner, @RequestParam(required = false) String orderBy,
-			@RequestParam(required = false) Integer limit) {
+			@RequestParam(required = false) Integer limit, @RequestParam(required = false) Integer offset) {
 
 		String processedOwner;
 
@@ -42,7 +42,7 @@ public class ItemRestController {
 
 		System.out.println(limit);
 
-		return itemService.fetchItemsApi(category, processedOwner, orderBy, limit);
+		return itemService.fetchItemsApi(category, processedOwner, orderBy, limit, offset);
 	}
 
 }
