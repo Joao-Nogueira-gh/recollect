@@ -1,8 +1,10 @@
 package ua.tqs.ReCollect.service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
@@ -162,6 +164,52 @@ public class UserService {
 
         return null;
 
-	}
+    }
+    
+    public Set<Item> getSoldItems(Integer offset, Integer limit) {
+
+        if(offset == null) {
+            offset = 0;
+        }
+
+        if(limit == null || limit > DEFAULT_LIMIT) {
+            limit = DEFAULT_LIMIT;
+        }
+
+        List<User> users = this.userRepo.findAll(new OffsetBasedPageRequest(offset, limit)).toList();
+        Set<Item> ret = new HashSet<>();
+
+        for (User user : users) {
+
+            ret.addAll(user.getSoldItems());
+            
+        }
+
+        return ret;
+
+    }
+
+    public Set<Item> getItemsOnSale(Integer offset, Integer limit) {
+
+        if(offset == null) {
+            offset = 0;
+        }
+
+        if(limit == null || limit > DEFAULT_LIMIT) {
+            limit = DEFAULT_LIMIT;
+        }
+
+        List<User> users = this.userRepo.findAll(new OffsetBasedPageRequest(offset, limit)).toList();
+        Set<Item> ret = new HashSet<>();
+
+        for (User user : users) {
+
+            ret.addAll(user.getPublishedItems());
+            
+        }
+
+        return ret;
+
+    }
 
 }

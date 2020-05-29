@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -316,6 +317,24 @@ public class ApiIntegrationTest {
             assertEquals("USER 2", user.getName());
 
         }
+    }
+
+    @Test
+    public void getSoldItems() {
+        ResponseEntity<Set<Item>> entity = restClient.exchange("/api/sold", HttpMethod.GET, null,
+                new ParameterizedTypeReference<Set<Item>>() {
+                });
+
+        assertEquals(0, entity.getBody().size());
+    }
+
+    @Test
+    public void getItemsOnSale() {
+        ResponseEntity<Set<Item>> entity = restClient.exchange("/api/on_sale", HttpMethod.GET, null,
+                new ParameterizedTypeReference<Set<Item>>() {
+                });
+
+        assertEquals(6, entity.getBody().size());
     }
 
 }
