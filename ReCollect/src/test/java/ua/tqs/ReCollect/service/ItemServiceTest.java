@@ -6,8 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.BDDMockito.given;
 
 import java.math.BigDecimal;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,9 +18,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import ua.tqs.ReCollect.model.Categories;
-import ua.tqs.ReCollect.model.Comment;
 import ua.tqs.ReCollect.model.Item;
-import ua.tqs.ReCollect.model.ItemDTO;
 import ua.tqs.ReCollect.model.User;
 import ua.tqs.ReCollect.repository.ItemRepository;
 import ua.tqs.ReCollect.repository.OffsetBasedPageRequest;
@@ -173,28 +169,6 @@ public class ItemServiceTest {
 
         assertEquals(itemList, itemService.fetchItemsApi("BOOKS", null, null, null, null), "Error: no books found");
 
-    }
-
-    @Test
-    public void whenItemDTOIsConverted_theRightDTOIsGenerated() throws MalformedURLException {
-
-        Item item = new Item("Moeda", 3, new BigDecimal(3.0), "Moeda fixe", Categories.MISC);
-        ItemDTO itemDTO = new ItemDTO("Moeda", 3, new BigDecimal(3.0), "Moeda fixe");
-
-        // Testing every branch
-        assertEquals(itemDTO, itemService.convertItem(item), "Items do not match");
-
-        item.setSeller(new User());
-        assertEquals(itemDTO, itemService.convertItem(item), "Items do not match");
-
-        item.setOwner(new User());
-        assertEquals(itemDTO, itemService.convertItem(item), "Items do not match");
-
-        item.addImage(new URL("https://www.google.com"));
-        item.addComment(new Comment("Comment", new User(), item));
-
-        assertEquals(itemDTO, itemService.convertItem(item), "Items do not match");
-        
     }
 
 
