@@ -1,114 +1,264 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ItemService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ReCollect</a> &gt; <a href="index.source.html" class="el_package">ua.tqs.ReCollect.service</a> &gt; <span class="el_source">ItemService.java</span></div><h1>ItemService.java</h1><pre class="source lang-java linenums">package ua.tqs.ReCollect.service;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.EnumUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import ua.tqs.ReCollect.model.Comment;
-import ua.tqs.ReCollect.model.Item;
-import ua.tqs.ReCollect.model.ItemDTO;
-import ua.tqs.ReCollect.model.User;
+import ua.tqs.ReCollect.model.*;
 import ua.tqs.ReCollect.repository.ItemRepository;
+import ua.tqs.ReCollect.repository.OffsetBasedPageRequest;
 
 @Service
-<span class="fc" id="L19">public class ItemService {</span>
+<span class="fc" id="L23">public class ItemService {</span>
 
-<span class="fc" id="L21">    static final Logger logger = Logger.getLogger(ItemService.class);</span>
+<span class="fc" id="L25">    static final Logger logger = Logger.getLogger(ItemService.class);</span>
+
+    private static final int DEFAULT_LIMIT = 25;
 
     @Autowired
     private ItemRepository itemRepo;
 
-    public Item getItemById(Long id){
-<span class="nc" id="L27">        Optional&lt;Item&gt; result = itemRepo.findById(id);</span>
+    @Autowired
+    private UserService userService;
 
-<span class="nc" id="L29">        return result.orElse(null);</span>
+    public Item getItemById(Long id) {
+<span class="nc" id="L36">        Optional&lt;Item&gt; result = itemRepo.findById(id);</span>
+
+<span class="nc" id="L38">        return result.orElse(null);</span>
     }
 
-    public List&lt;Item&gt; getAll(){
-<span class="fc" id="L33">        return itemRepo.findAll();</span>
+    public List&lt;Item&gt; getAll() {
+<span class="fc" id="L42">        return itemRepo.findAll();</span>
     }
 
-    public void save(Item item){
-<span class="fc" id="L37">        itemRepo.save(item);</span>
-<span class="fc" id="L38">    }</span>
-    public void deleteItem(Long id){
-<span class="nc" id="L40">        itemRepo.deleteById(id);</span>
-<span class="nc" id="L41">    }</span>
-    
-    public void deleteAll(){
-<span class="fc" id="L44">        itemRepo.deleteAll();</span>
-<span class="fc" id="L45">    }</span>
+    public void save(Item item) {
+<span class="fc" id="L46">        itemRepo.save(item);</span>
+<span class="fc" id="L47">    }</span>
 
-    public ItemDTO convertItem(Item item){
-<span class="fc" id="L48">        ItemDTO dto=new ItemDTO(item.getName(), item.getQuantity(), item.getPrice(),item.getDescription());</span>
+    public void deleteItem(Long id) {
+<span class="nc" id="L50">        itemRepo.deleteById(id);</span>
+<span class="nc" id="L51">    }</span>
 
-<span class="fc bfc" id="L50" title="All 2 branches covered.">        for (URL image : item.getImages()) {</span>
-<span class="fc" id="L51">           dto.addImages(image); </span>
-<span class="fc" id="L52">        }</span>
-<span class="fc" id="L53">        dto.setCreationDate(item.getCreationDate());</span>
+    public void deleteAll() {
+<span class="fc" id="L54">        itemRepo.deleteAll();</span>
+<span class="fc" id="L55">    }</span>
 
-<span class="fc bfc" id="L55" title="All 2 branches covered.">        if (item.getOwner()!=null){</span>
-<span class="fc" id="L56">            dto.setOwner(item.getOwner().getName());</span>
+    // Needed it for tests
+    public void setUserService(UserService userService) {
+<span class="fc" id="L59">        this.userService = userService;</span>
+<span class="fc" id="L60">    }</span>
+
+    public ItemDTO convertItem(Item item) {
+<span class="fc" id="L63">        ItemDTO dto = new ItemDTO(item.getName(), item.getQuantity(), item.getPrice(), item.getDescription());</span>
+
+<span class="fc bfc" id="L65" title="All 2 branches covered.">        for (URL image : item.getImages()) {</span>
+<span class="fc" id="L66">            dto.addImages(image);</span>
+<span class="fc" id="L67">        }</span>
+<span class="fc" id="L68">        dto.setCreationDate(item.getCreationDate());</span>
+
+<span class="fc bfc" id="L70" title="All 2 branches covered.">        if (item.getOwner() != null) {</span>
+<span class="fc" id="L71">            dto.setOwner(item.getOwner().getName());</span>
+<span class="fc bfc" id="L72" title="All 2 branches covered.">        } else if (item.getSeller() != null) {</span>
+<span class="fc" id="L73">            dto.setOwner(item.getSeller().getName());</span>
+        } else {
+<span class="fc" id="L75">            dto.setOwner(&quot;null&quot;);</span>
         }
-<span class="fc bfc" id="L58" title="All 2 branches covered.">        else if (item.getSeller()!=null){</span>
-<span class="fc" id="L59">            dto.setOwner(item.getSeller().getName());</span>
-        }
-        else{
-<span class="fc" id="L62">            dto.setOwner(&quot;null&quot;);</span>
-        }
-<span class="fc bfc" id="L64" title="All 2 branches covered.">        for (Comment comment : item.getComment()) {</span>
-<span class="fc" id="L65">            dto.addComments(comment.getText()+&quot;;&quot;+comment.getUser().getName()); </span>
-<span class="fc" id="L66">         }</span>
+<span class="fc bfc" id="L77" title="All 2 branches covered.">        for (Comment comment : item.getComment()) {</span>
+<span class="fc" id="L78">            dto.addComments(comment.getText() + &quot;;&quot; + comment.getUser().getName());</span>
+<span class="fc" id="L79">        }</span>
 
-<span class="fc" id="L68">        dto.setCategory(String.valueOf(item.getCategory()));</span>
+<span class="fc" id="L81">        dto.setCategory(String.valueOf(item.getCategory()));</span>
 
-<span class="fc" id="L70">        return dto;</span>
+<span class="fc" id="L83">        return dto;</span>
     }
+
     @Transactional
-	public void addNewProduct(Item item, User owner) {
-<span class="fc" id="L74">        save(item);</span>
-<span class="fc" id="L75">        item.setOwner(owner);</span>
-<span class="fc" id="L76">        save(item);</span>
-<span class="fc" id="L77">	}</span>
-    @Transactional
-	public void removeProduct(Item item) {
-<span class="fc" id="L80">        itemRepo.delete(item);</span>
-<span class="fc" id="L81">    }</span>
-    @Transactional
-	public void markAsSold(Item item) {
-<span class="fc" id="L84">        item.setSeller(item.getOwner());</span>
-<span class="fc" id="L85">        item.setOwner(null);</span>
-<span class="fc" id="L86">	}</span>
-    @Transactional
-	public void revertSale(Item item) {
-<span class="fc" id="L89">        item.setOwner(item.getSeller());</span>
-<span class="fc" id="L90">        item.setSeller(null);</span>
+    public void addNewProduct(Item item, User owner) {
+<span class="fc" id="L88">        save(item);</span>
+<span class="fc" id="L89">        item.setOwner(owner);</span>
+<span class="fc" id="L90">        save(item);</span>
 <span class="fc" id="L91">	}</span>
+
     @Transactional
-	public void addFavorite(Item item, User user) {
-<span class="nc bnc" id="L94" title="All 2 branches missed.">        if (!user.getFavoriteItems().contains(item)){</span>
-<span class="nc" id="L95">            user.addFavItem(item);</span>
-        }
-<span class="nc" id="L97">	}</span>
+    public void removeProduct(Item item) {
+<span class="fc" id="L95">        itemRepo.delete(item);</span>
+<span class="fc" id="L96">    }</span>
+
     @Transactional
-	public void removeFavorite(Item item, User user) {
-<span class="nc bnc" id="L100" title="All 2 branches missed.">        if (user.getFavoriteItems().contains(item)){</span>
-<span class="nc" id="L101">            user.remFavItem(item);</span>
+    public void markAsSold(Item item) {
+<span class="fc" id="L100">        item.setSeller(item.getOwner());</span>
+<span class="fc" id="L101">        item.setOwner(null);</span>
+<span class="fc" id="L102">	}</span>
+
+
+    @Transactional
+    public void revertSale(Item item) {
+<span class="fc" id="L107">        item.setOwner(item.getSeller());</span>
+<span class="fc" id="L108">        item.setSeller(null);</span>
+<span class="fc" id="L109">    }</span>
+
+    @Transactional
+    public void addFavorite(Item item, User user) {
+<span class="pc bpc" id="L113" title="1 of 2 branches missed.">        if (!user.getFavoriteItems().contains(item)) {</span>
+<span class="fc" id="L114">            user.addFavItem(item);</span>
         }
-<span class="nc" id="L103">	}</span>
+<span class="fc" id="L116">    }</span>
+
+    @Transactional
+    public void removeFavorite(Item item, User user) {
+<span class="pc bpc" id="L120" title="1 of 2 branches missed.">        if (user.getFavoriteItems().contains(item)) {</span>
+<span class="fc" id="L121">            user.remFavItem(item);</span>
+        }
+<span class="fc" id="L123">    }</span>
+
+    /**
+     * API Methods
+     * 
+     */
+
+    public List&lt;Item&gt; getAll(Pageable offset) {
+
+<span class="fc" id="L132">        Page&lt;Item&gt; page = itemRepo.findAll(offset);</span>
+
+<span class="fc" id="L134">        return page.toList();</span>
+
+    }
+
+    /**
+     * Return all Items from a Category
+     * 
+     */
+    private List&lt;Item&gt; fetchItemsByCategory(String cat, Pageable offset) {
+
+<span class="fc" id="L144">        return itemRepo.findByCategory(Categories.valueOf(cat), offset);</span>
+
+    }
+
+    /**
+     * Return all Items from a given seller's e-mail
+     * 
+     */
+    private List&lt;Item&gt; fetchItemsBySeller(String email, Pageable offset) {
+
+<span class="fc" id="L154">        return itemRepo.findByOwner(userService.getByEmail(email), offset);</span>
+
+    }
+    // Cant be tested in the Service Unit test since they need BD integration for the 
+    // timestamps to be generated. Mocks won't suffice.
+    public List&lt;Item&gt; get20NewestItems() {
+
+<span class="nc" id="L161">        return this.itemRepo.findTop20ByOrderByCreationDateAsc();</span>
+
+    }
+
+    public List&lt;Item&gt; get20OldestItems() {
+
+<span class="nc" id="L167">        return this.itemRepo.findTop20ByOrderByCreationDateDesc();</span>
+        
+	}
+
+	public List&lt;Item&gt; getItemsByCategoryAndSearchTerm(String searchTerm, Categories category){
+<span class="nc" id="L172">        return itemRepo.findByNameContainingAndCategory(searchTerm, category);</span>
+    }
+
+    public List&lt;Item&gt; getItemsByCategory(Categories category){
+<span class="nc" id="L176">        return itemRepo.findByCategory(category);</span>
+    }
+
+    // Return all Items from a given seller's e-mail and Category
+    private List&lt;Item&gt; fetchItemsByCategoryAndSeller(String cat, String email, Pageable offset) {
+
+<span class="fc" id="L182">        return itemRepo.findByCategoryAndOwner(Categories.valueOf(cat), userService.getByEmail(email), offset);</span>
+
+    }
+
+    public List&lt;Item&gt; fetchItemsApi(String cat, String seller, String orderBy, Integer limit, Integer offset) {
+
+        List&lt;Item&gt; ret;
+        Pageable p;
+
+<span class="fc bfc" id="L191" title="All 2 branches covered.">        if(offset == null) {</span>
+<span class="fc" id="L192">            offset = 0;</span>
+        }
+
+<span class="pc bpc" id="L195" title="1 of 4 branches missed.">        if (limit == null || limit &gt; DEFAULT_LIMIT) {</span>
+
+<span class="fc" id="L197">            limit = DEFAULT_LIMIT;</span>
+
+        }
+
+<span class="fc bfc" id="L201" title="All 2 branches covered.">        if(orderBy == null) {</span>
+
+<span class="fc" id="L203">            p = new OffsetBasedPageRequest(offset, limit);</span>
+
+        } else {
+
+<span class="fc" id="L207">            p = new OffsetBasedPageRequest(offset, limit, Direction.ASC, orderBy);</span>
+
+        }
+
+        // Basic Validation
+<span class="pc bpc" id="L212" title="1 of 6 branches missed.">        if ((seller != null &amp;&amp; !userService.userExists(seller))</span>
+<span class="pc bpc" id="L213" title="1 of 4 branches missed.">                || (cat != null &amp;&amp; !EnumUtils.isValidEnum(Categories.class, cat))</span>
+<span class="pc bpc" id="L214" title="1 of 2 branches missed.">                || (orderBy != null &amp;&amp; !orderByIsValid(orderBy))) {</span>
+
+<span class="nc" id="L216">            return new ArrayList&lt;Item&gt;();</span>
+        }
+
+
+<span class="fc bfc" id="L220" title="All 4 branches covered.">        if (cat == null &amp;&amp; seller == null) {</span>
+
+<span class="fc" id="L222">            ret = this.getAll(p);</span>
+
+<span class="fc bfc" id="L224" title="All 2 branches covered.">        } else if (cat == null) {</span>
+
+                // Query based on seller
+<span class="fc" id="L227">                ret = this.fetchItemsBySeller(seller, p);</span>
+
+<span class="fc bfc" id="L229" title="All 2 branches covered.">            } else if (seller == null) {</span>
+
+                // Query based on cat
+<span class="fc" id="L232">                ret = this.fetchItemsByCategory(cat, p);</span>
+
+            } else {
+
+                // Query based on both
+<span class="fc" id="L237">                ret = this.fetchItemsByCategoryAndSeller(cat, seller, p);</span>
+
+            }
+
+<span class="fc" id="L241">        return ret.stream().limit(limit).collect(Collectors.toList());</span>
+
+    }
+
+    private boolean orderByIsValid(String orderBy) {
+<span class="pc bpc" id="L246" title="3 of 4 branches missed.">        return orderBy.equals(&quot;price&quot;) || orderBy.equals(&quot;creationDate&quot;);</span>
+    }
+
+	public Item getSingleItem(Long id) {
+        
+<span class="nc" id="L251">        Optional&lt;Item&gt; optItem = this.itemRepo.findById(id);</span>
+
+<span class="nc bnc" id="L253" title="All 2 branches missed.">        if(optItem.isPresent()) {</span>
+
+<span class="nc" id="L255">            return optItem.get();</span>
+            
+        }
+
+<span class="nc" id="L259">        return null;</span>
+        
+    }
+
 }
-
-  
-
-
-
-
-
-
-
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

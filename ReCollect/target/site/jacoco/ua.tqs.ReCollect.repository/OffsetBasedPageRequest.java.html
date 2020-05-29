@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OffsetBasedPageRequest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ReCollect</a> &gt; <a href="index.source.html" class="el_package">ua.tqs.ReCollect.repository</a> &gt; <span class="el_source">OffsetBasedPageRequest.java</span></div><h1>OffsetBasedPageRequest.java</h1><pre class="source lang-java linenums">package ua.tqs.ReCollect.repository;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+
+import java.io.Serializable;
+
+/**
+* Created by Ergin
+**/
+public class OffsetBasedPageRequest implements Pageable, Serializable {
+
+
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+    private int limit;
+    private int offset;
+    private final Sort sort;
+
+    /**
+     * Creates a new {@link OffsetBasedPageRequest} with sort parameters applied.
+     *
+     * @param offset zero-based offset.
+     * @param limit  the size of the elements to be returned.
+     * @param sort   can be {@literal null}.
+     */
+<span class="fc" id="L32">    public OffsetBasedPageRequest(int offset, int limit, Sort sort) {</span>
+<span class="pc bpc" id="L33" title="1 of 2 branches missed.">        if (offset &lt; 0) {</span>
+<span class="nc" id="L34">            throw new IllegalArgumentException(&quot;Offset index must not be less than zero!&quot;);</span>
+        }
+
+<span class="pc bpc" id="L37" title="1 of 2 branches missed.">        if (limit &lt; 1) {</span>
+<span class="nc" id="L38">            throw new IllegalArgumentException(&quot;Limit must not be less than one!&quot;);</span>
+        }
+<span class="fc" id="L40">        this.limit = limit;</span>
+<span class="fc" id="L41">        this.offset = offset;</span>
+<span class="fc" id="L42">        this.sort = sort;</span>
+<span class="fc" id="L43">    }</span>
+
+    /**
+     * Creates a new {@link OffsetBasedPageRequest} with sort parameters applied.
+     *
+     * @param offset     zero-based offset.
+     * @param limit      the size of the elements to be returned.
+     * @param direction  the direction of the {@link Sort} to be specified, can be {@literal null}.
+     * @param properties the properties to sort by, must not be {@literal null} or empty.
+     */
+    public OffsetBasedPageRequest(int offset, int limit, Sort.Direction direction, String... properties) {
+<span class="fc" id="L54">        this(offset, limit, Sort.by(properties));</span>
+<span class="fc" id="L55">    }</span>
+
+    /**
+     * Creates a new {@link OffsetBasedPageRequest} with sort parameters applied.
+     *
+     * @param offset zero-based offset.
+     * @param limit  the size of the elements to be returned.
+     */
+    public OffsetBasedPageRequest(int offset, int limit) {
+<span class="fc" id="L64">        this(offset, limit, Sort.by(&quot;id&quot;));</span>
+<span class="fc" id="L65">    }</span>
+
+    @Override
+    public int getPageNumber() {
+<span class="nc" id="L69">        return offset / limit;</span>
+    }
+
+    @Override
+    public int getPageSize() {
+<span class="fc" id="L74">        return limit;</span>
+    }
+
+    @Override
+    public long getOffset() {
+<span class="fc" id="L79">        return offset;</span>
+    }
+
+    @Override
+    public Sort getSort() {
+<span class="fc" id="L84">        return sort;</span>
+    }
+
+    @Override
+    public Pageable next() {
+<span class="nc" id="L89">        return new OffsetBasedPageRequest((int) getOffset() + getPageSize(), getPageSize(), getSort());</span>
+    }
+
+    public OffsetBasedPageRequest previous() {
+<span class="nc bnc" id="L93" title="All 2 branches missed.">        return hasPrevious() ? new OffsetBasedPageRequest((int) getOffset() - getPageSize(), getPageSize(), getSort()) : this;</span>
+    }
+
+
+    @Override
+    public Pageable previousOrFirst() {
+<span class="nc bnc" id="L99" title="All 2 branches missed.">        return hasPrevious() ? previous() : first();</span>
+    }
+
+    @Override
+    public Pageable first() {
+<span class="nc" id="L104">        return new OffsetBasedPageRequest(0, getPageSize(), getSort());</span>
+    }
+
+    @Override
+    public boolean hasPrevious() {
+<span class="nc bnc" id="L109" title="All 2 branches missed.">        return offset &gt; limit;</span>
+    }
+
+    @Override
+    public boolean equals(Object o) {
+<span class="pc bpc" id="L114" title="1 of 2 branches missed.">        if (this == o) return true;</span>
+
+<span class="pc bpc" id="L116" title="1 of 2 branches missed.">        if (!(o instanceof OffsetBasedPageRequest)) return false;</span>
+
+<span class="fc" id="L118">        OffsetBasedPageRequest that = (OffsetBasedPageRequest) o;</span>
+
+<span class="fc" id="L120">        return new EqualsBuilder()</span>
+<span class="fc" id="L121">                .append(limit, that.limit)</span>
+<span class="fc" id="L122">                .append(offset, that.offset)</span>
+<span class="fc" id="L123">                .append(sort, that.sort)</span>
+<span class="fc" id="L124">                .isEquals();</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="nc" id="L129">        return new HashCodeBuilder(17, 37)</span>
+<span class="nc" id="L130">                .append(limit)</span>
+<span class="nc" id="L131">                .append(offset)</span>
+<span class="nc" id="L132">                .append(sort)</span>
+<span class="nc" id="L133">                .toHashCode();</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="nc" id="L138">        return new ToStringBuilder(this)</span>
+<span class="nc" id="L139">                .append(&quot;limit&quot;, limit)</span>
+<span class="nc" id="L140">                .append(&quot;offset&quot;, offset)</span>
+<span class="nc" id="L141">                .append(&quot;sort&quot;, sort)</span>
+<span class="nc" id="L142">                .toString();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.junit.jupiter.api.AfterEach;
@@ -43,17 +44,32 @@ public class ItemRepositoryTest {
     Item i5 = new Item("Livro", 3, new BigDecimal(3.0), "Moeda fixe", Categories.BOOKS);
 
     @BeforeEach
-    public void insert() {
+    public void insert() throws InterruptedException {
 
         itemRepo.deleteAll();
         userRepo.deleteAll();
 
         entityManager.persistAndFlush(i1);
-        entityManager.persistAndFlush(i2);
-        entityManager.persistAndFlush(i3);
-        entityManager.persistAndFlush(i4);
-        entityManager.persistAndFlush(i5);
+        sleep();
 
+        entityManager.persistAndFlush(i2);
+        sleep();
+
+        entityManager.persistAndFlush(i3);
+        sleep();
+
+        entityManager.persistAndFlush(i4);
+        sleep();
+
+        entityManager.persistAndFlush(i5);
+        sleep();
+
+    }
+
+    @AfterEach
+    public void cleanUp() {
+        itemRepo.deleteAll();
+        userRepo.deleteAll();
     }
 
     @Test
@@ -135,10 +151,24 @@ public class ItemRepositoryTest {
 
     // }
 
-    @AfterEach
-    public void cleanUp() {
-        itemRepo.deleteAll();
-        userRepo.deleteAll();
+    // Smelly test, cant figure out how to delay test execution without sleep
+    @Test
+    public void get20SortedItems() {
+
+        List<Item> newest = itemRepo.findTop20ByOrderByCreationDateAsc();
+        List<Item> oldest = itemRepo.findTop20ByOrderByCreationDateDesc();
+
+
+        assertEquals(oldest.get(4), newest.get(0));
+
     }
+
+    private void sleep() {
+        long start = new Date().getTime();
+        while(new Date().getTime() - start < 1000L){}
+    }
+
+
+
 
 }

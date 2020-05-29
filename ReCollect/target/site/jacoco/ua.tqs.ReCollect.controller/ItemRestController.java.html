@@ -3,29 +3,47 @@
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import ua.tqs.ReCollect.model.Item;
 import ua.tqs.ReCollect.service.ItemService;
 
-//API controller, WIP
-
-@RestController()
-<span class="fc" id="L17">public class ItemRestController {</span>
+@RestController
+<span class="fc" id="L16">public class ItemRestController {</span>
 
 	@Autowired
 	private ItemService itemService;
 
-	//not working because of nested serializers shit, kinda hard to fix
-
-	@GetMapping(&quot;/api/items/&quot;)
+	@GetMapping(&quot;/api/item/{id}&quot;)
 	@ResponseBody
-	public List&lt;Item&gt; itemIndex(Model model) {
-<span class="fc" id="L27">		return this.itemService.getAll();</span>
+	public Item singleItem(@PathVariable Long id) {
+
+<span class="nc" id="L25">		return itemService.getSingleItem(id);</span>
+
 	}
-    
+
+	@GetMapping(&quot;/api/items&quot;)
+	@ResponseBody
+	public List&lt;Item&gt; itemIndex(@RequestParam(required = false) String category,
+			@RequestParam(required = false) String owner, @RequestParam(required = false) String orderBy,
+			@RequestParam(required = false) Integer limit, @RequestParam(required = false) Integer offset) {
+
+		String processedOwner;
+
+<span class="fc bfc" id="L37" title="All 2 branches covered.">		if (owner != null) {</span>
+<span class="fc" id="L38">			processedOwner = owner.replace(&quot;'&quot;, &quot;&quot;);</span>
+		} else {
+<span class="fc" id="L40">			processedOwner = owner;</span>
+		}
+
+<span class="fc" id="L43">		System.out.println(limit);</span>
+
+<span class="fc" id="L45">		return itemService.fetchItemsApi(category, processedOwner, orderBy, limit, offset);</span>
+	}
+
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

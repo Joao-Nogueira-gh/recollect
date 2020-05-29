@@ -3,14 +3,14 @@
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import ua.tqs.ReCollect.model.User;
 import ua.tqs.ReCollect.service.UserService;
-
-//API controller, WIP
 
 @RestController()
 <span class="fc" id="L16">public class UserRestController {</span>
@@ -18,13 +18,23 @@ import ua.tqs.ReCollect.service.UserService;
 	@Autowired
 	private UserService userService;
 
-	//not working because of nested serializers shit, kinda hard to fix
+	@GetMapping(path = &quot;/api/user/{id}&quot;)
+	@ResponseBody
+	public User singleUser(@PathVariable(value = &quot;id&quot;) Long id) {
 
-	@GetMapping(path=&quot;/api/users/&quot;)
-	public List&lt;User&gt; userIndex(Model model) {
-<span class="fc" id="L25">		return userService.getAll();</span>
+<span class="nc" id="L25">		return userService.getById(id);</span>
 
 	}
-    
+
+	@GetMapping(path = &quot;/api/users/&quot;)
+	@ResponseBody
+	public List&lt;User&gt; userIndex(@RequestParam(required = false) String district,
+			@RequestParam(required = false) String county, @RequestParam(required = false) Integer limit,
+			@RequestParam(required = false) Integer offset) {
+
+<span class="fc" id="L35">		return userService.getUsersByLocation(district, county, limit, offset);</span>
+
+	}
+
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 
   <!-- SITE TITTLE -->
@@ -66,15 +66,16 @@
 
 						</ul>
 						<ul class="navbar-nav ml-auto mt-10">
-							<li class="nav-item">
+							<li class="nav-item" sec:authorize="!isAuthenticated()">
 								<a class="nav-link login-button" href="/login">Login</a>
+							</li>
+							<li class="nav-item" sec:authorize="isAuthenticated()">
+								<a class="nav-link login-button" href="/profile">Profile</a>
 							</li>
 							<li class="nav-item">
 								<a class="nav-link text-white add-button" href="/announce"><i class="fa fa-plus-circle"></i> Announce</a>
 							</li>
-							<li class="nav-item">
-								<a class="nav-link" href="/product"><i class="fa fa-product-hunt"></i> Products</a>
-							</li>
+							<!--<li class="nav-item"><a class="nav-link" href="/category"><i class="fa fa-product-hunt"></i> Products</a></li>-->
 						</ul>
 					</div>
 				</nav>
@@ -94,27 +95,8 @@
 			<div class="col-md-12">
 				<!-- Header Contetnt -->
 				<div class="content-block">
-					<h1>Buy & Sell Your Old Collections </h1>
+					<h1 id="home_header">Buy & Sell Your Old Collections </h1>
 					<p>Join the millions who buy and sell from each other <br> everyday in local communities around the world</p>
-					<div class="short-popular-category-list text-center">
-						<h2>Popular Categories</h2>
-						<ul class="list-inline">
-							<li class="list-inline-item">
-								<a href="/category"><i class="fas fa-book-open"></i> Books</a></li>
-							<li class="list-inline-item">
-								<a href="category"><i class="fas fa-dice-d6"></i> Games</a>
-							</li>
-							<li class="list-inline-item">
-								<a href="/category"><i class="fas fa-robot"></i> Toys</a>
-							</li>
-							<li class="list-inline-item">
-								<a href="/category"><i class="fas fa-camera-retro"></i> Technology</a>
-							</li>
-							<li class="list-inline-item">
-								<a href="/category"><i class="fas fa-guitar"></i> Music</a>
-							</li>
-						</ul>
-					</div>
 					
 				</div>
 				<!-- Advance Search -->
@@ -122,29 +104,33 @@
 						<div class="container">
 							<div class="row justify-content-center">
 								<div class="col-lg-12 col-md-12 align-content-center">
-										<form>
+									<form method="post" th:action="@{/}" th:object="${searchParams}">
 											<div class="form-row">
 												<div class="form-group col-md-4">
-													<input type="text" class="form-control my-2 my-lg-1" id="inputtext4" placeholder="What are you looking for">
+													<input type="text" class="form-control my-2 my-lg-1" id="inputtext4" placeholder="What are you looking for" th:field="*{searchterm}">
 												</div>
 												<div class="form-group col-md-3">
-													<select class="w-100 form-control mt-lg-1 mt-md-2">
-														<option>Category</option>
-														<option value="1">Top rated</option>
-														<option value="2">Lowest Price</option>
-														<option value="4">Highest Price</option>
+													<select th:field="*{category}" class="w-100 form-control mt-lg-1 mt-md-2">
+														<th:block th:each="category : ${categories}">
+															<option th:value="${category.name}" th:text="${category.name}">Books</option>
+														</th:block>
 													</select>
 												</div>
 												<div class="form-group col-md-3">
 													<input type="text" class="form-control my-2 my-lg-1" id="inputLocation4" placeholder="Location">
 												</div>
 												<div class="form-group col-md-2 align-self-center">
-													<button type="submit" class="btn btn-primary">Search Now</button>
+													<button type="submit" class="btn btn-primary" id="search_button_home">Search Now</button>
 												</div>
 											</div>
 										</form>
+									<div th:if="${hasErrors}">
+										<div class="alert alert-danger" role="alert" id="invalidSearchMessage">
+											A category must be provided for this search.
+										</div>
 									</div>
 								</div>
+							</div>
 					</div>
 				</div>
 				
@@ -168,8 +154,8 @@
 		<div class="row">
 			<div class="col-md-12">
 				<div class="section-title">
-					<h2>Trending Ads</h2>
-					<p>Things other people are also looking for.</p>
+					<h2>Last Added</h2>
+					<p>Most recent items available for sale.</p>
 				</div>
 			</div>
 		</div>
@@ -177,154 +163,46 @@
 			<!-- offer 01 -->
 			<div class="col-lg-12">
 				<div class="trending-ads-slide">
-					<div class="col-sm-12 col-lg-4">
-						<!-- product card -->
-<div class="product-item bg-light">
-	<div class="card">
-		<div class="thumb-content">
-			<!-- <div class="price">$200</div> -->
-			<a href="/product">
-				<img class="card-img-top img-fluid" src="images/products/products-1.jpg" alt="Card image cap">
-			</a>
-		</div>
-		<div class="card-body">
-		    <h4 class="card-title"><a href="/product">11inch Macbook Air</a></h4>
-		    <ul class="list-inline product-meta">
-		    	<li class="list-inline-item">
-		    		<a href="/product"><i class="fa fa-folder-open-o"></i>Electronics</a>
-		    	</li>
-		    	<li class="list-inline-item">
-		    		<a href="#"><i class="fa fa-calendar"></i>26th December</a>
-		    	</li>
-		    </ul>
-		    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo, aliquam!</p>
-		    <div class="product-ratings">
-		    	<ul class="list-inline">
-		    		<li class="list-inline-item selected"><i class="fa fa-star"></i></li>
-		    		<li class="list-inline-item selected"><i class="fa fa-star"></i></li>
-		    		<li class="list-inline-item selected"><i class="fa fa-star"></i></li>
-		    		<li class="list-inline-item selected"><i class="fa fa-star"></i></li>
-		    		<li class="list-inline-item"><i class="fa fa-star"></i></li>
-		    	</ul>
-		    </div>
-		</div>
-	</div>
-</div>
+
+					<th:block th:each="item : ${recentItems}">
+						<div class="col-sm-12 col-lg-4">
+							<!-- product card -->
+							<div class="product-item bg-light">
+								<div class="card">
+									<div class="thumb-content">
+										<div class="price" th:text="${item.price}">...</div>
+										<a th:href="${'/product/' + item.id}">
+											<img class="card-img-top img-fluid" th:src="${item.getImages().get(0).toString()}" alt="Card image cap" style="height:200px; object-fit: cover">
+										</a>
+									</div>
+									<div class="card-body">
+										<h4 class="card-title"><a th:href="${'/product/' + item.id}" th:text="${item.name}">...</a></h4>
+										<ul class="list-inline product-meta">
+											<li class="list-inline-item">
+												<div><i class="fa fa-folder-open-o"></i> <span th:text="${item.category.toString()}"></span> ...</div>
+											</li>
+											<li class="list-inline-item">
+												<div><i class="fa fa-calendar"></i> <span th:text="${item.creationDate}"></span> ...</div>
+											</li>
+										</ul>
+										<p class="card-text" th:text="${item.description}" style="overflow: hidden; white-space: normal; text-overflow: ellipsis; height: 40px">...</p>
+										<div class="product-ratings">
+											<ul class="list-inline">
+												<li class="list-inline-item selected"><i class="fa fa-star"></i></li>
+												<li class="list-inline-item selected"><i class="fa fa-star"></i></li>
+												<li class="list-inline-item selected"><i class="fa fa-star"></i></li>
+												<li class="list-inline-item selected"><i class="fa fa-star"></i></li>
+												<li class="list-inline-item"><i class="fa fa-star"></i></li>
+											</ul>
+										</div>
+									</div>
+								</div>
+							</div>
 
 
 
-					</div>
-					<div class="col-sm-12 col-lg-4">
-						<!-- product card -->
-<div class="product-item bg-light">
-	<div class="card">
-		<div class="thumb-content">
-			<!-- <div class="price">$200</div> -->
-			<a href="/product">
-				<img class="card-img-top img-fluid" src="images/products/products-2.jpg" alt="Card image cap">
-			</a>
-		</div>
-		<div class="card-body">
-		    <h4 class="card-title"><a href="/product">Full Study Table Combo</a></h4>
-		    <ul class="list-inline product-meta">
-		    	<li class="list-inline-item">
-		    		<a href="/product"><i class="fa fa-folder-open-o"></i>Furnitures</a>
-		    	</li>
-		    	<li class="list-inline-item">
-		    		<a href="#"><i class="fa fa-calendar"></i>26th December</a>
-		    	</li>
-		    </ul>
-		    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo, aliquam!</p>
-		    <div class="product-ratings">
-		    	<ul class="list-inline">
-		    		<li class="list-inline-item selected"><i class="fa fa-star"></i></li>
-		    		<li class="list-inline-item selected"><i class="fa fa-star"></i></li>
-		    		<li class="list-inline-item selected"><i class="fa fa-star"></i></li>
-		    		<li class="list-inline-item selected"><i class="fa fa-star"></i></li>
-		    		<li class="list-inline-item"><i class="fa fa-star"></i></li>
-		    	</ul>
-		    </div>
-		</div>
-	</div>
-</div>
-
-
-
-					</div>
-					<div class="col-sm-12 col-lg-4">
-						<!-- product card -->
-<div class="product-item bg-light">
-	<div class="card">
-		<div class="thumb-content">
-			<!-- <div class="price">$200</div> -->
-			<a href="/product">
-				<img class="card-img-top img-fluid" src="images/products/products-3.jpg" alt="Card image cap">
-			</a>
-		</div>
-		<div class="card-body">
-		    <h4 class="card-title"><a href="/product">11inch Macbook Air</a></h4>
-		    <ul class="list-inline product-meta">
-		    	<li class="list-inline-item">
-		    		<a href="/product"><i class="fa fa-folder-open-o"></i>Electronics</a>
-		    	</li>
-		    	<li class="list-inline-item">
-		    		<a href="#"><i class="fa fa-calendar"></i>26th December</a>
-		    	</li>
-		    </ul>
-		    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo, aliquam!</p>
-		    <div class="product-ratings">
-		    	<ul class="list-inline">
-		    		<li class="list-inline-item selected"><i class="fa fa-star"></i></li>
-		    		<li class="list-inline-item selected"><i class="fa fa-star"></i></li>
-		    		<li class="list-inline-item selected"><i class="fa fa-star"></i></li>
-		    		<li class="list-inline-item selected"><i class="fa fa-star"></i></li>
-		    		<li class="list-inline-item"><i class="fa fa-star"></i></li>
-		    	</ul>
-		    </div>
-		</div>
-	</div>
-</div>
-
-
-
-					</div>
-					<div class="col-sm-12 col-lg-4">
-						<!-- product card -->
-<div class="product-item bg-light">
-	<div class="card">
-		<div class="thumb-content">
-			<!-- <div class="price">$200</div> -->
-			<a href="/product">
-				<img class="card-img-top img-fluid" src="images/products/products-2.jpg" alt="Card image cap">
-			</a>
-		</div>
-		<div class="card-body">
-		    <h4 class="card-title"><a href="/product">Full Study Table Combo</a></h4>
-		    <ul class="list-inline product-meta">
-		    	<li class="list-inline-item">
-		    		<a href="/product"><i class="fa fa-folder-open-o"></i>Furnitures</a>
-		    	</li>
-		    	<li class="list-inline-item">
-		    		<a href="#"><i class="fa fa-calendar"></i>26th December</a>
-		    	</li>
-		    </ul>
-		    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo, aliquam!</p>
-		    <div class="product-ratings">
-		    	<ul class="list-inline">
-		    		<li class="list-inline-item selected"><i class="fa fa-star"></i></li>
-		    		<li class="list-inline-item selected"><i class="fa fa-star"></i></li>
-		    		<li class="list-inline-item selected"><i class="fa fa-star"></i></li>
-		    		<li class="list-inline-item selected"><i class="fa fa-star"></i></li>
-		    		<li class="list-inline-item"><i class="fa fa-star"></i></li>
-		    	</ul>
-		    </div>
-		</div>
-	</div>
-</div>
-
-
-
-					</div>
+						</div>
+					</th:block>
 				</div>
 			</div>
 			
@@ -355,72 +233,13 @@
 						<div class="col-lg-3 offset-lg-0 col-md-5 offset-md-1 col-sm-6 col-6">
 							<div class="category-block">
 								<div class="header">
-									<a href="/category"><i th:class="${category.iconClass}"></i> </a>
-									<h4><a href="/category" th:text="${category.name}">...</a></h4>
+									<a th:href="${'/home_category/' + category.name}"><i th:class="${category.iconClass}"></i> </a>
+									<h4 th:id="${'button_' + category.name}"> <a th:href="${'/home_category/' + category.name}" th:text="${category.name}">...</a></h4>
 								</div>
 							</div>
 						</div>
 						<!-- /Category List -->
 					</th:block>
-
-					<!--
-					<div class="col-lg-3 offset-lg-0 col-md-5 offset-md-1 col-sm-6 col-6">
-						<div class="category-block">
-							<div class="header">
-								<a href="/category"><i class="fas fa-book-open icon-bg-1"></i> </a>
-								<h4><a href="/category">Books</a></h4>
-							</div>
-						</div>
-					</div>
-					<div class="col-lg-3 offset-lg-0 col-md-5 offset-md-1 col-sm-6 col-6">
-						<div class="category-block">
-							<div class="header">
-								<a href="/category"><i class="fas fa-dice-d6 icon-bg-2"></i> </a>
-								<h4><a href="/category">Games</a></h4>
-							</div>
-						</div>
-					</div>
-					<div class="col-lg-3 offset-lg-0 col-md-5 offset-md-1 col-sm-6 col-6">
-						<div class="category-block">
-							<div class="header">
-								<a href="/category"><i class="fas fa-robot icon-bg-3"></i> </a>
-								<h4><a href="/category">Toys</a></h4>
-							</div>
-						</div>
-					</div>
-					<div class="col-lg-3 offset-lg-0 col-md-5 offset-md-1 col-sm-6 col-6">
-						<div class="category-block">
-							<div class="header">
-								<a href="/category"><i class="fa fa-camera-retro icon-bg-4"></i> </a>
-								<h4><a href="/category">Technology</a></h4>
-							</div>
-						</div>
-					</div>
-					<div class="col-lg-3 offset-lg-0 col-md-5 offset-md-1 col-sm-6 col-6">
-						<div class="category-block">
-							<div class="header">
-								<a href="/category"><i class="fas fa-guitar icon-bg-5"></i> </a>
-								<h4><a href="/category">Music</a></h4>
-							</div>
-						</div>
-					</div>
-					<div class="col-lg-3 offset-lg-0 col-md-5 offset-md-1 col-sm-6 col-6">
-						<div class="category-block">
-							<div class="header">
-								<a href="/category"><i class="fas fa-image icon-bg-6"></i> </a>
-								<h4><a href="/category">Art</a></h4>
-							</div>
-						</div>
-					</div>
-					<div class="col-lg-3 offset-lg-0 col-md-5 offset-md-1 col-sm-6 col-6">
-						<div class="category-block">
-							<div class="header">
-								<a href="/category"><i class="fas fa-box-open icon-bg-8"></i> </a>
-								<h4><a href="/category">Miscellaneous</a></h4>
-							</div>
-						</div>
-					</div>
-					-->
 
 				</div>
 			</div>

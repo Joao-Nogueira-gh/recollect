@@ -2,16 +2,17 @@ const appName = "reCollect";
 
 
 $(document).ready(function(){
+    //document.getElementsByTagName("html")[0].setAttribute("xmlns:sec","http://www.thymeleaf.org/extras/spring-security");
+
     const tagline = document.getElementsByTagName("title")[0];
     tagline.innerText = appName;
     tagline.innerHTML = appName;
 
-    buildNavbar();
+    //buildNavbar();
     buildFooter();
     buildFooterBottom();
 
 });
-
 
 
 
@@ -34,14 +35,18 @@ function buildNavbar() {
                                 <a class="nav-link" href="/">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="/about-us">About us</a>
+                                <a class="nav-link" href="/about">About us</a>
                             </li>
 
                         </ul>
                         <ul class="navbar-nav ml-auto mt-10">
-                            <li class="nav-item">
-                                <a class="nav-link login-button" href="/login">Login</a>
-                            </li>
+                            <li class="nav-item" sec:authorize="!isAuthenticated()">
+								<a class="nav-link login-button" href="/login">Login</a>
+							</li>
+							<li class="nav-item" sec:authorize="isAuthenticated()">
+								<a class="nav-link login-button" href="/profile">Profile</a>
+							</li>
+						
                             <li class="nav-item">
                                 <a class="nav-link text-white add-button" href="/announce"><i class="fa fa-plus-circle"></i> Announce</a>
                             </li>
@@ -77,9 +82,7 @@ function buildFooter() {
                     <!-- footer logo -->
                     <img src="images/logo-footer.png" alt="reCollect">
                     <!-- description -->
-                    <p class="alt-color">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                        incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                        laboris nisi ut aliquip ex ea commodo consequat.</p>
+                    <!-- <p class="alt-color">ReCollect is a platform that allows users to sell their old collections, from simple things such as figurines sold some years ago in stores to rarer items like limited editions of a certain product (book, game, etc.). Here, the buyers can find items they need in order to complete their collections or even start brand new ones!</p> -->
                 </div>
             </div>
             <!-- Link list -->
@@ -88,8 +91,8 @@ function buildFooter() {
                     <h4>Useful Links</h4>
                     <ul>
                         <li><a href="/about">About us</a></li>
-                        <li><a href="contact-us.html">Conctact us</a></li>
-                        <li><a href="/terms-conditions">Terms & Conditions</a></li>
+                        <li><a href="#">Conctact us</a></li>
+                        <li><a href="#">Terms & Conditions</a></li>
                     </ul>
                 </div>
             </div>

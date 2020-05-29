@@ -28,6 +28,15 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
     public List<Item> findByCategoryAndOwner(Categories category, User user, Pageable pageable);
 
+    public List<Item> findByCategory(Categories category);
+
+    public List<Item> findByNameContaining(String name);
+
+    public List<Item> findByNameContainingAndCategory(String name, Categories category);
+
+    public List<Item> findTop20ByOrderByCreationDateAsc();
+
+    public List<Item> findTop20ByOrderByCreationDateDesc();
 }
 
 

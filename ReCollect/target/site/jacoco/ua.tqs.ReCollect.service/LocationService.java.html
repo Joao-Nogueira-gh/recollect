@@ -22,12 +22,12 @@ import ua.tqs.ReCollect.repository.LocationRepository;
     }
 
     public void save(Location item){
-<span class="fc" id="L25">        locationRepo.save(item);</span>
-<span class="fc" id="L26">    }</span>
+<span class="nc" id="L25">        locationRepo.save(item);</span>
+<span class="nc" id="L26">    }</span>
 
     public void deleteAll(){
-<span class="fc" id="L29">        locationRepo.deleteAll();</span>
-<span class="fc" id="L30">    }</span>
+<span class="nc" id="L29">        locationRepo.deleteAll();</span>
+<span class="nc" id="L30">    }</span>
 
     public Location getLocation(String district, String county){
 <span class="fc" id="L33">        return locationRepo.findByDistrictAndCounty(district, county);</span>

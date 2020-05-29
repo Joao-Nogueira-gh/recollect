@@ -15,11 +15,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import ua.tqs.ReCollect.model.Categories;
-import ua.tqs.ReCollect.model.Comment;
-import ua.tqs.ReCollect.model.Item;
-import ua.tqs.ReCollect.model.ItemDTO;
-import ua.tqs.ReCollect.model.User;
+import ua.tqs.ReCollect.model.*;
 import ua.tqs.ReCollect.repository.ItemRepository;
 import ua.tqs.ReCollect.repository.OffsetBasedPageRequest;
 
@@ -92,7 +88,7 @@ public class ItemService {
         save(item);
         item.setOwner(owner);
         save(item);
-    }
+	}
 
     @Transactional
     public void removeProduct(Item item) {
@@ -103,7 +99,8 @@ public class ItemService {
     public void markAsSold(Item item) {
         item.setSeller(item.getOwner());
         item.setOwner(null);
-    }
+	}
+
 
     @Transactional
     public void revertSale(Item item) {
@@ -156,6 +153,27 @@ public class ItemService {
 
         return itemRepo.findByOwner(userService.getByEmail(email), offset);
 
+    }
+    // Cant be tested in the Service Unit test since they need BD integration for the 
+    // timestamps to be generated. Mocks won't suffice.
+    public List<Item> get20NewestItems() {
+
+        return this.itemRepo.findTop20ByOrderByCreationDateAsc();
+
+    }
+
+    public List<Item> get20OldestItems() {
+
+        return this.itemRepo.findTop20ByOrderByCreationDateDesc();
+        
+	}
+
+	public List<Item> getItemsByCategoryAndSearchTerm(String searchTerm, Categories category){
+        return itemRepo.findByNameContainingAndCategory(searchTerm, category);
+    }
+
+    public List<Item> getItemsByCategory(Categories category){
+        return itemRepo.findByCategory(category);
     }
 
     // Return all Items from a given seller's e-mail and Category

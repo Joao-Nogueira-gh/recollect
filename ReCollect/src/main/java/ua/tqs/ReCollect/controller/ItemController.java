@@ -24,6 +24,7 @@ public class ItemController {
     private UserService userService;
     
     static final Logger logger = Logger.getLogger(ItemController.class);
+    static final String EMPTY_TEST_PAGE = "emptyTest";
 
 	@GetMapping(path="/testic/")
 	public String test(Model model) {
@@ -34,7 +35,7 @@ public class ItemController {
 
         logger.debug(currUser.toString());
         //create item from forms
-        Item i1= new Item("Moeda", 3, new BigDecimal(3.0), "Moeda fixe", Categories.MISC);
+        Item i1= new Item("Moeda", 3, new BigDecimal("3.0"), "Moeda fixe", Categories.MISC);
         //create item for that user
         itemService.addNewProduct(i1, currUser);
 
@@ -44,7 +45,7 @@ public class ItemController {
         itemService.removeProduct(itemService.getAll().get(0));
         logger.debug(itemService.getAll());
         logger.debug(currUser.getPublishedItems());
-        return "emptyTest";
+        return EMPTY_TEST_PAGE;
     }
     @GetMapping(path="/testic2/")
 	public String test2(Model model) {
@@ -55,7 +56,7 @@ public class ItemController {
 
         logger.debug(currUser.toString());
         //create item from forms
-        Item i1= new Item("Moeda", 3, new BigDecimal(3.0), "Moeda fixe", Categories.MISC);
+        Item i1= new Item("Moeda", 3, new BigDecimal("3.0"), "Moeda fixe", Categories.MISC);
         //create item for that user
         itemService.addNewProduct(i1, currUser);
 
@@ -72,7 +73,7 @@ public class ItemController {
         logger.debug(itemService.getAll());
         logger.debug(currUser.getPublishedItems());
         logger.debug(currUser.getSoldItems());
-        return "emptyTest";
+        return EMPTY_TEST_PAGE;
     }
     @GetMapping(path="/testic3/")
 	public String test3(Model model) {
@@ -97,16 +98,9 @@ public class ItemController {
         itemService.addFavorite(itemService.getAll().get(0),currUser);
 
         logger.debug(itemService.getAll());
-        logger.debug(itemService.getAll().get(0).getFavedBy());
-        logger.debug(currUser.getFavoriteItems()+"\n");
-        //remove from favorite list
-        //usei itens do proprio user como favoritos, mas isso é whatever i guess
-        itemService.removeFavorite(itemService.getAll().get(0), currUser);
-
-        logger.debug(itemService.getAll());
-        logger.debug(itemService.getAll().get(0).getFavedBy());
-        logger.debug(currUser.getFavoriteItems()+"\n");
-        return "emptyTest";
+        logger.debug(currUser.getPublishedItems());
+        logger.debug(currUser.getSoldItems()+"\n");
+        return EMPTY_TEST_PAGE;
     }
     
 }

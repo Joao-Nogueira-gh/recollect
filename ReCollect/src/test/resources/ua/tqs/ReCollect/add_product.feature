@@ -6,10 +6,8 @@ Feature: Add Product
         When <user> fills in <qt> the fields with <user>s product information
         And clicks the Submit Item button
         Then The product <action> go on sale on the platform
-        And <action> be visible to other users
-        And Error messages <action> pop up
 
         Examples:
             | user      | qt      | action     |
             | Alexandra | all     | should     |
-            | Roberto   | some of | should not |
+            | Francisco   | some of | should not |
