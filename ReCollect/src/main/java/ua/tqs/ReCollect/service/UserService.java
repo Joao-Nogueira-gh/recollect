@@ -31,6 +31,8 @@ public class UserService {
 
     static final Logger logger = Logger.getLogger(UserService.class);
 
+    private static final int DEFAULT_LIMIT = 5;
+
     public List<User> getAll() {
         return userRepo.findAll();
     }
@@ -88,9 +90,9 @@ public class UserService {
 
         }
 
-        if (limit == null) {
+        if (limit == null || limit > DEFAULT_LIMIT) {
 
-            return ret;
+            limit = DEFAULT_LIMIT;
 
         }
 

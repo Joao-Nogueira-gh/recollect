@@ -25,6 +25,8 @@ public class ItemService {
 
     static final Logger logger = Logger.getLogger(ItemService.class);
 
+    private static final int DEFAULT_LIMIT = 25;
+
     @Autowired
     private ItemRepository itemRepo;
 
@@ -238,9 +240,9 @@ public class ItemService {
 
         }
 
-        if (limit == null) {
+        if (limit == null || limit > DEFAULT_LIMIT) {
 
-            return ret;
+            limit = DEFAULT_LIMIT;
 
         }
 
@@ -264,6 +266,6 @@ public class ItemService {
 
         return null;
         
-	}
+    }
 
 }
