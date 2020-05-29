@@ -3,7 +3,6 @@ package ua.tqs.ReCollect.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.net.URL;
 
 import org.apache.commons.lang3.EnumUtils;
@@ -238,7 +237,7 @@ public class ItemService {
 
         }
 
-        return ret.stream().limit(limit).collect(Collectors.toList());
+        return ret;
 
     }
 

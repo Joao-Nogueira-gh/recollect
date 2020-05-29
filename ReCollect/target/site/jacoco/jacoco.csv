@@ -1,8 +1,8 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
 ReCollect,ua.tqs.ReCollect.service,CommentService,33,3,0,0,11,1,6,1,6,1
-ReCollect,ua.tqs.ReCollect.service,ItemService,59,310,12,36,13,67,17,34,7,20
+ReCollect,ua.tqs.ReCollect.service,ItemService,59,302,12,36,13,67,17,34,7,20
 ReCollect,ua.tqs.ReCollect.service,MyUserDetailsService,63,7,4,0,11,2,5,2,3,2
-ReCollect,ua.tqs.ReCollect.service,UserService,84,171,18,18,12,42,15,17,3,11
+ReCollect,ua.tqs.ReCollect.service,UserService,76,171,18,18,12,42,15,17,3,11
 ReCollect,ua.tqs.ReCollect.service,LocationService,10,55,0,4,4,11,2,6,2,4
 ReCollect,ua.tqs.ReCollect,WebSecurityConfiguration,0,144,0,0,0,28,0,4,0,4
 ReCollect,ua.tqs.ReCollect,ReCollectApplication,6,3,0,0,2,1,1,1,1,1

@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,7 @@ import ua.tqs.ReCollect.repository.OffsetBasedPageRequest;
 import ua.tqs.ReCollect.repository.UserRepository;
 
 @Service
-<span class="fc" id="L23">public class UserService {</span>
+<span class="fc" id="L22">public class UserService {</span>
 
     @Autowired
     private UserRepository userRepo;
@@ -31,52 +30,52 @@ import ua.tqs.ReCollect.repository.UserRepository;
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-<span class="fc" id="L34">    static final Logger logger = Logger.getLogger(UserService.class);</span>
+<span class="fc" id="L33">    static final Logger logger = Logger.getLogger(UserService.class);</span>
 
     private static final int DEFAULT_LIMIT = 5;
 
     public List&lt;User&gt; getAll() {
-<span class="fc" id="L39">        return userRepo.findAll();</span>
+<span class="fc" id="L38">        return userRepo.findAll();</span>
     }
 
     public boolean userExists(String email) {
-<span class="fc" id="L43">        return userRepo.existsByEmail(email);</span>
+<span class="fc" id="L42">        return userRepo.existsByEmail(email);</span>
     }
 
     public void save(User user) {
-<span class="fc" id="L47">        userRepo.save(user);</span>
-<span class="fc" id="L48">    }</span>
+<span class="fc" id="L46">        userRepo.save(user);</span>
+<span class="fc" id="L47">    }</span>
 
     public void deleteAll() {
-<span class="fc" id="L51">        userRepo.deleteAll();</span>
-<span class="fc" id="L52">    }</span>
+<span class="fc" id="L50">        userRepo.deleteAll();</span>
+<span class="fc" id="L51">    }</span>
 
     public boolean register(User user) {
 
-<span class="fc bfc" id="L56" title="All 2 branches covered.">        if (userExists(user.getEmail())) {</span>
-<span class="fc" id="L57">            logger.debug(&quot;E-mail is already in use&quot;);</span>
-<span class="fc" id="L58">            return false;</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">        if (userExists(user.getEmail())) {</span>
+<span class="fc" id="L56">            logger.debug(&quot;E-mail is already in use&quot;);</span>
+<span class="fc" id="L57">            return false;</span>
         }
 
-<span class="fc" id="L61">        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));</span>
+<span class="fc" id="L60">        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));</span>
 
-<span class="fc" id="L63">        this.save(user);</span>
+<span class="fc" id="L62">        this.save(user);</span>
 
-<span class="fc" id="L65">        logger.debug(user.toString());</span>
+<span class="fc" id="L64">        logger.debug(user.toString());</span>
 
-<span class="fc" id="L67">        return true;</span>
+<span class="fc" id="L66">        return true;</span>
 
     }
 
     public User getByEmail(String email) {
 
-<span class="fc" id="L73">        return userRepo.findByEmail(email);</span>
+<span class="fc" id="L72">        return userRepo.findByEmail(email);</span>
 
     }
 
     public List&lt;User&gt; getAll(OffsetBasedPageRequest offset) {
 
-<span class="nc" id="L79">        return this.userRepo.findAll(offset).toList();</span>
+<span class="nc" id="L78">        return this.userRepo.findAll(offset).toList();</span>
 
     }
 
@@ -84,98 +83,98 @@ import ua.tqs.ReCollect.repository.UserRepository;
 
         List&lt;User&gt; ret;
 
-<span class="fc bfc" id="L87" title="All 2 branches covered.">        if (offset == null) {</span>
-<span class="fc" id="L88">            offset = 0;</span>
+<span class="fc bfc" id="L86" title="All 2 branches covered.">        if (offset == null) {</span>
+<span class="fc" id="L87">            offset = 0;</span>
         }
 
-<span class="pc bpc" id="L91" title="3 of 4 branches missed.">        if (limit == null || limit &gt; DEFAULT_LIMIT) {</span>
+<span class="pc bpc" id="L90" title="3 of 4 branches missed.">        if (limit == null || limit &gt; DEFAULT_LIMIT) {</span>
 
-<span class="fc" id="L93">            limit = DEFAULT_LIMIT;</span>
+<span class="fc" id="L92">            limit = DEFAULT_LIMIT;</span>
 
         }
 
-<span class="pc bpc" id="L97" title="1 of 6 branches missed.">        if (!(distrito == null ^ concelho == null)) {</span>
+<span class="pc bpc" id="L96" title="1 of 6 branches missed.">        if (!(distrito == null ^ concelho == null)) {</span>
 
-<span class="fc" id="L99">            return new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L98">            return new ArrayList&lt;&gt;();</span>
 
-<span class="nc bnc" id="L101" title="All 4 branches missed.">        } else if (distrito == null &amp;&amp; concelho == null) {</span>
+<span class="nc bnc" id="L100" title="All 4 branches missed.">        } else if (distrito == null &amp;&amp; concelho == null) {</span>
 
-<span class="nc" id="L103">            ret = this.getAll(new OffsetBasedPageRequest(offset, limit));</span>
+<span class="nc" id="L102">            ret = this.getAll(new OffsetBasedPageRequest(offset, limit));</span>
 
         } else {
 
-<span class="nc" id="L107">            ret = userRepo.findByLocation(locationService.getLocation(distrito, concelho), new OffsetBasedPageRequest(offset, limit));</span>
+<span class="nc" id="L106">            ret = userRepo.findByLocation(locationService.getLocation(distrito, concelho), new OffsetBasedPageRequest(offset, limit));</span>
 
         }
 
 
-<span class="nc" id="L112">        return ret.stream().limit(limit).collect(Collectors.toList());</span>
+<span class="nc" id="L111">        return ret;</span>
 
     }
 
     public User getCurrentUser() {
-<span class="nc" id="L117">        Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();</span>
-<span class="nc" id="L118">        String email = loggedInUser.getName();</span>
-<span class="nc" id="L119">        return userRepo.findByEmail(email);</span>
+<span class="nc" id="L116">        Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();</span>
+<span class="nc" id="L117">        String email = loggedInUser.getName();</span>
+<span class="nc" id="L118">        return userRepo.findByEmail(email);</span>
     }
 
     public User getById(Long id) {
 
-<span class="nc" id="L124">        Optional&lt;User&gt; optUser = this.userRepo.findById(id);</span>
+<span class="nc" id="L123">        Optional&lt;User&gt; optUser = this.userRepo.findById(id);</span>
 
-<span class="nc bnc" id="L126" title="All 2 branches missed.">        if(optUser.isPresent()) {</span>
+<span class="nc bnc" id="L125" title="All 2 branches missed.">        if(optUser.isPresent()) {</span>
 
-<span class="nc" id="L128">            return optUser.get();</span>
+<span class="nc" id="L127">            return optUser.get();</span>
             
         }
 
-<span class="nc" id="L132">        return null;</span>
+<span class="nc" id="L131">        return null;</span>
 
     }
     
     public Set&lt;Item&gt; getSoldItems(Integer offset, Integer limit) {
 
-<span class="pc bpc" id="L138" title="1 of 2 branches missed.">        if(offset == null) {</span>
-<span class="fc" id="L139">            offset = 0;</span>
+<span class="pc bpc" id="L137" title="1 of 2 branches missed.">        if(offset == null) {</span>
+<span class="fc" id="L138">            offset = 0;</span>
         }
 
-<span class="pc bpc" id="L142" title="3 of 4 branches missed.">        if(limit == null || limit &gt; DEFAULT_LIMIT) {</span>
-<span class="fc" id="L143">            limit = DEFAULT_LIMIT;</span>
+<span class="pc bpc" id="L141" title="3 of 4 branches missed.">        if(limit == null || limit &gt; DEFAULT_LIMIT) {</span>
+<span class="fc" id="L142">            limit = DEFAULT_LIMIT;</span>
         }
 
-<span class="fc" id="L146">        List&lt;User&gt; users = this.userRepo.findAll(new OffsetBasedPageRequest(offset, limit)).toList();</span>
-<span class="fc" id="L147">        Set&lt;Item&gt; ret = new HashSet&lt;&gt;();</span>
+<span class="fc" id="L145">        List&lt;User&gt; users = this.userRepo.findAll(new OffsetBasedPageRequest(offset, limit)).toList();</span>
+<span class="fc" id="L146">        Set&lt;Item&gt; ret = new HashSet&lt;&gt;();</span>
 
-<span class="fc bfc" id="L149" title="All 2 branches covered.">        for (User user : users) {</span>
+<span class="fc bfc" id="L148" title="All 2 branches covered.">        for (User user : users) {</span>
 
-<span class="fc" id="L151">            ret.addAll(user.getSoldItems());</span>
+<span class="fc" id="L150">            ret.addAll(user.getSoldItems());</span>
             
-<span class="fc" id="L153">        }</span>
+<span class="fc" id="L152">        }</span>
 
-<span class="fc" id="L155">        return ret;</span>
+<span class="fc" id="L154">        return ret;</span>
 
     }
 
     public Set&lt;Item&gt; getItemsOnSale(Integer offset, Integer limit) {
 
-<span class="pc bpc" id="L161" title="1 of 2 branches missed.">        if(offset == null) {</span>
-<span class="fc" id="L162">            offset = 0;</span>
+<span class="pc bpc" id="L160" title="1 of 2 branches missed.">        if(offset == null) {</span>
+<span class="fc" id="L161">            offset = 0;</span>
         }
 
-<span class="pc bpc" id="L165" title="3 of 4 branches missed.">        if(limit == null || limit &gt; DEFAULT_LIMIT) {</span>
-<span class="fc" id="L166">            limit = DEFAULT_LIMIT;</span>
+<span class="pc bpc" id="L164" title="3 of 4 branches missed.">        if(limit == null || limit &gt; DEFAULT_LIMIT) {</span>
+<span class="fc" id="L165">            limit = DEFAULT_LIMIT;</span>
         }
 
-<span class="fc" id="L169">        List&lt;User&gt; users = this.userRepo.findAll(new OffsetBasedPageRequest(offset, limit)).toList();</span>
-<span class="fc" id="L170">        Set&lt;Item&gt; ret = new HashSet&lt;&gt;();</span>
+<span class="fc" id="L168">        List&lt;User&gt; users = this.userRepo.findAll(new OffsetBasedPageRequest(offset, limit)).toList();</span>
+<span class="fc" id="L169">        Set&lt;Item&gt; ret = new HashSet&lt;&gt;();</span>
 
-<span class="fc bfc" id="L172" title="All 2 branches covered.">        for (User user : users) {</span>
+<span class="fc bfc" id="L171" title="All 2 branches covered.">        for (User user : users) {</span>
 
-<span class="fc" id="L174">            ret.addAll(user.getPublishedItems());</span>
+<span class="fc" id="L173">            ret.addAll(user.getPublishedItems());</span>
             
-<span class="fc" id="L176">        }</span>
+<span class="fc" id="L175">        }</span>
 
-<span class="fc" id="L178">        return ret;</span>
+<span class="fc" id="L177">        return ret;</span>
 
     }
 

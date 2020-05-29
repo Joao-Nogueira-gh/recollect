@@ -3,7 +3,6 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.net.URL;
 
 import org.apache.commons.lang3.EnumUtils;
@@ -20,9 +19,9 @@ import ua.tqs.ReCollect.repository.ItemRepository;
 import ua.tqs.ReCollect.repository.OffsetBasedPageRequest;
 
 @Service
-<span class="fc" id="L23">public class ItemService {</span>
+<span class="fc" id="L22">public class ItemService {</span>
 
-<span class="fc" id="L25">    static final Logger logger = Logger.getLogger(ItemService.class);</span>
+<span class="fc" id="L24">    static final Logger logger = Logger.getLogger(ItemService.class);</span>
 
     private static final int DEFAULT_LIMIT = 25;
 
@@ -33,93 +32,93 @@ import ua.tqs.ReCollect.repository.OffsetBasedPageRequest;
     private UserService userService;
 
     public Item getItemById(Long id) {
-<span class="nc" id="L36">        Optional&lt;Item&gt; result = itemRepo.findById(id);</span>
+<span class="nc" id="L35">        Optional&lt;Item&gt; result = itemRepo.findById(id);</span>
 
-<span class="nc" id="L38">        return result.orElse(null);</span>
+<span class="nc" id="L37">        return result.orElse(null);</span>
     }
 
     public List&lt;Item&gt; getAll() {
-<span class="fc" id="L42">        return itemRepo.findAll();</span>
+<span class="fc" id="L41">        return itemRepo.findAll();</span>
     }
 
     public void save(Item item) {
-<span class="fc" id="L46">        itemRepo.save(item);</span>
-<span class="fc" id="L47">    }</span>
+<span class="fc" id="L45">        itemRepo.save(item);</span>
+<span class="fc" id="L46">    }</span>
 
     public void deleteItem(Long id) {
-<span class="nc" id="L50">        itemRepo.deleteById(id);</span>
-<span class="nc" id="L51">    }</span>
+<span class="nc" id="L49">        itemRepo.deleteById(id);</span>
+<span class="nc" id="L50">    }</span>
 
     public void deleteAll() {
-<span class="fc" id="L54">        itemRepo.deleteAll();</span>
-<span class="fc" id="L55">    }</span>
+<span class="fc" id="L53">        itemRepo.deleteAll();</span>
+<span class="fc" id="L54">    }</span>
 
     // Needed it for tests
     public void setUserService(UserService userService) {
-<span class="fc" id="L59">        this.userService = userService;</span>
-<span class="fc" id="L60">    }</span>
+<span class="fc" id="L58">        this.userService = userService;</span>
+<span class="fc" id="L59">    }</span>
 
 
     @Transactional
     public void addNewProduct(Item item, User owner) {
-<span class="fc" id="L65">        save(item);</span>
-<span class="fc" id="L66">        item.setOwner(owner);</span>
-<span class="fc" id="L67">        save(item);</span>
-<span class="fc" id="L68">    }</span>
+<span class="fc" id="L64">        save(item);</span>
+<span class="fc" id="L65">        item.setOwner(owner);</span>
+<span class="fc" id="L66">        save(item);</span>
+<span class="fc" id="L67">    }</span>
 
     @Transactional
     public void removeProduct(Item item) {
-<span class="fc" id="L72">        itemRepo.delete(item);</span>
-<span class="fc" id="L73">    }</span>
+<span class="fc" id="L71">        itemRepo.delete(item);</span>
+<span class="fc" id="L72">    }</span>
 
     @Transactional
     public void markAsSold(Item item) {
-<span class="fc" id="L77">        item.setSeller(item.getOwner());</span>
-<span class="fc" id="L78">        item.setOwner(null);</span>
-<span class="fc" id="L79">    }</span>
+<span class="fc" id="L76">        item.setSeller(item.getOwner());</span>
+<span class="fc" id="L77">        item.setOwner(null);</span>
+<span class="fc" id="L78">    }</span>
 
     @Transactional
     public void revertSale(Item item) {
-<span class="fc" id="L83">        item.setOwner(item.getSeller());</span>
-<span class="fc" id="L84">        item.setSeller(null);</span>
-<span class="fc" id="L85">    }</span>
+<span class="fc" id="L82">        item.setOwner(item.getSeller());</span>
+<span class="fc" id="L83">        item.setSeller(null);</span>
+<span class="fc" id="L84">    }</span>
 
     @Transactional
     public void addFavorite(Item item, User user) {
-<span class="pc bpc" id="L89" title="1 of 2 branches missed.">        if (!user.getFavoriteItems().contains(item)) {</span>
-<span class="fc" id="L90">            user.addFavItem(item);</span>
+<span class="pc bpc" id="L88" title="1 of 2 branches missed.">        if (!user.getFavoriteItems().contains(item)) {</span>
+<span class="fc" id="L89">            user.addFavItem(item);</span>
         }
-<span class="fc" id="L92">    }</span>
+<span class="fc" id="L91">    }</span>
 
     @Transactional
     public void removeFavorite(Item item, User user) {
-<span class="pc bpc" id="L96" title="1 of 2 branches missed.">        if (user.getFavoriteItems().contains(item)) {</span>
-<span class="fc" id="L97">            user.remFavItem(item);</span>
+<span class="pc bpc" id="L95" title="1 of 2 branches missed.">        if (user.getFavoriteItems().contains(item)) {</span>
+<span class="fc" id="L96">            user.remFavItem(item);</span>
         }
-<span class="fc" id="L99">    }</span>
+<span class="fc" id="L98">    }</span>
 
     public ItemDTO convertItem(Item item) {
-<span class="fc" id="L102">        ItemDTO dto = new ItemDTO(item.getName(), item.getQuantity(), item.getPrice(), item.getDescription());</span>
+<span class="fc" id="L101">        ItemDTO dto = new ItemDTO(item.getName(), item.getQuantity(), item.getPrice(), item.getDescription());</span>
 
-<span class="fc bfc" id="L104" title="All 2 branches covered.">        for (URL image : item.getImages()) {</span>
-<span class="fc" id="L105">            dto.addImages(image);</span>
-<span class="fc" id="L106">        }</span>
-<span class="fc" id="L107">        dto.setCreationDate(item.getCreationDate());</span>
+<span class="fc bfc" id="L103" title="All 2 branches covered.">        for (URL image : item.getImages()) {</span>
+<span class="fc" id="L104">            dto.addImages(image);</span>
+<span class="fc" id="L105">        }</span>
+<span class="fc" id="L106">        dto.setCreationDate(item.getCreationDate());</span>
 
-<span class="fc bfc" id="L109" title="All 2 branches covered.">        if (item.getOwner() != null) {</span>
-<span class="fc" id="L110">            dto.setOwner(item.getOwner().getName());</span>
-<span class="fc bfc" id="L111" title="All 2 branches covered.">        } else if (item.getSeller() != null) {</span>
-<span class="fc" id="L112">            dto.setOwner(item.getSeller().getName());</span>
+<span class="fc bfc" id="L108" title="All 2 branches covered.">        if (item.getOwner() != null) {</span>
+<span class="fc" id="L109">            dto.setOwner(item.getOwner().getName());</span>
+<span class="fc bfc" id="L110" title="All 2 branches covered.">        } else if (item.getSeller() != null) {</span>
+<span class="fc" id="L111">            dto.setOwner(item.getSeller().getName());</span>
         } else {
-<span class="fc" id="L114">            dto.setOwner(&quot;null&quot;);</span>
+<span class="fc" id="L113">            dto.setOwner(&quot;null&quot;);</span>
         }
-<span class="fc bfc" id="L116" title="All 2 branches covered.">        for (Comment comment : item.getComment()) {</span>
-<span class="fc" id="L117">            dto.addComments(comment.getText() + &quot;;&quot; + comment.getUser().getName());</span>
-<span class="fc" id="L118">        }</span>
+<span class="fc bfc" id="L115" title="All 2 branches covered.">        for (Comment comment : item.getComment()) {</span>
+<span class="fc" id="L116">            dto.addComments(comment.getText() + &quot;;&quot; + comment.getUser().getName());</span>
+<span class="fc" id="L117">        }</span>
 
-<span class="fc" id="L120">        dto.setCategory(String.valueOf(item.getCategory()));</span>
+<span class="fc" id="L119">        dto.setCategory(String.valueOf(item.getCategory()));</span>
 
-<span class="fc" id="L122">        return dto;</span>
+<span class="fc" id="L121">        return dto;</span>
     }
 
 
@@ -130,9 +129,9 @@ import ua.tqs.ReCollect.repository.OffsetBasedPageRequest;
 
     public List&lt;Item&gt; getAll(Pageable offset) {
 
-<span class="fc" id="L133">        Page&lt;Item&gt; page = itemRepo.findAll(offset);</span>
+<span class="fc" id="L132">        Page&lt;Item&gt; page = itemRepo.findAll(offset);</span>
 
-<span class="fc" id="L135">        return page.toList();</span>
+<span class="fc" id="L134">        return page.toList();</span>
 
     }
 
@@ -142,7 +141,7 @@ import ua.tqs.ReCollect.repository.OffsetBasedPageRequest;
      */
     private List&lt;Item&gt; fetchItemsByCategory(String cat, Pageable offset) {
 
-<span class="fc" id="L145">        return itemRepo.findByCategory(Categories.valueOf(cat), offset);</span>
+<span class="fc" id="L144">        return itemRepo.findByCategory(Categories.valueOf(cat), offset);</span>
 
     }
 
@@ -152,7 +151,7 @@ import ua.tqs.ReCollect.repository.OffsetBasedPageRequest;
      */
     private List&lt;Item&gt; fetchItemsBySeller(String email, Pageable offset) {
 
-<span class="fc" id="L155">        return itemRepo.findByOwner(userService.getByEmail(email), offset);</span>
+<span class="fc" id="L154">        return itemRepo.findByOwner(userService.getByEmail(email), offset);</span>
 
     }
 
@@ -161,28 +160,28 @@ import ua.tqs.ReCollect.repository.OffsetBasedPageRequest;
     // timestamps to be generated. Mocks won't suffice.
     public List&lt;Item&gt; get20NewestItems() {
 
-<span class="nc" id="L164">        return this.itemRepo.findTop20ByOrderByCreationDateAsc();</span>
+<span class="nc" id="L163">        return this.itemRepo.findTop20ByOrderByCreationDateAsc();</span>
 
     }
 
     public List&lt;Item&gt; get20OldestItems() {
 
-<span class="nc" id="L170">        return this.itemRepo.findTop20ByOrderByCreationDateDesc();</span>
+<span class="nc" id="L169">        return this.itemRepo.findTop20ByOrderByCreationDateDesc();</span>
 
     }
 
     public List&lt;Item&gt; getItemsByCategoryAndSearchTerm(String searchTerm, Categories category) {
-<span class="nc" id="L175">        return itemRepo.findByNameContainingAndCategory(searchTerm, category);</span>
+<span class="nc" id="L174">        return itemRepo.findByNameContainingAndCategory(searchTerm, category);</span>
     }
 
     public List&lt;Item&gt; getItemsByCategory(Categories category) {
-<span class="nc" id="L179">        return itemRepo.findByCategory(category);</span>
+<span class="nc" id="L178">        return itemRepo.findByCategory(category);</span>
     }
 
     // Return all Items from a given seller's e-mail and Category
     private List&lt;Item&gt; fetchItemsByCategoryAndSeller(String cat, String email, Pageable offset) {
 
-<span class="fc" id="L185">        return itemRepo.findByCategoryAndOwner(Categories.valueOf(cat), userService.getByEmail(email), offset);</span>
+<span class="fc" id="L184">        return itemRepo.findByCategoryAndOwner(Categories.valueOf(cat), userService.getByEmail(email), offset);</span>
 
     }
 
@@ -191,79 +190,79 @@ import ua.tqs.ReCollect.repository.OffsetBasedPageRequest;
         List&lt;Item&gt; ret;
         Pageable p;
 
-<span class="fc bfc" id="L194" title="All 2 branches covered.">        if (offset == null) {</span>
-<span class="fc" id="L195">            offset = 0;</span>
+<span class="fc bfc" id="L193" title="All 2 branches covered.">        if (offset == null) {</span>
+<span class="fc" id="L194">            offset = 0;</span>
         }
 
-<span class="pc bpc" id="L198" title="1 of 4 branches missed.">        if (limit == null || limit &gt; DEFAULT_LIMIT) {</span>
+<span class="pc bpc" id="L197" title="1 of 4 branches missed.">        if (limit == null || limit &gt; DEFAULT_LIMIT) {</span>
 
-<span class="fc" id="L200">            limit = DEFAULT_LIMIT;</span>
+<span class="fc" id="L199">            limit = DEFAULT_LIMIT;</span>
 
         }
 
-<span class="fc bfc" id="L204" title="All 2 branches covered.">        if (orderBy == null) {</span>
+<span class="fc bfc" id="L203" title="All 2 branches covered.">        if (orderBy == null) {</span>
 
-<span class="fc" id="L206">            p = new OffsetBasedPageRequest(offset, limit);</span>
+<span class="fc" id="L205">            p = new OffsetBasedPageRequest(offset, limit);</span>
 
         } else {
 
-<span class="fc" id="L210">            p = new OffsetBasedPageRequest(offset, limit, Direction.ASC, orderBy);</span>
+<span class="fc" id="L209">            p = new OffsetBasedPageRequest(offset, limit, Direction.ASC, orderBy);</span>
 
         }
 
         // Basic Validation
-<span class="pc bpc" id="L215" title="1 of 2 branches missed.">        if (basicValidation(cat, seller, orderBy)) {</span>
+<span class="pc bpc" id="L214" title="1 of 2 branches missed.">        if (basicValidation(cat, seller, orderBy)) {</span>
 
-<span class="nc" id="L217">            return new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L216">            return new ArrayList&lt;&gt;();</span>
         }
 
-<span class="fc bfc" id="L220" title="All 4 branches covered.">        if (cat == null &amp;&amp; seller == null) {</span>
+<span class="fc bfc" id="L219" title="All 4 branches covered.">        if (cat == null &amp;&amp; seller == null) {</span>
 
-<span class="fc" id="L222">            ret = this.getAll(p);</span>
+<span class="fc" id="L221">            ret = this.getAll(p);</span>
 
-<span class="fc bfc" id="L224" title="All 2 branches covered.">        } else if (cat == null) {</span>
+<span class="fc bfc" id="L223" title="All 2 branches covered.">        } else if (cat == null) {</span>
 
             // Query based on seller
-<span class="fc" id="L227">            ret = this.fetchItemsBySeller(seller, p);</span>
+<span class="fc" id="L226">            ret = this.fetchItemsBySeller(seller, p);</span>
 
-<span class="fc bfc" id="L229" title="All 2 branches covered.">        } else if (seller == null) {</span>
+<span class="fc bfc" id="L228" title="All 2 branches covered.">        } else if (seller == null) {</span>
 
             // Query based on cat
-<span class="fc" id="L232">            ret = this.fetchItemsByCategory(cat, p);</span>
+<span class="fc" id="L231">            ret = this.fetchItemsByCategory(cat, p);</span>
 
         } else {
 
             // Query based on both
-<span class="fc" id="L237">            ret = this.fetchItemsByCategoryAndSeller(cat, seller, p);</span>
+<span class="fc" id="L236">            ret = this.fetchItemsByCategoryAndSeller(cat, seller, p);</span>
 
         }
 
-<span class="fc" id="L241">        return ret.stream().limit(limit).collect(Collectors.toList());</span>
+<span class="fc" id="L240">        return ret;</span>
 
     }
 
     private boolean orderByIsValid(String orderBy) {
-<span class="pc bpc" id="L246" title="3 of 4 branches missed.">        return orderBy.equals(&quot;price&quot;) || orderBy.equals(&quot;creationDate&quot;);</span>
+<span class="pc bpc" id="L245" title="3 of 4 branches missed.">        return orderBy.equals(&quot;price&quot;) || orderBy.equals(&quot;creationDate&quot;);</span>
     }
 
     private boolean basicValidation(String cat, String seller, String orderBy){
 
-<span class="pc bpc" id="L251" title="1 of 6 branches missed.">        return ((seller != null &amp;&amp; !userService.userExists(seller))</span>
-<span class="pc bpc" id="L252" title="1 of 4 branches missed.">        || (cat != null &amp;&amp; !EnumUtils.isValidEnum(Categories.class, cat))</span>
-<span class="pc bpc" id="L253" title="1 of 2 branches missed.">        || (orderBy != null &amp;&amp; !orderByIsValid(orderBy)));</span>
+<span class="pc bpc" id="L250" title="1 of 6 branches missed.">        return ((seller != null &amp;&amp; !userService.userExists(seller))</span>
+<span class="pc bpc" id="L251" title="1 of 4 branches missed.">        || (cat != null &amp;&amp; !EnumUtils.isValidEnum(Categories.class, cat))</span>
+<span class="pc bpc" id="L252" title="1 of 2 branches missed.">        || (orderBy != null &amp;&amp; !orderByIsValid(orderBy)));</span>
     }
 
     public Item getSingleItem(Long id) {
 
-<span class="nc" id="L258">        Optional&lt;Item&gt; optItem = this.itemRepo.findById(id);</span>
+<span class="nc" id="L257">        Optional&lt;Item&gt; optItem = this.itemRepo.findById(id);</span>
 
-<span class="nc bnc" id="L260" title="All 2 branches missed.">        if (optItem.isPresent()) {</span>
+<span class="nc bnc" id="L259" title="All 2 branches missed.">        if (optItem.isPresent()) {</span>
 
-<span class="nc" id="L262">            return optItem.get();</span>
+<span class="nc" id="L261">            return optItem.get();</span>
 
         }
 
-<span class="nc" id="L266">        return null;</span>
+<span class="nc" id="L265">        return null;</span>
 
     }
 
