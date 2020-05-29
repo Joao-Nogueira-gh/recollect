@@ -28,7 +28,7 @@ public class CommentController {
     @Autowired 
     private CommentService commentService;
     
-    static final Logger logger = Logger.getLogger(ItemController.class);
+    static final Logger logger = Logger.getLogger(CommentController.class);
 
 	@GetMapping(path="/testcc/")
 	public String test(Model model) {

@@ -8,6 +8,7 @@ import ua.tqs.ReCollect.functionalTest.LoginPage;
 import ua.tqs.ReCollect.functionalTest.MyAdsPage;
 import ua.tqs.ReCollect.functionalTest.SoldItemsPage;
 
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 public class PutBackOnSaleStepsDefinition  {
@@ -46,7 +47,7 @@ public class PutBackOnSaleStepsDefinition  {
 
     @Given("has at least one item in sold items list")
     public void has_at_least_one_item_in_sold_items_list() {
-        assertTrue(currentSoldCount!=0);
+        assertNotEquals(0, currentSoldCount);
     }
 
     @Given("clicks the put back on sale button")

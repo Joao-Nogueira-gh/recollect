@@ -1,6 +1,5 @@
 package ua.tqs.ReCollect.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -52,6 +51,11 @@ public class FrontendWebController {
     private static final String REDIRECT_SEARCH_RESULTS = "redirect:/category";
     private static final String REDIRECT_HOME= "redirect:/";
     private static final String ERROR_PAGE = "error";
+    private static final String CATEGORIES = "categories";
+    private static final String CATEGORY = "category";
+    private static final String HAS_ERRORS = "hasErrors";
+    private static final String SEARCH_RESULTS = "searchResults";
+    private static final String COMMENT_HAS_ERROR = "commentHasError";
 
     @Autowired
     ItemService itemService;
@@ -62,7 +66,7 @@ public class FrontendWebController {
     @Autowired
     CommentService commentService;
 
-    ArrayList<Category> categories = Category.getCategories();
+    List<Category> categories = Category.getCategories();
 
     @GetMapping(value = "/error")
     public String error(){
@@ -70,14 +74,14 @@ public class FrontendWebController {
     }
 
     @GetMapping(value = "/")
-    public String home(SearchParams searchParams, Model model, @RequestParam(name = "hasErrors", required = false) boolean hasErrors) {
-        model.addAttribute("categories", categories);
-        model.addAttribute("hasErrors", hasErrors);
+    public String home(SearchParams searchParams, Model model, @RequestParam(name = HAS_ERRORS, required = false) boolean hasErrors) {
+        model.addAttribute(CATEGORIES, categories);
+        model.addAttribute(HAS_ERRORS, hasErrors);
         List<Item> recentItems = itemService.get20NewestItems();
         // get only items on sale
         CollectionUtils.filter(recentItems, i -> ((Item) i).getSeller()==null);
         model.addAttribute("recentItems", recentItems);
-        System.err.println("loggedUser -> " + this.getLoggedUser());
+        logger.debug("loggedUser -> " + this.getLoggedUser());
         return "index";
     }
 
@@ -86,7 +90,7 @@ public class FrontendWebController {
         if(bindingResult.hasErrors()){
             // if, for some reason, there's no category, search is invalid
             logger.debug("NÃO FOI FORNECIDA CATEGORIA!");
-            ra.addAttribute("hasErrors", true);
+            ra.addAttribute(HAS_ERRORS, true);
             return REDIRECT_HOME;
         }
 
@@ -105,8 +109,8 @@ public class FrontendWebController {
         // get only items on sale
         CollectionUtils.filter(searchResults, i -> ((Item) i).getSeller()==null);
 
-        ra.addAttribute("searchResults", searchResults);
-        ra.addAttribute("category", category);
+        ra.addAttribute(SEARCH_RESULTS, searchResults);
+        ra.addAttribute(CATEGORY, category);
 
         return REDIRECT_SEARCH_RESULTS;
     }
@@ -114,17 +118,16 @@ public class FrontendWebController {
     @GetMapping(value = "/category") // url for product search results
     public String searchResultsPage(SearchParams searchParams,
                                     Model model,
-                                    @RequestParam(name = "hasErrors", required = false) boolean hasErrors,
-                                    @RequestParam(name = "searchResults") List<Item> searchResults,
-                                    @RequestParam(name = "category", required = false) Categories category){
+                                    @RequestParam(name = HAS_ERRORS, required = false) boolean hasErrors,
+                                    @RequestParam(name = SEARCH_RESULTS) List<Item> searchResults,
+                                    @RequestParam(name = CATEGORY, required = false) Categories category){
 
         logger.debug("searchResults to recebidos -> " + searchResults.toString());
 
         model.addAttribute("hasErros", hasErrors);
-        model.addAttribute("searchResults", searchResults);
-        model.addAttribute("category", category);
-        //model.addAttribute("searchParams", new SearchParams());
-        model.addAttribute("categories", categories);
+        model.addAttribute(SEARCH_RESULTS, searchResults);
+        model.addAttribute(CATEGORY, category);
+        model.addAttribute(CATEGORIES, categories);
 
         return PRODUCT_SEARCH_RESULTS;
     }
@@ -134,7 +137,7 @@ public class FrontendWebController {
         if(bindingResult.hasErrors()){
             // if, for some reason, there's no category, search is invalid
             logger.debug("NÃO FOI FORNECIDA CATEGORIA!");
-            ra.addAttribute("hasErrors", true);
+            ra.addAttribute(HAS_ERRORS, true);
             return REDIRECT_SEARCH_RESULTS;
         }
 
@@ -153,14 +156,14 @@ public class FrontendWebController {
         CollectionUtils.filter(searchResults, i -> ((Item) i).getSeller()==null);
 
         logger.debug("searchResults to post -> " + searchResults.toString());
-        ra.addAttribute("searchResults", searchResults);
-        ra.addAttribute("category", category);
+        ra.addAttribute(SEARCH_RESULTS, searchResults);
+        ra.addAttribute(CATEGORY, category);
 
         return REDIRECT_SEARCH_RESULTS;
     }
 
     @GetMapping(value = "/home_category/{category}")
-    public String showCategoryProducts(@PathVariable(name = "category") String category, RedirectAttributes ra){
+    public String showCategoryProducts(@PathVariable(name = CATEGORY) String category, RedirectAttributes ra){
         List<Item> searchResults;
 
         Categories categoryEnum = Categories.valueOf(category);
@@ -169,8 +172,8 @@ public class FrontendWebController {
         // get only items on sale
         CollectionUtils.filter(searchResults, i -> ((Item) i).getSeller()==null);
 
-        ra.addAttribute("searchResults", searchResults);
-        ra.addAttribute("category", categoryEnum);
+        ra.addAttribute(SEARCH_RESULTS, searchResults);
+        ra.addAttribute(CATEGORY, categoryEnum);
 
         return REDIRECT_SEARCH_RESULTS;
     }
@@ -309,15 +312,15 @@ public class FrontendWebController {
     @GetMapping(value = "/announce")
     public String addItem(ItemForm itemForm, Model model, @RequestParam(name = "submitted", required = false) boolean submitted,
                           @RequestParam(name = "noImages", required = false) boolean noImages,
-                          @RequestParam(name = "hasErrors", required = false) boolean hasErrors) {
+                          @RequestParam(name = HAS_ERRORS, required = false) boolean hasErrors) {
         if(this.getLoggedUser() == null){
             return "redirect:/login";
         }
 
-        model.addAttribute("hasErrors", hasErrors);
+        model.addAttribute(HAS_ERRORS, hasErrors);
         model.addAttribute("noImages", noImages);
         model.addAttribute(SUBMITTED, submitted);
-        model.addAttribute("categories", categories);
+        model.addAttribute(CATEGORIES, categories);
 
         PictureListDto pictureListForm = new PictureListDto();
 
@@ -337,7 +340,7 @@ public class FrontendWebController {
             // if the provided data is invalid
             logger.debug("INPUTS INVALIDOS!");
             ra.addAttribute(SUBMITTED, false);
-            ra.addAttribute("hasErrors", true);
+            ra.addAttribute(HAS_ERRORS, true);
             return REDIRECTANNOUNCE;
         }
 
@@ -392,11 +395,9 @@ public class FrontendWebController {
 
     @GetMapping(value = "/product/{id}")
     public String productPost(Model model, @PathVariable(name = "id") Long id, RedirectAttributes ra) {
-        //System.err.println("id -> " + id);
         //model.addAttribute("searchparams", new SearchParams());
         Item item = itemService.getItemById(id);
 
-        //System.err.println("item recebido 1 -> " + item.toString());
         ra.addAttribute("item", item);
         return REDIRECT_PRODUCT;
     }
@@ -405,19 +406,18 @@ public class FrontendWebController {
     public String productPage(CommentForm commentForm,
                               Model model,
                               @RequestParam(name = "item", required = false) Item item,
-                              @RequestParam(name = "commentHasError", required = false) boolean commentHasError) {
-        model.addAttribute("loggedUser", this.getLoggedUser());
-        model.addAttribute("categories", categories);
+                              @RequestParam(name = COMMENT_HAS_ERROR, required = false) boolean commentHasError) {
+        model.addAttribute(LOGGEDUSER, this.getLoggedUser());
+        model.addAttribute(CATEGORIES, categories);
         model.addAttribute("searchparams", new SearchParams());
-        //System.err.println("item recebido 2 -> " + item.toString());
         model.addAttribute("item", item);
-        model.addAttribute("commentHasError", commentHasError);
+        model.addAttribute(COMMENT_HAS_ERROR, commentHasError);
         return PRODUCT_POST;
     }
 
     @PostMapping(value = "/product")
     public String productComment(Model model) {
-        model.addAttribute("categories", categories);
+        model.addAttribute(CATEGORIES, categories);
 
         return PRODUCT_POST;
 
@@ -446,7 +446,7 @@ public class FrontendWebController {
             // if the provided data is invalid
             logger.debug("COMENTARIO INVALIDOS!");
             ra.addAttribute("item", commentedItem);
-            ra.addAttribute("commentHasError", true);
+            ra.addAttribute(COMMENT_HAS_ERROR, true);
             return REDIRECT_PRODUCT;
         }
 
@@ -455,7 +455,7 @@ public class FrontendWebController {
             // if the provided data is invalid
             logger.debug("COMENTARIO VAZIO!");
             ra.addAttribute("item", commentedItem);
-            ra.addAttribute("commentHasError", true);
+            ra.addAttribute(COMMENT_HAS_ERROR, true);
             return REDIRECT_PRODUCT;
         }
 

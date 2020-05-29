@@ -19,7 +19,7 @@ public class RemoveCommentSeleniumTest extends FunctionalTest {
     }
 
     @Test
-    public void removeComment(){
+    void removeComment(){
         //Fazer o login
         driver.get("http://localhost:8080/announce");
         LoginPage loginPage = new LoginPage(driver);

@@ -30,7 +30,7 @@ import org.apache.log4j.Logger;
 
     @Override
     @Transactional
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String email) {
 <span class="nc" id="L34">        User user = userService.getByEmail(email);</span>
         
 <span class="nc bnc" id="L36" title="All 2 branches missed.">        if(user == null){</span>

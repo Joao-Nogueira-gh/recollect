@@ -30,7 +30,7 @@ public class UserController {
 
     static final Logger logger = Logger.getLogger(UserController.class);
 
-    private static final String registrationPage = "register";
+    private static final String REGISTER = "register";
 
     @GetMapping(value = "/login")
     public ModelAndView login() {
@@ -44,7 +44,7 @@ public class UserController {
         ModelAndView modelAndView = new ModelAndView();
         User user = new User();
         modelAndView.addObject("user", user);
-        modelAndView.setViewName(registrationPage);
+        modelAndView.setViewName(REGISTER);
         modelAndView.addObject("registo", new RegisterForm());
         modelAndView.addObject("cidades", locationService.getCountiesByDistrict());
         return modelAndView;
@@ -70,7 +70,7 @@ public class UserController {
         modelAndView.addObject("registo", new RegisterForm());
         modelAndView.addObject("cidades", locationService.getCountiesByDistrict());
 
-        modelAndView.setViewName(registrationPage);
+        modelAndView.setViewName(REGISTER);
         return modelAndView;
     }
 

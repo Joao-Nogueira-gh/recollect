@@ -6,7 +6,7 @@ import org.openqa.selenium.NoSuchElementException;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class SearchByCategorySeleniumTest extends FunctionalTest {
+class SearchByCategorySeleniumTest extends FunctionalTest {
 
     public SearchByCategorySeleniumTest() {
         super();
@@ -14,7 +14,7 @@ public class SearchByCategorySeleniumTest extends FunctionalTest {
     }
 
     @Test
-    public void searchBooksFromHomeSearchBar(){
+    void searchBooksFromHomeSearchBar(){
         driver.get("http://localhost:8080/");
         HomePage homePage = new HomePage(driver);
         assertTrue(homePage.isInitialized());
@@ -26,7 +26,7 @@ public class SearchByCategorySeleniumTest extends FunctionalTest {
     }
 
     @Test
-    public void searchToysThenMiscFromHomeCategories(){
+    void searchToysThenMiscFromHomeCategories(){
         driver.get("http://localhost:8080/");
         HomePage homePage = new HomePage(driver);
         assertTrue(homePage.isInitialized());
@@ -47,7 +47,7 @@ public class SearchByCategorySeleniumTest extends FunctionalTest {
     }
 
     @Test
-    public void searchBooksFromHomeAfterAddingItem(){
+    void searchBooksFromHomeAfterAddingItem(){
         // login and add an item
         driver.get("http://localhost:8080/announce");
         LoginPage loginPage = new LoginPage(driver);

@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import ua.tqs.ReCollect.model.Item;
 import ua.tqs.ReCollect.model.User;
-import ua.tqs.ReCollect.model.UserDTO;
 import ua.tqs.ReCollect.repository.OffsetBasedPageRequest;
 import ua.tqs.ReCollect.repository.UserRepository;
 
@@ -111,38 +110,6 @@ public class UserService {
 
 
         return ret.stream().limit(limit).collect(Collectors.toList());
-
-    }
-
-    public UserDTO convertToDTO(User user) {
-
-        UserDTO dto = new UserDTO(user.getName(), user.getEmail(), user.getPhone(), user.getPassword());
-
-        if (user.getLocation() != null) {
-            dto.setLocation(user.getLocation().getCounty() + "-" + user.getLocation().getDistrict());
-        }
-        for (Item i : user.getFavoriteItems()) {
-            dto.addFavoriteItems(i.getName() + ";" + i.getQuantity() + ";" + i.getPrice() + ";" + i.getDescription()
-                    + ";" + i.getCategory());
-        }
-        for (Item i : user.getSoldItems()) {
-            dto.addSoldItems(i.getName() + ";" + i.getQuantity() + ";" + i.getPrice() + ";" + i.getDescription() + ";"
-                    + i.getCategory());
-        }
-        for (Item i : user.getPublishedItems()) {
-            dto.addPublishedItems(i.getName() + ";" + i.getQuantity() + ";" + i.getPrice() + ";" + i.getDescription()
-                    + ";" + i.getCategory());
-        }
-
-        return dto;
-
-    }
-
-    // might need to have several methods, or flags
-    // this specific one is because of the register
-    public User convertToUser(UserDTO userdto) {
-
-        return new User(userdto.getName(), userdto.getEmail(), userdto.getPassword(), userdto.getPhoneNumber());
 
     }
 

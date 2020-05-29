@@ -6,7 +6,7 @@ import org.openqa.selenium.NoSuchElementException;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class AddItemSeleniumTest extends FunctionalTest {
+class AddItemSeleniumTest extends FunctionalTest {
 
     public AddItemSeleniumTest() {
         super();
@@ -14,7 +14,7 @@ public class AddItemSeleniumTest extends FunctionalTest {
     }
 
     @Test
-    public void submittedValidItem(){
+    void submittedValidItem(){
         //Fazer o login
         driver.get("http://localhost:8080/announce");
         LoginPage loginPage = new LoginPage(driver);
@@ -37,7 +37,7 @@ public class AddItemSeleniumTest extends FunctionalTest {
     }
 
     @Test
-    public void submittedInvalidItem(){
+    void submittedInvalidItem(){
         //Fazer o login
         driver.get("http://localhost:8080/announce");
         LoginPage loginPage = new LoginPage(driver);

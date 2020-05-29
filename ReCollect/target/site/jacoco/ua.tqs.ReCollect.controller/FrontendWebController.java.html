@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FrontendWebController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ReCollect</a> &gt; <a href="index.source.html" class="el_package">ua.tqs.ReCollect.controller</a> &gt; <span class="el_source">FrontendWebController.java</span></div><h1>FrontendWebController.java</h1><pre class="source lang-java linenums">package ua.tqs.ReCollect.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -33,9 +32,9 @@ import org.apache.log4j.Logger;
 
 
 @Controller
-<span class="fc" id="L36">public class FrontendWebController {</span>
+<span class="fc" id="L35">public class FrontendWebController {</span>
 
-<span class="fc" id="L38">    static final Logger logger = Logger.getLogger(FrontendWebController.class);</span>
+<span class="fc" id="L37">    static final Logger logger = Logger.getLogger(FrontendWebController.class);</span>
 
 
     private static final String USERITEMS = &quot;userItems&quot;;
@@ -52,6 +51,11 @@ import org.apache.log4j.Logger;
     private static final String REDIRECT_SEARCH_RESULTS = &quot;redirect:/category&quot;;
     private static final String REDIRECT_HOME= &quot;redirect:/&quot;;
     private static final String ERROR_PAGE = &quot;error&quot;;
+    private static final String CATEGORIES = &quot;categories&quot;;
+    private static final String CATEGORY = &quot;category&quot;;
+    private static final String HAS_ERRORS = &quot;hasErrors&quot;;
+    private static final String SEARCH_RESULTS = &quot;searchResults&quot;;
+    private static final String COMMENT_HAS_ERROR = &quot;commentHasError&quot;;
 
     @Autowired
     ItemService itemService;
@@ -62,117 +66,116 @@ import org.apache.log4j.Logger;
     @Autowired
     CommentService commentService;
 
-<span class="fc" id="L65">    ArrayList&lt;Category&gt; categories = Category.getCategories();</span>
+<span class="fc" id="L69">    List&lt;Category&gt; categories = Category.getCategories();</span>
 
     @GetMapping(value = &quot;/error&quot;)
     public String error(){
-<span class="nc" id="L69">        return ERROR_PAGE;</span>
+<span class="nc" id="L73">        return ERROR_PAGE;</span>
     }
 
     @GetMapping(value = &quot;/&quot;)
-    public String home(SearchParams searchParams, Model model, @RequestParam(name = &quot;hasErrors&quot;, required = false) boolean hasErrors) {
-<span class="nc" id="L74">        model.addAttribute(&quot;categories&quot;, categories);</span>
-<span class="nc" id="L75">        model.addAttribute(&quot;hasErrors&quot;, hasErrors);</span>
-<span class="nc" id="L76">        List&lt;Item&gt; recentItems = itemService.get20NewestItems();</span>
+    public String home(SearchParams searchParams, Model model, @RequestParam(name = HAS_ERRORS, required = false) boolean hasErrors) {
+<span class="nc" id="L78">        model.addAttribute(CATEGORIES, categories);</span>
+<span class="nc" id="L79">        model.addAttribute(HAS_ERRORS, hasErrors);</span>
+<span class="nc" id="L80">        List&lt;Item&gt; recentItems = itemService.get20NewestItems();</span>
         // get only items on sale
-<span class="nc bnc" id="L78" title="All 2 branches missed.">        CollectionUtils.filter(recentItems, i -&gt; ((Item) i).getSeller()==null);</span>
-<span class="nc" id="L79">        model.addAttribute(&quot;recentItems&quot;, recentItems);</span>
-<span class="nc" id="L80">        System.err.println(&quot;loggedUser -&gt; &quot; + this.getLoggedUser());</span>
-<span class="nc" id="L81">        return &quot;index&quot;;</span>
+<span class="nc bnc" id="L82" title="All 2 branches missed.">        CollectionUtils.filter(recentItems, i -&gt; ((Item) i).getSeller()==null);</span>
+<span class="nc" id="L83">        model.addAttribute(&quot;recentItems&quot;, recentItems);</span>
+<span class="nc" id="L84">        logger.debug(&quot;loggedUser -&gt; &quot; + this.getLoggedUser());</span>
+<span class="nc" id="L85">        return &quot;index&quot;;</span>
     }
 
     @PostMapping(value = &quot;/&quot;)
     public String searchProducts(@Valid SearchParams searchParams, BindingResult bindingResult, RedirectAttributes ra) {
-<span class="nc bnc" id="L86" title="All 2 branches missed.">        if(bindingResult.hasErrors()){</span>
+<span class="nc bnc" id="L90" title="All 2 branches missed.">        if(bindingResult.hasErrors()){</span>
             // if, for some reason, there's no category, search is invalid
-<span class="nc" id="L88">            logger.debug(&quot;NÃO FOI FORNECIDA CATEGORIA!&quot;);</span>
-<span class="nc" id="L89">            ra.addAttribute(&quot;hasErrors&quot;, true);</span>
-<span class="nc" id="L90">            return REDIRECT_HOME;</span>
+<span class="nc" id="L92">            logger.debug(&quot;NÃO FOI FORNECIDA CATEGORIA!&quot;);</span>
+<span class="nc" id="L93">            ra.addAttribute(HAS_ERRORS, true);</span>
+<span class="nc" id="L94">            return REDIRECT_HOME;</span>
         }
 
         List&lt;Item&gt; searchResults;
 
-<span class="nc" id="L95">        String searchTerm = searchParams.getSearchterm();</span>
-<span class="nc" id="L96">        Categories category = Categories.valueOf(searchParams.getCategory());</span>
+<span class="nc" id="L99">        String searchTerm = searchParams.getSearchterm();</span>
+<span class="nc" id="L100">        Categories category = Categories.valueOf(searchParams.getCategory());</span>
 
-<span class="nc bnc" id="L98" title="All 4 branches missed.">        if(searchTerm==null || searchTerm.equals(&quot;&quot;)){</span>
-<span class="nc" id="L99">            searchResults = itemService.getItemsByCategory(category);</span>
+<span class="nc bnc" id="L102" title="All 4 branches missed.">        if(searchTerm==null || searchTerm.equals(&quot;&quot;)){</span>
+<span class="nc" id="L103">            searchResults = itemService.getItemsByCategory(category);</span>
         }
         else{
-<span class="nc" id="L102">            searchResults = itemService.getItemsByCategoryAndSearchTerm(searchTerm, category);</span>
+<span class="nc" id="L106">            searchResults = itemService.getItemsByCategoryAndSearchTerm(searchTerm, category);</span>
         }
 
         // get only items on sale
-<span class="nc bnc" id="L106" title="All 2 branches missed.">        CollectionUtils.filter(searchResults, i -&gt; ((Item) i).getSeller()==null);</span>
+<span class="nc bnc" id="L110" title="All 2 branches missed.">        CollectionUtils.filter(searchResults, i -&gt; ((Item) i).getSeller()==null);</span>
 
-<span class="nc" id="L108">        ra.addAttribute(&quot;searchResults&quot;, searchResults);</span>
-<span class="nc" id="L109">        ra.addAttribute(&quot;category&quot;, category);</span>
+<span class="nc" id="L112">        ra.addAttribute(SEARCH_RESULTS, searchResults);</span>
+<span class="nc" id="L113">        ra.addAttribute(CATEGORY, category);</span>
 
-<span class="nc" id="L111">        return REDIRECT_SEARCH_RESULTS;</span>
+<span class="nc" id="L115">        return REDIRECT_SEARCH_RESULTS;</span>
     }
 
     @GetMapping(value = &quot;/category&quot;) // url for product search results
     public String searchResultsPage(SearchParams searchParams,
                                     Model model,
-                                    @RequestParam(name = &quot;hasErrors&quot;, required = false) boolean hasErrors,
-                                    @RequestParam(name = &quot;searchResults&quot;) List&lt;Item&gt; searchResults,
-                                    @RequestParam(name = &quot;category&quot;, required = false) Categories category){
+                                    @RequestParam(name = HAS_ERRORS, required = false) boolean hasErrors,
+                                    @RequestParam(name = SEARCH_RESULTS) List&lt;Item&gt; searchResults,
+                                    @RequestParam(name = CATEGORY, required = false) Categories category){
 
-<span class="nc" id="L121">        logger.debug(&quot;searchResults to recebidos -&gt; &quot; + searchResults.toString());</span>
+<span class="nc" id="L125">        logger.debug(&quot;searchResults to recebidos -&gt; &quot; + searchResults.toString());</span>
 
-<span class="nc" id="L123">        model.addAttribute(&quot;hasErros&quot;, hasErrors);</span>
-<span class="nc" id="L124">        model.addAttribute(&quot;searchResults&quot;, searchResults);</span>
-<span class="nc" id="L125">        model.addAttribute(&quot;category&quot;, category);</span>
-        //model.addAttribute(&quot;searchParams&quot;, new SearchParams());
-<span class="nc" id="L127">        model.addAttribute(&quot;categories&quot;, categories);</span>
+<span class="nc" id="L127">        model.addAttribute(&quot;hasErros&quot;, hasErrors);</span>
+<span class="nc" id="L128">        model.addAttribute(SEARCH_RESULTS, searchResults);</span>
+<span class="nc" id="L129">        model.addAttribute(CATEGORY, category);</span>
+<span class="nc" id="L130">        model.addAttribute(CATEGORIES, categories);</span>
 
-<span class="nc" id="L129">        return PRODUCT_SEARCH_RESULTS;</span>
+<span class="nc" id="L132">        return PRODUCT_SEARCH_RESULTS;</span>
     }
 
     @PostMapping(value = &quot;/category&quot;)
     public String categorysearch(@Valid SearchParams searchParams, BindingResult bindingResult, RedirectAttributes ra) {
-<span class="nc bnc" id="L134" title="All 2 branches missed.">        if(bindingResult.hasErrors()){</span>
+<span class="nc bnc" id="L137" title="All 2 branches missed.">        if(bindingResult.hasErrors()){</span>
             // if, for some reason, there's no category, search is invalid
-<span class="nc" id="L136">            logger.debug(&quot;NÃO FOI FORNECIDA CATEGORIA!&quot;);</span>
-<span class="nc" id="L137">            ra.addAttribute(&quot;hasErrors&quot;, true);</span>
-<span class="nc" id="L138">            return REDIRECT_SEARCH_RESULTS;</span>
+<span class="nc" id="L139">            logger.debug(&quot;NÃO FOI FORNECIDA CATEGORIA!&quot;);</span>
+<span class="nc" id="L140">            ra.addAttribute(HAS_ERRORS, true);</span>
+<span class="nc" id="L141">            return REDIRECT_SEARCH_RESULTS;</span>
         }
 
         List&lt;Item&gt; searchResults;
 
-<span class="nc" id="L143">        String searchTerm = searchParams.getSearchterm();</span>
-<span class="nc" id="L144">        Categories category = Categories.valueOf(searchParams.getCategory());</span>
+<span class="nc" id="L146">        String searchTerm = searchParams.getSearchterm();</span>
+<span class="nc" id="L147">        Categories category = Categories.valueOf(searchParams.getCategory());</span>
 
-<span class="nc bnc" id="L146" title="All 4 branches missed.">        if(searchTerm==null || searchTerm.equals(&quot;&quot;)){</span>
-<span class="nc" id="L147">            searchResults = itemService.getItemsByCategory(category);</span>
+<span class="nc bnc" id="L149" title="All 4 branches missed.">        if(searchTerm==null || searchTerm.equals(&quot;&quot;)){</span>
+<span class="nc" id="L150">            searchResults = itemService.getItemsByCategory(category);</span>
         }
         else{
-<span class="nc" id="L150">            searchResults = itemService.getItemsByCategoryAndSearchTerm(searchTerm, category);</span>
+<span class="nc" id="L153">            searchResults = itemService.getItemsByCategoryAndSearchTerm(searchTerm, category);</span>
         }
 
-<span class="nc bnc" id="L153" title="All 2 branches missed.">        CollectionUtils.filter(searchResults, i -&gt; ((Item) i).getSeller()==null);</span>
+<span class="nc bnc" id="L156" title="All 2 branches missed.">        CollectionUtils.filter(searchResults, i -&gt; ((Item) i).getSeller()==null);</span>
 
-<span class="nc" id="L155">        logger.debug(&quot;searchResults to post -&gt; &quot; + searchResults.toString());</span>
-<span class="nc" id="L156">        ra.addAttribute(&quot;searchResults&quot;, searchResults);</span>
-<span class="nc" id="L157">        ra.addAttribute(&quot;category&quot;, category);</span>
+<span class="nc" id="L158">        logger.debug(&quot;searchResults to post -&gt; &quot; + searchResults.toString());</span>
+<span class="nc" id="L159">        ra.addAttribute(SEARCH_RESULTS, searchResults);</span>
+<span class="nc" id="L160">        ra.addAttribute(CATEGORY, category);</span>
 
-<span class="nc" id="L159">        return REDIRECT_SEARCH_RESULTS;</span>
+<span class="nc" id="L162">        return REDIRECT_SEARCH_RESULTS;</span>
     }
 
     @GetMapping(value = &quot;/home_category/{category}&quot;)
-    public String showCategoryProducts(@PathVariable(name = &quot;category&quot;) String category, RedirectAttributes ra){
+    public String showCategoryProducts(@PathVariable(name = CATEGORY) String category, RedirectAttributes ra){
         List&lt;Item&gt; searchResults;
 
-<span class="nc" id="L166">        Categories categoryEnum = Categories.valueOf(category);</span>
-<span class="nc" id="L167">        searchResults = itemService.getItemsByCategory(categoryEnum);</span>
+<span class="nc" id="L169">        Categories categoryEnum = Categories.valueOf(category);</span>
+<span class="nc" id="L170">        searchResults = itemService.getItemsByCategory(categoryEnum);</span>
 
         // get only items on sale
-<span class="nc bnc" id="L170" title="All 2 branches missed.">        CollectionUtils.filter(searchResults, i -&gt; ((Item) i).getSeller()==null);</span>
+<span class="nc bnc" id="L173" title="All 2 branches missed.">        CollectionUtils.filter(searchResults, i -&gt; ((Item) i).getSeller()==null);</span>
 
-<span class="nc" id="L172">        ra.addAttribute(&quot;searchResults&quot;, searchResults);</span>
-<span class="nc" id="L173">        ra.addAttribute(&quot;category&quot;, categoryEnum);</span>
+<span class="nc" id="L175">        ra.addAttribute(SEARCH_RESULTS, searchResults);</span>
+<span class="nc" id="L176">        ra.addAttribute(CATEGORY, categoryEnum);</span>
 
-<span class="nc" id="L175">        return REDIRECT_SEARCH_RESULTS;</span>
+<span class="nc" id="L178">        return REDIRECT_SEARCH_RESULTS;</span>
     }
 
 
@@ -183,241 +186,238 @@ import org.apache.log4j.Logger;
     @GetMapping(value = &quot;/edit-profile&quot;)
     public String editProfile(Model model) {
 
-<span class="nc" id="L186">        Authentication auth = SecurityContextHolder.getContext().getAuthentication();</span>
-<span class="nc" id="L187">        User loggedUser = userService.getByEmail(auth.getName());</span>
+<span class="nc" id="L189">        Authentication auth = SecurityContextHolder.getContext().getAuthentication();</span>
+<span class="nc" id="L190">        User loggedUser = userService.getByEmail(auth.getName());</span>
 
-<span class="nc" id="L189">        model.addAttribute(LOGGEDUSER, loggedUser);</span>
+<span class="nc" id="L192">        model.addAttribute(LOGGEDUSER, loggedUser);</span>
 
-<span class="nc" id="L191">        return &quot;edit-profile&quot;;</span>
+<span class="nc" id="L194">        return &quot;edit-profile&quot;;</span>
     }
 
     @GetMapping(value = &quot;/profile&quot;)
     public String userProfile(Model model) {
 
-<span class="nc bnc" id="L197" title="All 2 branches missed.">        if(this.getLoggedUser() == null){</span>
-<span class="nc" id="L198">            return &quot;redirect:/login&quot;;</span>
+<span class="nc bnc" id="L200" title="All 2 branches missed.">        if(this.getLoggedUser() == null){</span>
+<span class="nc" id="L201">            return &quot;redirect:/login&quot;;</span>
         }
 
-<span class="nc" id="L201">        Authentication auth = SecurityContextHolder.getContext().getAuthentication();</span>
-<span class="nc" id="L202">        User loggedUser = userService.getByEmail(auth.getName());</span>
+<span class="nc" id="L204">        Authentication auth = SecurityContextHolder.getContext().getAuthentication();</span>
+<span class="nc" id="L205">        User loggedUser = userService.getByEmail(auth.getName());</span>
 
-<span class="nc" id="L204">        Set&lt;Item&gt; allItems = loggedUser.getPublishedItems();</span>
+<span class="nc" id="L207">        Set&lt;Item&gt; allItems = loggedUser.getPublishedItems();</span>
 
-<span class="nc" id="L206">        model.addAttribute(USERITEMS, allItems);</span>
-<span class="nc" id="L207">        model.addAttribute(LOGGEDUSER, loggedUser);</span>
+<span class="nc" id="L209">        model.addAttribute(USERITEMS, allItems);</span>
+<span class="nc" id="L210">        model.addAttribute(LOGGEDUSER, loggedUser);</span>
 
-<span class="nc" id="L209">        return &quot;dashboard-my-ads&quot;;</span>
+<span class="nc" id="L212">        return &quot;dashboard-my-ads&quot;;</span>
     }
 
     @GetMapping(value = &quot;/profile/delete/{id}&quot;)
     public String deleteItem(Model model, @PathVariable(name = &quot;id&quot;) Long id) {
 
-<span class="nc bnc" id="L215" title="All 2 branches missed.">        if(this.getLoggedUser() == null){</span>
-<span class="nc" id="L216">            return &quot;redirect:/login&quot;;</span>
+<span class="nc bnc" id="L218" title="All 2 branches missed.">        if(this.getLoggedUser() == null){</span>
+<span class="nc" id="L219">            return &quot;redirect:/login&quot;;</span>
         }
 
-<span class="nc" id="L219">        User loggedUser = this.getLoggedUser();</span>
+<span class="nc" id="L222">        User loggedUser = this.getLoggedUser();</span>
 
-<span class="nc" id="L221">        Item deleted = itemService.getItemById(id);</span>
-<span class="nc" id="L222">        itemService.removeProduct(deleted);</span>
+<span class="nc" id="L224">        Item deleted = itemService.getItemById(id);</span>
+<span class="nc" id="L225">        itemService.removeProduct(deleted);</span>
 
-<span class="nc" id="L224">        Set&lt;Item&gt; allItems = loggedUser.getPublishedItems();</span>
+<span class="nc" id="L227">        Set&lt;Item&gt; allItems = loggedUser.getPublishedItems();</span>
 
-<span class="nc" id="L226">        model.addAttribute(USERITEMS, allItems);</span>
-<span class="nc" id="L227">        model.addAttribute(LOGGEDUSER, loggedUser);</span>
+<span class="nc" id="L229">        model.addAttribute(USERITEMS, allItems);</span>
+<span class="nc" id="L230">        model.addAttribute(LOGGEDUSER, loggedUser);</span>
 
-<span class="nc" id="L229">        return &quot;redirect:/profile&quot;;</span>
+<span class="nc" id="L232">        return &quot;redirect:/profile&quot;;</span>
     }
 
     @GetMapping(value = &quot;/sold-items/deleteSold/{id}&quot;)
     public String deleteSoldItem(Model model, @PathVariable(name = &quot;id&quot;) Long id) {
 
-<span class="nc bnc" id="L235" title="All 2 branches missed.">        if(this.getLoggedUser() == null){</span>
-<span class="nc" id="L236">            return &quot;redirect:/login&quot;;</span>
+<span class="nc bnc" id="L238" title="All 2 branches missed.">        if(this.getLoggedUser() == null){</span>
+<span class="nc" id="L239">            return &quot;redirect:/login&quot;;</span>
         }
 
-<span class="nc" id="L239">        logger.debug(&quot;ID para delete: &quot; + id);</span>
+<span class="nc" id="L242">        logger.debug(&quot;ID para delete: &quot; + id);</span>
 
-<span class="nc" id="L241">        Item deleted = itemService.getItemById(id);</span>
-<span class="nc" id="L242">        itemService.removeProduct(deleted);</span>
+<span class="nc" id="L244">        Item deleted = itemService.getItemById(id);</span>
+<span class="nc" id="L245">        itemService.removeProduct(deleted);</span>
 
-<span class="nc" id="L244">        Set&lt;Item&gt; allItems = this.getLoggedUser().getSoldItems();</span>
+<span class="nc" id="L247">        Set&lt;Item&gt; allItems = this.getLoggedUser().getSoldItems();</span>
 
-<span class="nc" id="L246">        logger.debug(ATRIBATUAL);</span>
-<span class="nc" id="L247">        model.addAttribute(&quot;userSoldItems&quot;, allItems);</span>
-<span class="nc" id="L248">        model.addAttribute(LOGGEDUSER, this.getLoggedUser());</span>
-<span class="nc" id="L249">        logger.debug(USERITEMS+&quot;: &quot; + model.getAttribute(USERITEMS));</span>
-<span class="nc" id="L250">        logger.debug(USERST+&quot;: &quot; + model.getAttribute(LOGGEDUSER));</span>
+<span class="nc" id="L249">        logger.debug(ATRIBATUAL);</span>
+<span class="nc" id="L250">        model.addAttribute(&quot;userSoldItems&quot;, allItems);</span>
+<span class="nc" id="L251">        model.addAttribute(LOGGEDUSER, this.getLoggedUser());</span>
+<span class="nc" id="L252">        logger.debug(USERITEMS+&quot;: &quot; + model.getAttribute(USERITEMS));</span>
+<span class="nc" id="L253">        logger.debug(USERST+&quot;: &quot; + model.getAttribute(LOGGEDUSER));</span>
 
-<span class="nc" id="L252">        return &quot;redirect:/sold-items&quot;;</span>
+<span class="nc" id="L255">        return &quot;redirect:/sold-items&quot;;</span>
     }
 
 
     @GetMapping(value = &quot;/profile/marksold/{id}&quot;)
     public String markAsSoldItem(Model model, @PathVariable(name = &quot;id&quot;) Long id) {
 
-<span class="nc bnc" id="L259" title="All 2 branches missed.">        if(this.getLoggedUser() == null){</span>
-<span class="nc" id="L260">            return &quot;redirect:/login&quot;;</span>
+<span class="nc bnc" id="L262" title="All 2 branches missed.">        if(this.getLoggedUser() == null){</span>
+<span class="nc" id="L263">            return &quot;redirect:/login&quot;;</span>
         }
 
-<span class="nc" id="L263">        logger.debug(&quot;ID para sold: &quot; + id);</span>
+<span class="nc" id="L266">        logger.debug(&quot;ID para sold: &quot; + id);</span>
 
-<span class="nc" id="L265">        Item sold = itemService.getItemById(id);</span>
-<span class="nc" id="L266">        itemService.markAsSold(sold);</span>
+<span class="nc" id="L268">        Item sold = itemService.getItemById(id);</span>
+<span class="nc" id="L269">        itemService.markAsSold(sold);</span>
 
-<span class="nc" id="L268">        Set&lt;Item&gt; allItems = this.getLoggedUser().getPublishedItems();</span>
+<span class="nc" id="L271">        Set&lt;Item&gt; allItems = this.getLoggedUser().getPublishedItems();</span>
 
-<span class="nc" id="L270">        logger.debug(ATRIBATUAL);</span>
-<span class="nc" id="L271">        model.addAttribute(USERITEMS, allItems);</span>
-<span class="nc" id="L272">        model.addAttribute(LOGGEDUSER, this.getLoggedUser());</span>
-<span class="nc" id="L273">        logger.debug(USERITEMS+&quot;: &quot; + model.getAttribute(USERITEMS));</span>
-<span class="nc" id="L274">        logger.debug(USERST+&quot;: &quot; + model.getAttribute(LOGGEDUSER));</span>
+<span class="nc" id="L273">        logger.debug(ATRIBATUAL);</span>
+<span class="nc" id="L274">        model.addAttribute(USERITEMS, allItems);</span>
+<span class="nc" id="L275">        model.addAttribute(LOGGEDUSER, this.getLoggedUser());</span>
+<span class="nc" id="L276">        logger.debug(USERITEMS+&quot;: &quot; + model.getAttribute(USERITEMS));</span>
+<span class="nc" id="L277">        logger.debug(USERST+&quot;: &quot; + model.getAttribute(LOGGEDUSER));</span>
 
-<span class="nc" id="L276">        return &quot;redirect:/profile&quot;;</span>
+<span class="nc" id="L279">        return &quot;redirect:/profile&quot;;</span>
     }
 
     @GetMapping(value = &quot;/sold-items/backOnSale/{id}&quot;)
     public String putItemBackOnSale(Model model, @PathVariable(name = &quot;id&quot;) Long id) {
 
-<span class="nc bnc" id="L282" title="All 2 branches missed.">        if(this.getLoggedUser() == null){</span>
-<span class="nc" id="L283">            return &quot;redirect:/login&quot;;</span>
+<span class="nc bnc" id="L285" title="All 2 branches missed.">        if(this.getLoggedUser() == null){</span>
+<span class="nc" id="L286">            return &quot;redirect:/login&quot;;</span>
         }
 
-<span class="nc" id="L286">        logger.debug(&quot;ID para sold: &quot; + id);</span>
+<span class="nc" id="L289">        logger.debug(&quot;ID para sold: &quot; + id);</span>
 
-<span class="nc" id="L288">        Item backOnSale = itemService.getItemById(id);</span>
-<span class="nc" id="L289">        itemService.revertSale(backOnSale);</span>
+<span class="nc" id="L291">        Item backOnSale = itemService.getItemById(id);</span>
+<span class="nc" id="L292">        itemService.revertSale(backOnSale);</span>
 
-<span class="nc" id="L291">        Set&lt;Item&gt; allItems = this.getLoggedUser().getSoldItems();</span>
+<span class="nc" id="L294">        Set&lt;Item&gt; allItems = this.getLoggedUser().getSoldItems();</span>
 
-<span class="nc" id="L293">        logger.debug(ATRIBATUAL);</span>
-<span class="nc" id="L294">        model.addAttribute(USERITEMS, allItems);</span>
-<span class="nc" id="L295">        model.addAttribute(LOGGEDUSER, this.getLoggedUser());</span>
-<span class="nc" id="L296">        logger.debug(USERITEMS+&quot;: &quot; + model.getAttribute(USERITEMS));</span>
-<span class="nc" id="L297">        logger.debug(USERST+&quot;: &quot; + model.getAttribute(LOGGEDUSER));</span>
+<span class="nc" id="L296">        logger.debug(ATRIBATUAL);</span>
+<span class="nc" id="L297">        model.addAttribute(USERITEMS, allItems);</span>
+<span class="nc" id="L298">        model.addAttribute(LOGGEDUSER, this.getLoggedUser());</span>
+<span class="nc" id="L299">        logger.debug(USERITEMS+&quot;: &quot; + model.getAttribute(USERITEMS));</span>
+<span class="nc" id="L300">        logger.debug(USERST+&quot;: &quot; + model.getAttribute(LOGGEDUSER));</span>
 
-<span class="nc" id="L299">        return &quot;redirect:/sold-items&quot;;</span>
+<span class="nc" id="L302">        return &quot;redirect:/sold-items&quot;;</span>
     }
 
 
 
     @GetMapping(value = &quot;/about&quot;)
     public String aboutUs() {
-<span class="nc" id="L306">        return &quot;about-us&quot;;</span>
+<span class="nc" id="L309">        return &quot;about-us&quot;;</span>
     }
 
     @GetMapping(value = &quot;/announce&quot;)
     public String addItem(ItemForm itemForm, Model model, @RequestParam(name = &quot;submitted&quot;, required = false) boolean submitted,
                           @RequestParam(name = &quot;noImages&quot;, required = false) boolean noImages,
-                          @RequestParam(name = &quot;hasErrors&quot;, required = false) boolean hasErrors) {
-<span class="nc bnc" id="L313" title="All 2 branches missed.">        if(this.getLoggedUser() == null){</span>
-<span class="nc" id="L314">            return &quot;redirect:/login&quot;;</span>
+                          @RequestParam(name = HAS_ERRORS, required = false) boolean hasErrors) {
+<span class="nc bnc" id="L316" title="All 2 branches missed.">        if(this.getLoggedUser() == null){</span>
+<span class="nc" id="L317">            return &quot;redirect:/login&quot;;</span>
         }
 
-<span class="nc" id="L317">        model.addAttribute(&quot;hasErrors&quot;, hasErrors);</span>
-<span class="nc" id="L318">        model.addAttribute(&quot;noImages&quot;, noImages);</span>
-<span class="nc" id="L319">        model.addAttribute(SUBMITTED, submitted);</span>
-<span class="nc" id="L320">        model.addAttribute(&quot;categories&quot;, categories);</span>
+<span class="nc" id="L320">        model.addAttribute(HAS_ERRORS, hasErrors);</span>
+<span class="nc" id="L321">        model.addAttribute(&quot;noImages&quot;, noImages);</span>
+<span class="nc" id="L322">        model.addAttribute(SUBMITTED, submitted);</span>
+<span class="nc" id="L323">        model.addAttribute(CATEGORIES, categories);</span>
 
-<span class="nc" id="L322">        PictureListDto pictureListForm = new PictureListDto();</span>
+<span class="nc" id="L325">        PictureListDto pictureListForm = new PictureListDto();</span>
 
         // create space for MAX_ITEM_PICTURES, maximum
-<span class="nc bnc" id="L325" title="All 2 branches missed.">        for (int i = 1; i &lt;= MAX_ITEM_PICTURES; i++) {</span>
-<span class="nc" id="L326">            pictureListForm.addImage(new Image());</span>
+<span class="nc bnc" id="L328" title="All 2 branches missed.">        for (int i = 1; i &lt;= MAX_ITEM_PICTURES; i++) {</span>
+<span class="nc" id="L329">            pictureListForm.addImage(new Image());</span>
         }
 
-<span class="nc" id="L329">        model.addAttribute(&quot;imagesList&quot;,pictureListForm);</span>
-<span class="nc" id="L330">        return &quot;add-item&quot;;</span>
+<span class="nc" id="L332">        model.addAttribute(&quot;imagesList&quot;,pictureListForm);</span>
+<span class="nc" id="L333">        return &quot;add-item&quot;;</span>
     }
 
     @PostMapping(value = &quot;/announce&quot;)
     public String postItem(@Valid ItemForm itemForm, BindingResult bindingResult, @ModelAttribute PictureListDto imagesList, RedirectAttributes ra) {
 
-<span class="nc bnc" id="L336" title="All 2 branches missed.">        if(bindingResult.hasErrors()){</span>
+<span class="nc bnc" id="L339" title="All 2 branches missed.">        if(bindingResult.hasErrors()){</span>
             // if the provided data is invalid
-<span class="nc" id="L338">            logger.debug(&quot;INPUTS INVALIDOS!&quot;);</span>
-<span class="nc" id="L339">            ra.addAttribute(SUBMITTED, false);</span>
-<span class="nc" id="L340">            ra.addAttribute(&quot;hasErrors&quot;, true);</span>
-<span class="nc" id="L341">            return REDIRECTANNOUNCE;</span>
+<span class="nc" id="L341">            logger.debug(&quot;INPUTS INVALIDOS!&quot;);</span>
+<span class="nc" id="L342">            ra.addAttribute(SUBMITTED, false);</span>
+<span class="nc" id="L343">            ra.addAttribute(HAS_ERRORS, true);</span>
+<span class="nc" id="L344">            return REDIRECTANNOUNCE;</span>
         }
 
         // check for missing URLs (to later check if at least one was provided)
-<span class="nc" id="L345">        int emptyEntries = 0;</span>
-<span class="nc bnc" id="L346" title="All 2 branches missed.">        for(Image im : imagesList.getImages()){</span>
-<span class="nc bnc" id="L347" title="All 2 branches missed.">            if(im.getUrl()==null)</span>
-<span class="nc" id="L348">                emptyEntries+=1; // count empty entries</span>
-<span class="nc" id="L349">        }</span>
+<span class="nc" id="L348">        int emptyEntries = 0;</span>
+<span class="nc bnc" id="L349" title="All 2 branches missed.">        for(Image im : imagesList.getImages()){</span>
+<span class="nc bnc" id="L350" title="All 2 branches missed.">            if(im.getUrl()==null)</span>
+<span class="nc" id="L351">                emptyEntries+=1; // count empty entries</span>
+<span class="nc" id="L352">        }</span>
 
         // if all images urls are empty strings
-<span class="nc bnc" id="L352" title="All 2 branches missed.">        if(emptyEntries==imagesList.getImages().size()){</span>
-<span class="nc" id="L353">            ra.addAttribute(&quot;noImages&quot;, true);</span>
-<span class="nc" id="L354">            ra.addAttribute(SUBMITTED, false);</span>
-<span class="nc" id="L355">            return REDIRECTANNOUNCE;</span>
+<span class="nc bnc" id="L355" title="All 2 branches missed.">        if(emptyEntries==imagesList.getImages().size()){</span>
+<span class="nc" id="L356">            ra.addAttribute(&quot;noImages&quot;, true);</span>
+<span class="nc" id="L357">            ra.addAttribute(SUBMITTED, false);</span>
+<span class="nc" id="L358">            return REDIRECTANNOUNCE;</span>
         }
 
         // setup item with valid provided data
-<span class="nc" id="L359">        Item newItem = new Item();</span>
-<span class="nc" id="L360">        newItem.setName(itemForm.getNome());</span>
-<span class="nc" id="L361">        newItem.setCategory(itemForm.getCategoria());</span>
-<span class="nc" id="L362">        newItem.setDescription(itemForm.getDescricao());</span>
-<span class="nc" id="L363">        newItem.setPrice(itemForm.getPreco());</span>
-<span class="nc" id="L364">        newItem.setQuantity(itemForm.getQuantidade());</span>
+<span class="nc" id="L362">        Item newItem = new Item();</span>
+<span class="nc" id="L363">        newItem.setName(itemForm.getNome());</span>
+<span class="nc" id="L364">        newItem.setCategory(itemForm.getCategoria());</span>
+<span class="nc" id="L365">        newItem.setDescription(itemForm.getDescricao());</span>
+<span class="nc" id="L366">        newItem.setPrice(itemForm.getPreco());</span>
+<span class="nc" id="L367">        newItem.setQuantity(itemForm.getQuantidade());</span>
 
-<span class="nc bnc" id="L366" title="All 2 branches missed.">        for(Image im : imagesList.getImages()){</span>
-<span class="nc bnc" id="L367" title="All 2 branches missed.">            if(im.getUrl()==null){</span>
-<span class="nc" id="L368">                continue;</span>
+<span class="nc bnc" id="L369" title="All 2 branches missed.">        for(Image im : imagesList.getImages()){</span>
+<span class="nc bnc" id="L370" title="All 2 branches missed.">            if(im.getUrl()==null){</span>
+<span class="nc" id="L371">                continue;</span>
             }
-<span class="nc" id="L370">            newItem.addImage(im.getUrl());</span>
-<span class="nc" id="L371">        }</span>
+<span class="nc" id="L373">            newItem.addImage(im.getUrl());</span>
+<span class="nc" id="L374">        }</span>
 
-<span class="nc" id="L373">        itemService.addNewProduct(newItem, this.getLoggedUser());</span>
-<span class="nc" id="L374">        ra.addAttribute(SUBMITTED, true);</span>
-<span class="nc" id="L375">        logger.debug(&quot;Item submetido: &quot; + newItem.toString());</span>
-<span class="nc" id="L376">        return REDIRECTANNOUNCE;</span>
+<span class="nc" id="L376">        itemService.addNewProduct(newItem, this.getLoggedUser());</span>
+<span class="nc" id="L377">        ra.addAttribute(SUBMITTED, true);</span>
+<span class="nc" id="L378">        logger.debug(&quot;Item submetido: &quot; + newItem.toString());</span>
+<span class="nc" id="L379">        return REDIRECTANNOUNCE;</span>
     }
 
 
     @GetMapping(value = &quot;/favourites&quot;)
     public String favouritesAds() {
-<span class="nc" id="L382">        return &quot;dashboard-favourite-ads&quot;;</span>
+<span class="nc" id="L385">        return &quot;dashboard-favourite-ads&quot;;</span>
     }
 
     @GetMapping(value = &quot;/sold-items&quot;)
     public String soldItems(Model model) {
-<span class="nc" id="L387">        Set&lt;Item&gt; allItems = this.getLoggedUser().getSoldItems();</span>
-<span class="nc" id="L388">        model.addAttribute(&quot;userSoldItems&quot;, allItems);</span>
-<span class="nc" id="L389">        model.addAttribute(LOGGEDUSER, getLoggedUser());</span>
-<span class="nc" id="L390">        return &quot;dashboard-sold-items&quot;;</span>
+<span class="nc" id="L390">        Set&lt;Item&gt; allItems = this.getLoggedUser().getSoldItems();</span>
+<span class="nc" id="L391">        model.addAttribute(&quot;userSoldItems&quot;, allItems);</span>
+<span class="nc" id="L392">        model.addAttribute(LOGGEDUSER, getLoggedUser());</span>
+<span class="nc" id="L393">        return &quot;dashboard-sold-items&quot;;</span>
     }
 
     @GetMapping(value = &quot;/product/{id}&quot;)
     public String productPost(Model model, @PathVariable(name = &quot;id&quot;) Long id, RedirectAttributes ra) {
-        //System.err.println(&quot;id -&gt; &quot; + id);
         //model.addAttribute(&quot;searchparams&quot;, new SearchParams());
-<span class="nc" id="L397">        Item item = itemService.getItemById(id);</span>
+<span class="nc" id="L399">        Item item = itemService.getItemById(id);</span>
 
-        //System.err.println(&quot;item recebido 1 -&gt; &quot; + item.toString());
-<span class="nc" id="L400">        ra.addAttribute(&quot;item&quot;, item);</span>
-<span class="nc" id="L401">        return REDIRECT_PRODUCT;</span>
+<span class="nc" id="L401">        ra.addAttribute(&quot;item&quot;, item);</span>
+<span class="nc" id="L402">        return REDIRECT_PRODUCT;</span>
     }
 
     @GetMapping(value = &quot;/product&quot;)
     public String productPage(CommentForm commentForm,
                               Model model,
                               @RequestParam(name = &quot;item&quot;, required = false) Item item,
-                              @RequestParam(name = &quot;commentHasError&quot;, required = false) boolean commentHasError) {
-<span class="nc" id="L409">        model.addAttribute(&quot;loggedUser&quot;, this.getLoggedUser());</span>
-<span class="nc" id="L410">        model.addAttribute(&quot;categories&quot;, categories);</span>
-<span class="nc" id="L411">        model.addAttribute(&quot;searchparams&quot;, new SearchParams());</span>
-        //System.err.println(&quot;item recebido 2 -&gt; &quot; + item.toString());
+                              @RequestParam(name = COMMENT_HAS_ERROR, required = false) boolean commentHasError) {
+<span class="nc" id="L410">        model.addAttribute(LOGGEDUSER, this.getLoggedUser());</span>
+<span class="nc" id="L411">        model.addAttribute(CATEGORIES, categories);</span>
+<span class="nc" id="L412">        model.addAttribute(&quot;searchparams&quot;, new SearchParams());</span>
 <span class="nc" id="L413">        model.addAttribute(&quot;item&quot;, item);</span>
-<span class="nc" id="L414">        model.addAttribute(&quot;commentHasError&quot;, commentHasError);</span>
+<span class="nc" id="L414">        model.addAttribute(COMMENT_HAS_ERROR, commentHasError);</span>
 <span class="nc" id="L415">        return PRODUCT_POST;</span>
     }
 
     @PostMapping(value = &quot;/product&quot;)
     public String productComment(Model model) {
-<span class="nc" id="L420">        model.addAttribute(&quot;categories&quot;, categories);</span>
+<span class="nc" id="L420">        model.addAttribute(CATEGORIES, categories);</span>
 
 <span class="nc" id="L422">        return PRODUCT_POST;</span>
 
@@ -446,7 +446,7 @@ import org.apache.log4j.Logger;
             // if the provided data is invalid
 <span class="nc" id="L447">            logger.debug(&quot;COMENTARIO INVALIDOS!&quot;);</span>
 <span class="nc" id="L448">            ra.addAttribute(&quot;item&quot;, commentedItem);</span>
-<span class="nc" id="L449">            ra.addAttribute(&quot;commentHasError&quot;, true);</span>
+<span class="nc" id="L449">            ra.addAttribute(COMMENT_HAS_ERROR, true);</span>
 <span class="nc" id="L450">            return REDIRECT_PRODUCT;</span>
         }
 
@@ -455,7 +455,7 @@ import org.apache.log4j.Logger;
             // if the provided data is invalid
 <span class="nc" id="L456">            logger.debug(&quot;COMENTARIO VAZIO!&quot;);</span>
 <span class="nc" id="L457">            ra.addAttribute(&quot;item&quot;, commentedItem);</span>
-<span class="nc" id="L458">            ra.addAttribute(&quot;commentHasError&quot;, true);</span>
+<span class="nc" id="L458">            ra.addAttribute(COMMENT_HAS_ERROR, true);</span>
 <span class="nc" id="L459">            return REDIRECT_PRODUCT;</span>
         }
 
