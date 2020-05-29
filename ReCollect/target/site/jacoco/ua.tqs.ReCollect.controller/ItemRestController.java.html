@@ -30,17 +30,18 @@ import ua.tqs.ReCollect.service.ItemService;
 	@ResponseBody
 	public List&lt;Item&gt; itemIndex(@RequestParam(required = false) String category,
 			@RequestParam(required = false) String owner, @RequestParam(required = false) String orderBy,
-			@RequestParam(required = false) Integer limit, @RequestParam(required = false) Integer offset) {
+			@RequestParam(required = false) Integer limit, @RequestParam(required = false) Integer offset,
+			@RequestParam(required = false) Boolean sold) {
 
 		String processedOwner;
 
-<span class="fc bfc" id="L37" title="All 2 branches covered.">		if (owner != null) {</span>
-<span class="fc" id="L38">			processedOwner = owner.replace(&quot;'&quot;, &quot;&quot;);</span>
+<span class="fc bfc" id="L38" title="All 2 branches covered.">		if (owner != null) {</span>
+<span class="fc" id="L39">			processedOwner = owner.replace(&quot;'&quot;, &quot;&quot;);</span>
 		} else {
-<span class="fc" id="L40">			processedOwner = owner;</span>
+<span class="fc" id="L41">			processedOwner = owner;</span>
 		}
 
-<span class="fc" id="L43">		return itemService.fetchItemsApi(category, processedOwner, orderBy, limit, offset);</span>
+<span class="fc" id="L44">		return itemService.fetchItemsApi(category, processedOwner, orderBy, limit, offset, sold);</span>
 	}
 
 }
