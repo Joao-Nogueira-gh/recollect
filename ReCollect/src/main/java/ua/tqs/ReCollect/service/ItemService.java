@@ -15,7 +15,11 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import ua.tqs.ReCollect.model.*;
+import ua.tqs.ReCollect.model.Categories;
+import ua.tqs.ReCollect.model.Comment;
+import ua.tqs.ReCollect.model.Item;
+import ua.tqs.ReCollect.model.ItemDTO;
+import ua.tqs.ReCollect.model.User;
 import ua.tqs.ReCollect.repository.ItemRepository;
 import ua.tqs.ReCollect.repository.OffsetBasedPageRequest;
 
@@ -184,7 +188,8 @@ public class ItemService {
 
     }
 
-    public List<Item> fetchItemsApi(String cat, String seller, String orderBy, Integer limit, Integer offset) {
+    public List<Item> fetchItemsApi(String cat, String seller, String orderBy, Integer limit, Integer offset,
+            Boolean sold) {
 
         List<Item> ret;
         Pageable p;
@@ -236,7 +241,7 @@ public class ItemService {
 
         }
 
-        return ret.stream().limit(limit).collect(Collectors.toList());
+        return filterResults(ret, sold);
 
     }
 
@@ -244,11 +249,29 @@ public class ItemService {
         return orderBy.equals("price") || orderBy.equals("creationDate");
     }
 
-    private boolean basicValidation(String cat, String seller, String orderBy){
+    private boolean basicValidation(String cat, String seller, String orderBy) {
 
         return ((seller != null && !userService.userExists(seller))
-        || (cat != null && !EnumUtils.isValidEnum(Categories.class, cat))
-        || (orderBy != null && !orderByIsValid(orderBy)));
+                || (cat != null && !EnumUtils.isValidEnum(Categories.class, cat))
+                || (orderBy != null && !orderByIsValid(orderBy)));
+    }
+
+    private List<Item> filterResults(List<Item> all, Boolean sold) {
+
+        if (sold == null) {
+            return all;
+        }
+
+        if (sold) {
+
+            return all.stream().filter(i -> i.getSeller() != null).collect(Collectors.toList());
+
+        } else {
+
+            return all.stream().filter(i -> i.getSeller() == null).collect(Collectors.toList());
+
+        }
+
     }
 
     public Item getSingleItem(Long id) {
