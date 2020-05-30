@@ -218,8 +218,10 @@
 			<div class="col-md-4">
 				<div class="sidebar">
 					<div class="widget price text-center">
-						<h4>Price</h4>
+						<h4>Price per unit</h4>
 						<p th:text="${item.price + '€'}">...</p>
+						<h4></h4>
+						<h4 th:text="${'Available units: ' + item.quantity}"></h4>
 					</div>
 					<!-- User Profile widget -->
 					<div class="widget user text-center">

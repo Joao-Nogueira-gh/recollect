@@ -83,7 +83,7 @@ public class FrontendWebController {
         model.addAttribute(HAS_ERRORS, hasErrors);
         List<Item> recentItems = itemService.get20NewestItems();
         // get only items on sale
-        CollectionUtils.filter(recentItems, i -> ((Item) i).getSeller()==null);
+        CollectionUtils.filter(recentItems, i -> ((Item) i).getSeller()==null && ((Item) i).getOwner()!=userService.getCurrentUser());
         model.addAttribute("recentItems", recentItems);
         logger.debug("loggedUser -> " + this.getLoggedUser());
         return "index";
@@ -111,7 +111,7 @@ public class FrontendWebController {
         }
 
         // get only items on sale
-        CollectionUtils.filter(searchResults, i -> ((Item) i).getSeller()==null);
+        CollectionUtils.filter(searchResults, i -> ((Item) i).getSeller()==null && ((Item) i).getOwner()!=userService.getCurrentUser());
 
         ra.addAttribute(SEARCH_RESULTS, searchResults);
         ra.addAttribute(CATEGORY, category);
@@ -157,7 +157,7 @@ public class FrontendWebController {
             searchResults = itemService.getItemsByCategoryAndSearchTerm(searchTerm, category);
         }
 
-        CollectionUtils.filter(searchResults, i -> ((Item) i).getSeller()==null);
+        CollectionUtils.filter(searchResults, i -> ((Item) i).getSeller()==null && ((Item) i).getOwner()!=userService.getCurrentUser());
 
         logger.debug("searchResults to post -> " + searchResults.toString());
         ra.addAttribute(SEARCH_RESULTS, searchResults);
@@ -174,7 +174,7 @@ public class FrontendWebController {
         searchResults = itemService.getItemsByCategory(categoryEnum);
 
         // get only items on sale
-        CollectionUtils.filter(searchResults, i -> ((Item) i).getSeller()==null);
+        CollectionUtils.filter(searchResults, i -> ((Item) i).getSeller()==null && ((Item) i).getOwner()!=userService.getCurrentUser());
 
         ra.addAttribute(SEARCH_RESULTS, searchResults);
         ra.addAttribute(CATEGORY, categoryEnum);
