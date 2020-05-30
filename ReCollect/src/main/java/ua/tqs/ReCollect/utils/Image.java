@@ -1,6 +1,5 @@
 package ua.tqs.ReCollect.utils;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 
 public class Image {

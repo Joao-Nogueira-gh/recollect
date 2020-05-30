@@ -5,9 +5,6 @@ import javax.validation.constraints.NotNull;
 
 public class RegisterForm {
 
-    public RegisterForm(){
-    }
-
     @NotNull
     private String name;
 

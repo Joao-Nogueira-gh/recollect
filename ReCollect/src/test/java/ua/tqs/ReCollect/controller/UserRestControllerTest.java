@@ -17,7 +17,7 @@ import ua.tqs.ReCollect.service.UserService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class UserRestControllerTest {
+class UserRestControllerTest {
     
     @Autowired
     private TestRestTemplate restTemplate;
@@ -31,7 +31,7 @@ public class UserRestControllerTest {
     }
 
 	@Test
-	public void apiShouldReturnAccurateListOfUsers() throws Exception {
+	void apiShouldReturnAccurateListOfUsers() throws Exception {
 
         ArrayList<User> all = (ArrayList<User>) service.getAll();
         

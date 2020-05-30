@@ -106,7 +106,7 @@ class UserAndItemServiceTest {
         given(userRepo.findByEmail(email)).willReturn(user);
         given(itemRepo.findByOwner(user, new OffsetBasedPageRequest(0, 25))).willReturn(userItems);
 
-        List<Item> usersItems = itemService.fetchItemsApi(null, email, null, null, null);
+        List<Item> usersItems = itemService.fetchItemsApi(null, email, null, null, null, null);
         
         assertEquals(2, usersItems.size());
 

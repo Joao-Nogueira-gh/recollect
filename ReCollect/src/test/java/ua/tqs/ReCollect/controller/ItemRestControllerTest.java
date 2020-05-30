@@ -17,7 +17,7 @@ import ua.tqs.ReCollect.service.ItemService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class ItemRestControllerTest {
+class ItemRestControllerTest {
     
     @Autowired
     private TestRestTemplate restTemplate;
@@ -31,7 +31,7 @@ public class ItemRestControllerTest {
     }
 
 	@Test
-	public void apiShouldReturnAccurateListOfItems() throws Exception {
+	void apiShouldReturnAccurateListOfItems() throws Exception {
 
         ArrayList<Item> all = (ArrayList<Item>) service.getAll();
         

@@ -22,7 +22,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private MyUserDetailsService userDetailsService;
 
-    private static final String loginPath = "/login";
+    private static final String LOGIN_PATH = "/login";
 
 
 
@@ -39,7 +39,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.
                 authorizeRequests()
                 .antMatchers("/").permitAll()
-                .antMatchers(loginPath).permitAll()
+                .antMatchers(LOGIN_PATH).permitAll()
                 .antMatchers("/register").permitAll()
                 .antMatchers("/category/**").permitAll()
                 .antMatchers("/home_category/**").permitAll()
@@ -47,13 +47,13 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin/**").hasAuthority("ADMIN").anyRequest()
                 //.antMatchers("/announce").hasAuthority("ADMIN").anyRequest()
                 .authenticated().and().formLogin()
-                .loginPage(loginPath).failureUrl("/login?error=true")
+                .loginPage(LOGIN_PATH).failureUrl("/login?error=true")
                 .defaultSuccessUrl("/profile")
                 .usernameParameter("user_name")
                 .passwordParameter("password")
                 .and().logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl(loginPath).and().exceptionHandling()
+                .logoutSuccessUrl(LOGIN_PATH).and().exceptionHandling()
                 .accessDeniedPage("/access-denied");
     }
 

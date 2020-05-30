@@ -30,7 +30,7 @@ import ua.tqs.ReCollect.utils.RegisterForm;
 
 <span class="fc" id="L31">    static final Logger logger = Logger.getLogger(UserController.class);</span>
 
-    private static final String registrationPage = &quot;register&quot;;
+    private static final String REGISTER = &quot;register&quot;;
 
     @GetMapping(value = &quot;/login&quot;)
     public ModelAndView login() {
@@ -44,7 +44,7 @@ import ua.tqs.ReCollect.utils.RegisterForm;
 <span class="fc" id="L44">        ModelAndView modelAndView = new ModelAndView();</span>
 <span class="fc" id="L45">        User user = new User();</span>
 <span class="fc" id="L46">        modelAndView.addObject(&quot;user&quot;, user);</span>
-<span class="fc" id="L47">        modelAndView.setViewName(registrationPage);</span>
+<span class="fc" id="L47">        modelAndView.setViewName(REGISTER);</span>
 <span class="fc" id="L48">        modelAndView.addObject(&quot;registo&quot;, new RegisterForm());</span>
 <span class="fc" id="L49">        modelAndView.addObject(&quot;cidades&quot;, locationService.getCountiesByDistrict());</span>
 <span class="fc" id="L50">        return modelAndView;</span>
@@ -70,7 +70,7 @@ import ua.tqs.ReCollect.utils.RegisterForm;
 <span class="fc" id="L70">        modelAndView.addObject(&quot;registo&quot;, new RegisterForm());</span>
 <span class="fc" id="L71">        modelAndView.addObject(&quot;cidades&quot;, locationService.getCountiesByDistrict());</span>
 
-<span class="fc" id="L73">        modelAndView.setViewName(registrationPage);</span>
+<span class="fc" id="L73">        modelAndView.setViewName(REGISTER);</span>
 <span class="fc" id="L74">        return modelAndView;</span>
     }
 

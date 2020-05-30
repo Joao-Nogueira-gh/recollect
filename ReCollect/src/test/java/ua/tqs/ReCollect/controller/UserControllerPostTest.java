@@ -1,5 +1,7 @@
 package ua.tqs.ReCollect.controller;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
@@ -22,7 +24,7 @@ import ua.tqs.ReCollect.service.UserService;
 import ua.tqs.ReCollect.utils.RegisterForm;
 
 @ExtendWith(MockitoExtension.class)
-public class UserControllerPostTest {
+class UserControllerPostTest {
 
     @Mock
     UserService service;
@@ -38,7 +40,7 @@ public class UserControllerPostTest {
     UserController controller;
 
     @Test
-    public void getHome() {
+    void getHome() {
 
         Authentication authentication = Mockito.mock(Authentication.class);
         // Mockito.whens() for your authorization object
@@ -49,11 +51,11 @@ public class UserControllerPostTest {
         given(SecurityContextHolder.getContext().getAuthentication().getName()).willReturn("user@user.com");
         given(service.getByEmail("user@user.com")).willReturn(new User());
         
-        controller.home();
+        assertTrue(controller.home().getModel().containsKey("userName"));
     }
 
     @Test
-    public void registerUser() {
+    void registerUser() {
         BindingResult result = mock(BindingResult.class);
         RegisterForm registerForm=new RegisterForm();
         given(locService.getLocation("Aveiro", "Aveiro")).willReturn(new Location("Aveiro", "Aveiro"));;
@@ -66,7 +68,9 @@ public class UserControllerPostTest {
         registerForm.setDistrict("Aveiro");
         registerForm.setMunicipality("Aveiro");
 
-        controller.createNewUser(registerForm, result);
+        assertEquals("register", controller.createNewUser(registerForm, result).getViewName());
+
+
     }
 
 }

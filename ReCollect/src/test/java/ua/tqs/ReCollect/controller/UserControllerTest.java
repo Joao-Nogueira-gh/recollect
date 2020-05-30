@@ -20,7 +20,7 @@ import ua.tqs.ReCollect.service.UserService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class UserControllerTest {
+class UserControllerTest {
     
     @Autowired
     private TestRestTemplate restTemplate;
@@ -42,7 +42,7 @@ public class UserControllerTest {
     LocationService locationService;
 
 	@Test
-	public void getLoginPageandGoHome() throws Exception {
+	void getLoginPageandGoHome() throws Exception {
         
         String login = this.restTemplate.getForObject("/login", String.class);
 
@@ -51,7 +51,7 @@ public class UserControllerTest {
     }
 
     @Test
-	public void getRegistrationPage() throws Exception {
+	void getRegistrationPage() throws Exception {
         
         String register = this.restTemplate.getForObject("/register", String.class);
 

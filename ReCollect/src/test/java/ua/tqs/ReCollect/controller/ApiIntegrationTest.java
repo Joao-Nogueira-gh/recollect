@@ -273,6 +273,33 @@ class ApiIntegrationTest {
     }
 
     @Test
+    void getSoldItemsUsingItemsEndpoint() {
+        ResponseEntity<List<Item>> entity = restClient.exchange("/api/items?sold=true", HttpMethod.GET, null,
+                new ParameterizedTypeReference<List<Item>>() {
+                });
+
+        assertEquals(0, entity.getBody().size());
+    }
+
+    @Test
+    void getItemsOnSaleUsingItemsEndpoint() {
+        ResponseEntity<List<Item>> entity = restClient.exchange("/api/items?sold=false", HttpMethod.GET, null,
+                new ParameterizedTypeReference<List<Item>>() {
+                });
+
+        assertEquals(6, entity.getBody().size());
+    }
+
+    @Test
+    void getBooksOnSale() {
+        ResponseEntity<List<Item>> entity = restClient.exchange("/api/items?category=BOOKS&sold=false", HttpMethod.GET, null,
+                new ParameterizedTypeReference<List<Item>>() {
+                });
+
+        assertEquals(3, entity.getBody().size());
+    }
+
+    @Test
     void noPwdsSent() {
 
         ResponseEntity<List<User>> entity = restClient.exchange("/api/users/", HttpMethod.GET, null,

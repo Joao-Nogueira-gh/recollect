@@ -16,7 +16,7 @@ public class AddCommentSeleniumTest extends FunctionalTest {
     }
 
     @Test
-    public void submittedValidComment(){
+    void submittedValidComment(){
 
         //Fazer o login
         driver.get("http://localhost:8080/announce");
@@ -52,7 +52,7 @@ public class AddCommentSeleniumTest extends FunctionalTest {
     }
 
     @Test
-    public void submittedInvalidComment(){
+    void submittedInvalidComment(){
 
         //Fazer o login
         driver.get("http://localhost:8080/announce");

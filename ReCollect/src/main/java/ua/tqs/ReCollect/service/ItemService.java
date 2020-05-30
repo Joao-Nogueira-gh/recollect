@@ -1,6 +1,5 @@
 package ua.tqs.ReCollect.service;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -15,7 +14,9 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import ua.tqs.ReCollect.model.*;
+import ua.tqs.ReCollect.model.Categories;
+import ua.tqs.ReCollect.model.Item;
+import ua.tqs.ReCollect.model.User;
 import ua.tqs.ReCollect.repository.ItemRepository;
 import ua.tqs.ReCollect.repository.OffsetBasedPageRequest;
 
@@ -59,29 +60,6 @@ public class ItemService {
         this.userService = userService;
     }
 
-    public ItemDTO convertItem(Item item) {
-        ItemDTO dto = new ItemDTO(item.getName(), item.getQuantity(), item.getPrice(), item.getDescription());
-
-        for (URL image : item.getImages()) {
-            dto.addImages(image);
-        }
-        dto.setCreationDate(item.getCreationDate());
-
-        if (item.getOwner() != null) {
-            dto.setOwner(item.getOwner().getName());
-        } else if (item.getSeller() != null) {
-            dto.setOwner(item.getSeller().getName());
-        } else {
-            dto.setOwner("null");
-        }
-        for (Comment comment : item.getComment()) {
-            dto.addComments(comment.getText() + ";" + comment.getUser().getName());
-        }
-
-        dto.setCategory(String.valueOf(item.getCategory()));
-
-        return dto;
-    }
 
     @Transactional
     public void addNewProduct(Item item, User owner) {
@@ -120,6 +98,7 @@ public class ItemService {
             user.remFavItem(item);
         }
     }
+
 
     /**
      * API Methods
@@ -184,7 +163,8 @@ public class ItemService {
 
     }
 
-    public List<Item> fetchItemsApi(String cat, String seller, String orderBy, Integer limit, Integer offset) {
+    public List<Item> fetchItemsApi(String cat, String seller, String orderBy, Integer limit, Integer offset,
+            Boolean sold) {
 
         List<Item> ret;
         Pageable p;
@@ -236,7 +216,7 @@ public class ItemService {
 
         }
 
-        return ret.stream().limit(limit).collect(Collectors.toList());
+        return filterResults(ret, sold);
 
     }
 
@@ -244,11 +224,29 @@ public class ItemService {
         return orderBy.equals("price") || orderBy.equals("creationDate");
     }
 
-    private boolean basicValidation(String cat, String seller, String orderBy){
+    private boolean basicValidation(String cat, String seller, String orderBy) {
 
         return ((seller != null && !userService.userExists(seller))
-        || (cat != null && !EnumUtils.isValidEnum(Categories.class, cat))
-        || (orderBy != null && !orderByIsValid(orderBy)));
+                || (cat != null && !EnumUtils.isValidEnum(Categories.class, cat))
+                || (orderBy != null && !orderByIsValid(orderBy)));
+    }
+
+    private List<Item> filterResults(List<Item> all, Boolean sold) {
+
+        if (sold == null) {
+            return all;
+        }
+
+        if (sold) {
+
+            return all.stream().filter(i -> i.getSeller() != null).collect(Collectors.toList());
+
+        } else {
+
+            return all.stream().filter(i -> i.getSeller() == null).collect(Collectors.toList());
+
+        }
+
     }
 
     public Item getSingleItem(Long id) {
