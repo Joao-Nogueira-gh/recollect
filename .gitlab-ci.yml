@@ -41,7 +41,6 @@ connect:
     - mysql --version
   except:
     - master
-    - cd
   script:
     - echo "SELECT 'OK';" | mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql "${MYSQL_DATABASE}"
 
@@ -58,7 +57,6 @@ connectVM:
     - mysql --version
   only:
     - master
-    - cd
   script:
     - echo "SELECT 'OK';" | mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" "${MYSQL_DATABASE}"
 
@@ -72,7 +70,6 @@ build:
     - mysql:5.7
   except:
     - master
-    - cd
   script:
     - mvn clean compile
 
@@ -85,7 +82,6 @@ buildVM:
     - mysql:5.7
   only:
     - master
-    - cd
   script:
     - mvn clean compile
 
@@ -99,7 +95,6 @@ test:
     - mysql:5.7
   except:
     - master
-    - cd
   script:
     - mvn clean test -Dtest=\!\*SeleniumTest
 
@@ -112,7 +107,6 @@ testVM:
     - mysql:5.7
   only:
     - master
-    - cd
   script:
     - mvn clean test -Dtest=\!\*SeleniumTest
 
@@ -126,7 +120,6 @@ package:
     - mysql:5.7
   except:
     - master
-    - cd
   script:
     - mvn clean package -Dtest=\!\*SeleniumTest
 
@@ -139,7 +132,6 @@ packageVM:
     - mysql:5.7
   only:
     - master
-    - cd
   script:
     - mvn clean package -Dtest=\!\*SeleniumTest
     - ls 
@@ -159,7 +151,6 @@ deployVM:
     - maven
   only:
     - master
-    - cd
   script:
     - docker-compose up -d --build --force-recreate
 

@@ -1,8 +1,5 @@
 package ua.tqs.ReCollect.repository;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
