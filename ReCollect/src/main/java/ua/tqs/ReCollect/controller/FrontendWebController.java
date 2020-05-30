@@ -385,7 +385,10 @@ public class FrontendWebController {
 
 
     @GetMapping(value = "/favourites")
-    public String favouritesAds() {
+    public String favouriteAds(Model model) {
+        Set<Item> allFavItems = this.getLoggedUser().getFavoriteItems();
+        model.addAttribute("userFavItems", allFavItems);
+        model.addAttribute(LOGGEDUSER, getLoggedUser());
         return "dashboard-favourite-ads";
     }
 
