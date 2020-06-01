@@ -60,6 +60,7 @@ public class FrontendWebController {
     private static final String HAS_ERRORS = "hasErrors";
     private static final String SEARCH_RESULTS = "searchResults";
     private static final String COMMENT_HAS_ERROR = "commentHasError";
+    public static final String REDIRECT_FAVOURITES = "redirect:/favourites";
 
     @Autowired
     ItemService itemService;
@@ -259,6 +260,18 @@ public class FrontendWebController {
         return "redirect:/sold-items";
     }
 
+    @GetMapping(value = "/favourites/unfavourite/{id}")
+    public String unfavItemProfile(@PathVariable(name = "id") Long id) {
+        if(this.getLoggedUser() == null){
+            return "redirect:/login";
+        }
+        logger.debug("ID para unfav: " + id);
+
+        Item unfaved = itemService.getItemById(id);
+        itemService.removeFavorite(unfaved, this.getLoggedUser());
+        return REDIRECT_FAVOURITES;
+    }
+
 
     @GetMapping(value = "/profile/marksold/{id}")
     public String markAsSoldItem(Model model, @PathVariable(name = "id") Long id) {
@@ -305,7 +318,6 @@ public class FrontendWebController {
 
         return "redirect:/sold-items";
     }
-
 
 
     @GetMapping(value = "/about")
@@ -387,6 +399,7 @@ public class FrontendWebController {
     @GetMapping(value = "/favourites")
     public String favouriteAds(Model model) {
         Set<Item> allFavItems = this.getLoggedUser().getFavoriteItems();
+        logger.debug("userFavItems -> " + allFavItems.toString());
         model.addAttribute("userFavItems", allFavItems);
         model.addAttribute(LOGGEDUSER, getLoggedUser());
         return "dashboard-favourite-ads";
@@ -477,6 +490,36 @@ public class FrontendWebController {
 
     }
 
+    @GetMapping(value = "/product/favourite/{id}")
+    public String favouriteItem(RedirectAttributes ra, @PathVariable(name = "id") Long id) {
+        if(this.getLoggedUser() == null){
+            return "redirect:/login";
+        }
+
+        logger.debug("ID para favourite: " + id);
+        Item item = itemService.getItemById(id);
+        itemService.addFavorite(item, this.getLoggedUser()); // TODO: fix this method
+        logger.debug("faved items -> " + this.getLoggedUser().getFavoriteItems().toString());
+        Item favedItem = itemService.getItemById(id);
+        ra.addAttribute("item", favedItem);
+
+        return REDIRECT_PRODUCT;
+    }
+
+    @GetMapping(value = "/product/unfavourite/{id}")
+    public String unfavouriteItem(RedirectAttributes ra, @PathVariable(name = "id") Long id) {
+        if(this.getLoggedUser() == null){
+            return "redirect:/login";
+        }
+
+        logger.debug("ID para favourite: " + id);
+        Item item = itemService.getItemById(id);
+        itemService.removeFavorite(item, this.getLoggedUser());
+        Item unfavedItem = itemService.getItemById(id);
+        ra.addAttribute("item", unfavedItem);
+
+        return REDIRECT_PRODUCT;
+    }
 
     private User getLoggedUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();

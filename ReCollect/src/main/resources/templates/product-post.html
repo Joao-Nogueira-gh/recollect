@@ -241,13 +241,15 @@
 						<ul class="list-inline">
 							<li class="list-inline-item">
 								<div th:unless="${loggedUser.favoriteItems.contains(item)}">
-									<div class="btn btn-contact d-inline-block  btn-primary px-lg-5 my-1 px-md-3" id="mark-favourite-button">
-										<i class="far fa-heart"></i> <span> Mark as favourite </span>
-										<!--<i class="fas fa-heart"></i> Remove from favourites <span></span> -->
-									</div>
+									<a th:href="${'/product/favourite/' + item.id}" id="mark-favourite-button">
+										<div class="btn btn-contact d-inline-block  btn-primary px-lg-5 my-1 px-md-3" >
+											<i class="far fa-heart"></i> <span> Mark as favourite </span>
+											<!--<i class="fas fa-heart"></i> Remove from favourites <span></span> -->
+										</div>
+									</a>
 								</div>
 								<div th:if="${loggedUser.favoriteItems.contains(item)}">
-									<div class="btn btn-contact d-inline-block  btn-primary px-lg-5 my-1 px-md-3" id="unmark-favourite-button">
+									<div class="btn btn-contact d-inline-block  btn-primary px-lg-5 my-1 px-md-3" id="unmark-favourite-button" th:href="${'/product/unfavourite/' + item.id}">
 										<i class="fas fa-heart"></i> <span> Remove from favourite</span>
 										<!--<i class="fas fa-heart"></i> Remove from favourites <span></span> -->
 									</div>

@@ -10,6 +10,9 @@ public class HomePage extends PageObject {
         super(driver);
     }
 
+    @FindBy(id = "product-card-title")
+    private WebElement productCard;
+
     @FindBy(id = "search_button_home")
     private WebElement searchButton;
 
@@ -31,6 +34,10 @@ public class HomePage extends PageObject {
         return new SearchResultsPage(driver);
     }
 
+    public ProductPage viewItem(){
+        productCard.click();
+        return new ProductPage(driver);
+    }
 
     public SearchResultsPage searchForToys(){
         toysButton.click();
