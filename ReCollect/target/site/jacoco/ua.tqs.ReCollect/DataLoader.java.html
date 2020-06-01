@@ -4,7 +4,10 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -33,7 +36,7 @@ import ua.tqs.ReCollect.service.UserService;
 
 @Component
 @Transactional
-<span class="fc" id="L36">public class DataLoader implements ApplicationRunner {</span>
+<span class="fc" id="L39">public class DataLoader implements ApplicationRunner {</span>
 
     @Autowired
     private LocationService locationService;
@@ -53,7 +56,7 @@ import ua.tqs.ReCollect.service.UserService;
     @Autowired
     private ItemRepository itemRepository;
 
-<span class="fc" id="L56">    static final Logger logger = Logger.getLogger(DataLoader.class);</span>
+<span class="fc" id="L59">    static final Logger logger = Logger.getLogger(DataLoader.class);</span>
 
     @Autowired
     private ResourceLoader rl;
@@ -61,101 +64,213 @@ import ua.tqs.ReCollect.service.UserService;
     @Override
     public void run(ApplicationArguments args) throws Exception {
         //loading locations
-<span class="pc bpc" id="L64" title="1 of 2 branches missed.">        if (locationService.getAll().size() != 308) {</span>
-<span class="nc" id="L65">            locationService.deleteAll();</span>
-<span class="nc" id="L66">            String fileName = &quot;cdpt.json&quot;;</span>
-<span class="nc" id="L67">            InputStream inputStream = rl.getResource(&quot;classpath:static/&quot; + fileName).getInputStream();</span>
-<span class="nc" id="L68">            String cdpt = IOUtils.toString(inputStream, StandardCharsets.UTF_8);</span>
-<span class="nc" id="L69">            ObjectMapper mapper = new ObjectMapper();</span>
-<span class="nc" id="L70">            Map&lt;String, ArrayList&lt;String&gt;&gt; map = mapper.readValue(cdpt, Map.class);</span>
+<span class="pc bpc" id="L67" title="1 of 2 branches missed.">        if (locationService.getAll().size() != 308) {</span>
+<span class="nc" id="L68">            locationService.deleteAll();</span>
+<span class="nc" id="L69">            String fileName = &quot;cdpt.json&quot;;</span>
+<span class="nc" id="L70">            InputStream inputStream = rl.getResource(&quot;classpath:static/&quot; + fileName).getInputStream();</span>
+<span class="nc" id="L71">            String cdpt = IOUtils.toString(inputStream, StandardCharsets.UTF_8);</span>
+<span class="nc" id="L72">            ObjectMapper mapper = new ObjectMapper();</span>
+<span class="nc" id="L73">            Map&lt;String, ArrayList&lt;String&gt;&gt; map = mapper.readValue(cdpt, Map.class);</span>
 
-<span class="nc" id="L72">            Iterator&lt;String&gt; keys = map.keySet().iterator();</span>
-<span class="nc bnc" id="L73" title="All 2 branches missed.">            while (keys.hasNext()) {</span>
-<span class="nc" id="L74">                String district = keys.next();</span>
-<span class="nc" id="L75">                ArrayList&lt;String&gt; counties = map.get(district);</span>
-<span class="nc bnc" id="L76" title="All 2 branches missed.">                for (String county : counties) {</span>
-<span class="nc" id="L77">                    locationService.save(new Location(county, district));</span>
-<span class="nc" id="L78">                }</span>
-<span class="nc" id="L79">            }</span>
+<span class="nc" id="L75">            Iterator&lt;String&gt; keys = map.keySet().iterator();</span>
+<span class="nc bnc" id="L76" title="All 2 branches missed.">            while (keys.hasNext()) {</span>
+<span class="nc" id="L77">                String district = keys.next();</span>
+<span class="nc" id="L78">                ArrayList&lt;String&gt; counties = map.get(district);</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">                for (String county : counties) {</span>
+<span class="nc" id="L80">                    locationService.save(new Location(county, district));</span>
+<span class="nc" id="L81">                }</span>
+<span class="nc" id="L82">            }</span>
 
-<span class="nc" id="L81">            logger.info(&quot;Finished loading &quot; + locationService.getAll().size() + &quot; locations&quot;);</span>
+<span class="nc" id="L84">            logger.info(&quot;Finished loading &quot; + locationService.getAll().size() + &quot; locations&quot;);</span>
 
-<span class="nc" id="L83">        } else {</span>
-<span class="fc" id="L84">            logger.debug(&quot;up and running&quot;);</span>
+<span class="nc" id="L86">        } else {</span>
+<span class="fc" id="L87">            logger.debug(&quot;up and running&quot;);</span>
         }
         // loading users
-<span class="fc" id="L87">        String emailCarlos=&quot;carlos@mail.com&quot;;</span>
-<span class="fc" id="L88">        String emailSofia=&quot;sofia@mail.com&quot;;</span>
-<span class="fc" id="L89">        String emailPedro=&quot;pedro@mail.com&quot;;</span>
-<span class="pc bpc" id="L90" title="5 of 6 branches missed.">        if (!userService.userExists(emailCarlos) || !userService.userExists(emailSofia) || !userService.userExists(emailPedro)) {</span>
-<span class="fc" id="L91">            userService.deleteAll();</span>
+<span class="fc" id="L90">        String emailCarlos=&quot;carlos@mail.com&quot;;</span>
+<span class="fc" id="L91">        String emailSofia=&quot;sofia@mail.com&quot;;</span>
+<span class="fc" id="L92">        String emailPedro=&quot;pedro@mail.com&quot;;</span>
+<span class="fc" id="L93">        String emailMiguel=&quot;miguel@mail.com&quot;;</span>
+<span class="fc" id="L94">        String emailAna=&quot;ana@mail.com&quot;;</span>
 
-<span class="fc" id="L93">            userService.register(new User(&quot;Carlos&quot;,emailCarlos, &quot;carlos&quot;, &quot;123456789&quot;,</span>
-<span class="fc" id="L94">                    locationService.getLocation(&quot;Aveiro&quot;, &quot;Aveiro&quot;)));</span>
+<span class="pc bpc" id="L96" title="5 of 10 branches missed.">        if (!userService.userExists(emailCarlos) || !userService.userExists(emailSofia) || !userService.userExists(emailPedro) || !userService.userExists(emailMiguel) || !userService.userExists(emailAna)) {</span>
 
-<span class="fc" id="L96">            userService.register(new User(&quot;Sofia&quot;, emailSofia, &quot;sofia&quot;, &quot;123789456&quot;,</span>
-<span class="fc" id="L97">                    locationService.getLocation(&quot;Coimbra&quot;, &quot;Mira&quot;)));</span>
+<span class="nc" id="L98">            userService.register(new User(&quot;Carlos&quot;,emailCarlos, &quot;carlos&quot;, &quot;123456789&quot;,</span>
+<span class="nc" id="L99">                    locationService.getLocation(&quot;Aveiro&quot;, &quot;Aveiro&quot;)));</span>
 
-<span class="fc" id="L99">            userService.register(new User(&quot;Pedro&quot;, emailPedro, &quot;pedro&quot;, &quot;456789123&quot;,</span>
-<span class="fc" id="L100">                    locationService.getLocation(&quot;Lisboa&quot;, &quot;Mafra&quot;)));</span>
+<span class="nc" id="L101">            userService.register(new User(&quot;Sofia&quot;, emailSofia, &quot;sofia&quot;, &quot;123789456&quot;,</span>
+<span class="nc" id="L102">                    locationService.getLocation(&quot;Coimbra&quot;, &quot;Mira&quot;)));</span>
+
+<span class="nc" id="L104">            userService.register(new User(&quot;Pedro&quot;, emailPedro, &quot;pedro&quot;, &quot;456789123&quot;,</span>
+<span class="nc" id="L105">                    locationService.getLocation(&quot;Lisboa&quot;, &quot;Mafra&quot;)));</span>
+
+<span class="nc" id="L107">            userService.register(new User(&quot;Miguel&quot;, emailMiguel, &quot;miguel&quot;, &quot;234567891&quot;,</span>
+<span class="nc" id="L108">                    locationService.getLocation(&quot;Faro&quot;, &quot;Albufeira&quot;)));</span>
+
+<span class="nc" id="L110">            userService.register(new User(&quot;Ana&quot;, emailAna, &quot;ana&quot;, &quot;789123456&quot;,</span>
+<span class="nc" id="L111">                    locationService.getLocation(&quot;Porto&quot;, &quot;Maia&quot;)));</span>
         }
-<span class="fc" id="L102">        logger.debug(userService.getAll());</span>
+        
+<span class="fc" id="L114">        logger.debug(userService.getAll());</span>
 
         //loading items
 
-<span class="fc" id="L106">        itemService.deleteAll();</span>
+<span class="fc" id="L118">        itemService.deleteAll();</span>
 
-<span class="fc" id="L108">        User carlos=userService.getByEmail(emailCarlos);</span>
-<span class="fc" id="L109">        User sofia=userService.getByEmail(emailSofia);</span>
-<span class="fc" id="L110">        User pedro=userService.getByEmail(emailPedro);</span>
+<span class="fc" id="L120">        User carlos=userService.getByEmail(emailCarlos);</span>
+<span class="fc" id="L121">        User sofia=userService.getByEmail(emailSofia);</span>
+<span class="fc" id="L122">        User pedro=userService.getByEmail(emailPedro);</span>
+<span class="fc" id="L123">        User miguel=userService.getByEmail(emailMiguel);</span>
+<span class="fc" id="L124">        User ana=userService.getByEmail(emailAna);</span>
 
-<span class="fc" id="L112">        Item i1= new Item(&quot;2019 Great Britain Silver Britannia 1 oz .999 BU £2 Brilliant Uncirculated&quot;, 1, BigDecimal.valueOf(41.0), &quot;Moeda rara&quot;, Categories.MISC);</span>
-<span class="fc" id="L113">        i1.setOwner(carlos);</span>
-<span class="fc" id="L114">        i1.addImage(new URL(&quot;https://images-na.ssl-images-amazon.com/images/I/81aA62TVZeL._SL1500_.jpg&quot;));</span>
-<span class="fc" id="L115">        itemRepository.saveAndFlush(i1);</span>
+<span class="fc" id="L126">        Item i1= new Item(&quot;2019 Great Britain Silver Britannia 1 oz .999 BU £2 Brilliant Uncirculated&quot;, 1, BigDecimal.valueOf(41.0), &quot;Moeda rara&quot;, Categories.MISC);</span>
+<span class="fc" id="L127">        i1.setOwner(carlos);</span>
+<span class="fc" id="L128">        i1.addImage(new URL(&quot;https://images-na.ssl-images-amazon.com/images/I/81aA62TVZeL._SL1500_.jpg&quot;));</span>
+<span class="fc" id="L129">        itemRepository.saveAndFlush(i1);</span>
+<span class="fc" id="L130">        i1.setCreationDate(Date.from(LocalDate.of(2020, 6, 1).atStartOfDay(ZoneId.of(&quot;Europe/London&quot;)).toInstant()));</span>
 
-<span class="fc" id="L117">        Item i2= new Item(&quot;The Cocktail Party [assinado]&quot;, 1, BigDecimal.valueOf(200.0), &quot;Livro antigo, assinado&quot;, Categories.BOOKS);</span>
-<span class="fc" id="L118">        i2.setOwner(carlos);</span>
-<span class="fc" id="L119">        i2.addImage(new URL(&quot;https://pictures.abebooks.com/LONDONRAREBOOKS/md/md30097028036.jpg&quot;));</span>
-<span class="fc" id="L120">        itemRepository.saveAndFlush(i2);</span>
 
-<span class="fc" id="L122">        Item i3= new Item(&quot;Vintage Vinyl, Black Sabbath Volume 4. Vertigo Records 1972&quot;, 1, BigDecimal.valueOf(23.0), &quot;Disco vinyl antigo&quot;, Categories.MUSIC);</span>
-<span class="fc" id="L123">        i3.setOwner(sofia);</span>
-<span class="fc" id="L124">        i3.addImage(new URL(&quot;https://i.ebayimg.com/images/g/TosAAOSw7Rdext5W/s-l1600.jpg&quot;));</span>
-<span class="fc" id="L125">        itemRepository.saveAndFlush(i3);</span>
+<span class="fc" id="L133">        Item i2= new Item(&quot;The Cocktail Party [assinado]&quot;, 1, BigDecimal.valueOf(200.0), &quot;Livro antigo, assinado&quot;, Categories.BOOKS);</span>
+<span class="fc" id="L134">        i2.setOwner(carlos);</span>
+<span class="fc" id="L135">        i2.addImage(new URL(&quot;https://pictures.abebooks.com/LONDONRAREBOOKS/md/md30097028036.jpg&quot;));</span>
+<span class="fc" id="L136">        itemRepository.saveAndFlush(i2);</span>
+<span class="fc" id="L137">        i2.setCreationDate(Date.from(LocalDate.of(2020, 5, 23).atStartOfDay(ZoneId.of(&quot;Europe/London&quot;)).toInstant()));</span>
 
-<span class="fc" id="L127">        Item i4= new Item(&quot;Japanese Art Print Dusk by Koho Shoda Vintage Poster, Painting Print, Japanese, Ukiyo e #1098&quot;, 1, BigDecimal.valueOf(20.0), &quot;Quadro raro&quot;, Categories.ART);</span>
-<span class="fc" id="L128">        i4.setSeller(sofia);</span>
-<span class="fc" id="L129">        i4.addImage(new URL(&quot;https://i.etsystatic.com/16900491/r/il/c479db/1938837110/il_1140xN.1938837110_au3l.jpg&quot;));</span>
-<span class="fc" id="L130">        itemRepository.saveAndFlush(i4);</span>
 
-<span class="fc" id="L132">        Item i5= new Item(&quot;1922-1935 Peace Silver Dollar BU&quot;, 1, BigDecimal.valueOf(27.0), &quot;Moeda rara&quot;, Categories.MISC);</span>
-<span class="fc" id="L133">        i5.setOwner(pedro);</span>
-<span class="fc" id="L134">        i5.addImage(new URL(&quot;https://www.images-apmex.com/images/Catalog%20Images/Products/170_Obv.jpg?v=20191107093552&amp;width=900&amp;height=900&quot;));</span>
-<span class="fc" id="L135">        itemRepository.saveAndFlush(i5);</span>
+<span class="fc" id="L140">        Item i3= new Item(&quot;Vintage Vinyl, Black Sabbath Volume 4. Vertigo Records 1972&quot;, 1, BigDecimal.valueOf(23.0), &quot;Disco vinyl antigo&quot;, Categories.MUSIC);</span>
+<span class="fc" id="L141">        i3.setOwner(sofia);</span>
+<span class="fc" id="L142">        i3.addImage(new URL(&quot;https://i.ebayimg.com/images/g/TosAAOSw7Rdext5W/s-l1600.jpg&quot;));</span>
+<span class="fc" id="L143">        itemRepository.saveAndFlush(i3);</span>
+<span class="fc" id="L144">        i3.setCreationDate(Date.from(LocalDate.of(2020, 4, 2).atStartOfDay(ZoneId.of(&quot;Europe/London&quot;)).toInstant()));</span>
 
-<span class="fc" id="L137">        Item i6= new Item(&quot;Complete Exodia the Forbidden One Set - All 5 Cards :: 1st Edition LDK2 Mint YuG&quot;, 2, BigDecimal.valueOf(17.0), &quot;Cartas raras&quot;, Categories.GAMES);</span>
-<span class="fc" id="L138">        i6.setOwner(pedro);</span>
-<span class="fc" id="L139">        i6.addImage(new URL(&quot;https://i.ebayimg.com/images/g/sOEAAOSwKtVeVorv/s-l1600.jpg&quot;));</span>
-<span class="fc" id="L140">        itemRepository.saveAndFlush(i6);</span>
 
-<span class="fc" id="L142">        logger.debug(itemService.getAll());</span>
+<span class="fc" id="L147">        Item i4= new Item(&quot;Japanese Art Print Dusk by Koho Shoda Vintage Poster, Painting Print, Japanese, Ukiyo e #1098&quot;, 1, BigDecimal.valueOf(20.0), &quot;Quadro raro&quot;, Categories.ART);</span>
+<span class="fc" id="L148">        i4.setSeller(sofia);</span>
+<span class="fc" id="L149">        i4.addImage(new URL(&quot;https://i.etsystatic.com/16900491/r/il/c479db/1938837110/il_1140xN.1938837110_au3l.jpg&quot;));</span>
+<span class="fc" id="L150">        itemRepository.saveAndFlush(i4);</span>
+<span class="fc" id="L151">        i4.setCreationDate(Date.from(LocalDate.of(2020, 5, 23).atStartOfDay(ZoneId.of(&quot;Europe/London&quot;)).toInstant()));</span>
+
+
+<span class="fc" id="L154">        Item i5= new Item(&quot;1922-1935 Peace Silver Dollar BU&quot;, 1, BigDecimal.valueOf(27.0), &quot;Moeda rara&quot;, Categories.MISC);</span>
+<span class="fc" id="L155">        i5.setOwner(pedro);</span>
+<span class="fc" id="L156">        i5.addImage(new URL(&quot;https://www.images-apmex.com/images/Catalog%20Images/Products/170_Obv.jpg?v=20191107093552&amp;width=900&amp;height=900&quot;));</span>
+<span class="fc" id="L157">        itemRepository.saveAndFlush(i5);</span>
+<span class="fc" id="L158">        i5.setCreationDate(Date.from(LocalDate.of(2020, 5, 4).atStartOfDay(ZoneId.of(&quot;Europe/London&quot;)).toInstant()));</span>
+
+
+<span class="fc" id="L161">        Item i6= new Item(&quot;Complete Exodia the Forbidden One Set - All 5 Cards :: 1st Edition LDK2 Mint YuG&quot;, 2, BigDecimal.valueOf(17.0), &quot;Cartas raras&quot;, Categories.GAMES);</span>
+<span class="fc" id="L162">        i6.setOwner(pedro);</span>
+<span class="fc" id="L163">        i6.addImage(new URL(&quot;https://i.ebayimg.com/images/g/sOEAAOSwKtVeVorv/s-l1600.jpg&quot;));</span>
+<span class="fc" id="L164">        itemRepository.saveAndFlush(i6);</span>
+<span class="fc" id="L165">        i6.setCreationDate(Date.from(LocalDate.of(2020, 4, 1).atStartOfDay(ZoneId.of(&quot;Europe/London&quot;)).toInstant()));</span>
+
+
+<span class="fc" id="L168">        Item i7= new Item(&quot;1907 $10 Indian Gold MS-62 Quality&quot;, 1, BigDecimal.valueOf(1600.0), &quot;Moeda muito rara&quot;, Categories.MISC);</span>
+<span class="fc" id="L169">        i7.setOwner(carlos);</span>
+<span class="fc" id="L170">        i7.addImage(new URL(&quot;https://www.rarecoins.com/media/catalog/product/cache/6/image/500x/040ec09b1e35df139433887a97daa66f/1/9/1907-10-indian-ms-62-holder.png&quot;));</span>
+<span class="fc" id="L171">        itemRepository.saveAndFlush(i7);</span>
+<span class="fc" id="L172">        i7.setCreationDate(Date.from(LocalDate.of(2020, 4, 22).atStartOfDay(ZoneId.of(&quot;Europe/London&quot;)).toInstant()));</span>
+
+<span class="fc" id="L174">        Item i8= new Item(&quot;Outlanders, signed&quot;, 1, BigDecimal.valueOf(30.0), &quot;Signed book&quot;, Categories.BOOKS);</span>
+<span class="fc" id="L175">        i8.setOwner(sofia);</span>
+<span class="fc" id="L176">        i8.addImage(new URL(&quot;https://pictures.abebooks.com/BETWEENTHECOVERS/47779555.jpg&quot;));</span>
+<span class="fc" id="L177">        itemRepository.saveAndFlush(i8);</span>
+<span class="fc" id="L178">        i8.setCreationDate(Date.from(LocalDate.of(2020, 5, 1).atStartOfDay(ZoneId.of(&quot;Europe/London&quot;)).toInstant()));</span>
+
+<span class="fc" id="L180">        Item i9= new Item(&quot;BATMAN FOREVER: THE ARCADE GAME  (PlayStation)&quot;, 1, BigDecimal.valueOf(135.0), &quot;Rare game&quot;, Categories.GAMES);</span>
+<span class="fc" id="L181">        i9.setOwner(pedro);</span>
+<span class="fc" id="L182">        i9.addImage(new URL(&quot;https://now.estarland.com/images/products/hr/6190/021481870838.jpg&quot;));</span>
+<span class="fc" id="L183">        itemRepository.saveAndFlush(i9);</span>
+<span class="fc" id="L184">        i9.setCreationDate(Date.from(LocalDate.of(2020, 5, 3).atStartOfDay(ZoneId.of(&quot;Europe/London&quot;)).toInstant()));</span>
+
+<span class="fc" id="L186">        Item i10= new Item(&quot;CMC 1/18 Ferrari F2 500 Super rare / very Limited 1/18 CMC / Diecast cars 1/18 / CMC products&quot;, 1, BigDecimal.valueOf(430.0), &quot;Rare toy&quot;, Categories.TOYS);</span>
+<span class="fc" id="L187">        i10.setOwner(miguel);</span>
+<span class="fc" id="L188">        i10.addImage(new URL(&quot;https://i.etsystatic.com/17352431/r/il/82a857/2379398821/il_794xN.2379398821_ey5n.jpg&quot;));</span>
+<span class="fc" id="L189">        itemRepository.saveAndFlush(i10);</span>
+<span class="fc" id="L190">        i10.setCreationDate(Date.from(LocalDate.of(2020, 5, 20).atStartOfDay(ZoneId.of(&quot;Europe/London&quot;)).toInstant()));</span>
+        //todo
+<span class="fc" id="L192">        Item i11= new Item(&quot;Apple IIc Plus&quot;, 1, BigDecimal.valueOf(440.0), &quot;Rare computer&quot;, Categories.TECHNOLOGY);</span>
+<span class="fc" id="L193">        i11.setOwner(miguel);</span>
+<span class="fc" id="L194">        i11.addImage(new URL(&quot;https://i.ebayimg.com/images/g/Hi0AAOSw0uZezTju/s-l1600.jpg&quot;));</span>
+<span class="fc" id="L195">        itemRepository.saveAndFlush(i11);</span>
+<span class="fc" id="L196">        i11.setCreationDate(Date.from(LocalDate.of(2020, 5, 22).atStartOfDay(ZoneId.of(&quot;Europe/London&quot;)).toInstant()));</span>
+
+<span class="fc" id="L198">        Item i12= new Item(&quot;Eric Clapton - I Still Do&quot;, 1, BigDecimal.valueOf(135.0), &quot;Rare disc&quot;, Categories.MUSIC);</span>
+<span class="fc" id="L199">        i12.setOwner(miguel);</span>
+<span class="fc" id="L200">        i12.addImage(new URL(&quot;https://www.vinyltap.co.uk/media/catalog/product/cache/1/image/364x/040ec09b1e35df139433887a97daa66f/i/m/image_236192_3_1_3_5_8_6_6_10_1_266708_1_118752_1_9_1_339533_1_36236_1_106114.jpg&quot;));</span>
+<span class="fc" id="L201">        itemRepository.saveAndFlush(i12);</span>
+<span class="fc" id="L202">        i12.setCreationDate(Date.from(LocalDate.of(2020, 5, 29).atStartOfDay(ZoneId.of(&quot;Europe/London&quot;)).toInstant()));</span>
+
+<span class="fc" id="L204">        Item i13= new Item(&quot;Black Labrador Rare Painting by Ivester Lloyd&quot;, 1, BigDecimal.valueOf(2269.0), &quot;Rare painting&quot;, Categories.ART);</span>
+<span class="fc" id="L205">        i13.setOwner(ana);</span>
+<span class="fc" id="L206">        i13.addImage(new URL(&quot;https://a.1stdibscdn.com/a_12252/1558701829687/Labrador_master.jpg?disable=upscale&amp;auto=webp&amp;quality=60&amp;width=960&quot;));</span>
+<span class="fc" id="L207">        itemRepository.saveAndFlush(i13);</span>
+<span class="fc" id="L208">        i13.setCreationDate(Date.from(LocalDate.of(2020, 3, 2).atStartOfDay(ZoneId.of(&quot;Europe/London&quot;)).toInstant()));</span>
+        
+<span class="fc" id="L210">        Item i14= new Item(&quot;1970s Tonka Truck&quot;, 1, BigDecimal.valueOf(93.0), &quot;Rare toy&quot;, Categories.TOYS);</span>
+<span class="fc" id="L211">        i14.setOwner(ana);</span>
+<span class="fc" id="L212">        i14.addImage(new URL(&quot;https://i.etsystatic.com/23439917/r/il/0194b3/2384136403/il_794xN.2384136403_mrwj.jpg&quot;));</span>
+<span class="fc" id="L213">        itemRepository.saveAndFlush(i14);</span>
+<span class="fc" id="L214">        i14.setCreationDate(Date.from(LocalDate.of(2020, 3, 4).atStartOfDay(ZoneId.of(&quot;Europe/London&quot;)).toInstant()));</span>
+
+<span class="fc" id="L216">        Item i15= new Item(&quot;Futurama-PlayStation2&quot;, 1, BigDecimal.valueOf(152.0), &quot;Rare game&quot;, Categories.GAMES);</span>
+<span class="fc" id="L217">        i15.setOwner(ana);</span>
+<span class="fc" id="L218">        i15.addImage(new URL(&quot;https://images.lukiegames.com/t_300e2/assets/images/PS2/ps2_futurama-110214.jpg&quot;));</span>
+<span class="fc" id="L219">        itemRepository.saveAndFlush(i15);</span>
+<span class="fc" id="L220">        i15.setCreationDate(Date.from(LocalDate.of(2020, 3, 30).atStartOfDay(ZoneId.of(&quot;Europe/London&quot;)).toInstant()));</span>
+
+<span class="fc" id="L222">        logger.debug(itemService.getAll());</span>
 
         //loading comments
 
-<span class="fc" id="L146">        commentService.deleteAll();</span>
+<span class="fc" id="L226">        commentService.deleteAll();</span>
 
-<span class="fc" id="L148">        Comment c1=new Comment(&quot;Em bom estado!&quot;, carlos, i6);</span>
-<span class="fc" id="L149">        commentRepository.saveAndFlush(c1);</span>
+<span class="fc" id="L228">        Comment c1=new Comment(&quot;Em bom estado!&quot;, carlos, i6);</span>
+<span class="fc" id="L229">        commentRepository.saveAndFlush(c1);</span>
         
-<span class="fc" id="L151">        Comment c2=new Comment(&quot;5 estrelas&quot;, pedro, i3);</span>
-<span class="fc" id="L152">        commentRepository.saveAndFlush(c2);</span>
+<span class="fc" id="L231">        Comment c2=new Comment(&quot;5 estrelas&quot;, pedro, i3);</span>
+<span class="fc" id="L232">        commentRepository.saveAndFlush(c2);</span>
         
-<span class="fc" id="L154">        Comment c3=new Comment(&quot;Tinha uma página rasgada...&quot;, pedro, i2);</span>
-<span class="fc" id="L155">        commentRepository.saveAndFlush(c3);</span>
+<span class="fc" id="L234">        Comment c3=new Comment(&quot;Tinha uma página rasgada...&quot;, pedro, i2);</span>
+<span class="fc" id="L235">        commentRepository.saveAndFlush(c3);</span>
 
-<span class="fc" id="L157">        logger.debug(commentService.getAll());</span>
+<span class="fc" id="L237">        Comment c4=new Comment(&quot;Otimo&quot;, sofia, i15);</span>
+<span class="fc" id="L238">        commentRepository.saveAndFlush(c4);</span>
 
-<span class="fc" id="L159">    }</span>
+<span class="fc" id="L240">        Comment c5=new Comment(&quot;Vendedor não responde...&quot;, miguel, i14);</span>
+<span class="fc" id="L241">        commentRepository.saveAndFlush(c5);</span>
+
+<span class="fc" id="L243">        Comment c6=new Comment(&quot;Wow&quot;, carlos, i13);</span>
+<span class="fc" id="L244">        commentRepository.saveAndFlush(c6);</span>
+
+<span class="fc" id="L246">        Comment c7=new Comment(&quot;Em otimas condições&quot;, ana, i12);</span>
+<span class="fc" id="L247">        commentRepository.saveAndFlush(c7);</span>
+
+<span class="fc" id="L249">        Comment c8=new Comment(&quot;Se calhar devia baixar o preço&quot;, pedro, i11);</span>
+<span class="fc" id="L250">        commentRepository.saveAndFlush(c8);</span>
+
+<span class="fc" id="L252">        Comment c9=new Comment(&quot;Confio no vendedor&quot;, carlos, i10);</span>
+<span class="fc" id="L253">        commentRepository.saveAndFlush(c9);</span>
+
+<span class="fc" id="L255">        Comment c10=new Comment(&quot;Funciona&quot;, sofia, i9);</span>
+<span class="fc" id="L256">        commentRepository.saveAndFlush(c10);</span>
+
+<span class="fc" id="L258">        Comment c11=new Comment(&quot;Incontactavel&quot;, miguel, i8);</span>
+<span class="fc" id="L259">        commentRepository.saveAndFlush(c11);</span>
+
+<span class="fc" id="L261">        Comment c12=new Comment(&quot;Scam&quot;, miguel, i7);</span>
+<span class="fc" id="L262">        commentRepository.saveAndFlush(c12);</span>
+
+<span class="fc" id="L264">        Comment c13=new Comment(&quot;Muito raro&quot;, ana, i4);</span>
+<span class="fc" id="L265">        commentRepository.saveAndFlush(c13);</span>
+
+<span class="fc" id="L267">        Comment c14=new Comment(&quot;Esse preço é muito baixo, acredite&quot;, miguel, i5);</span>
+<span class="fc" id="L268">        commentRepository.saveAndFlush(c14);</span>
+
+<span class="fc" id="L270">        Comment c15=new Comment(&quot;A transação correu muito bem&quot;, ana, i1);</span>
+<span class="fc" id="L271">        commentRepository.saveAndFlush(c15);</span>
+<span class="fc" id="L272">        logger.debug(commentService.getAll());</span>
+
+<span class="fc" id="L274">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

@@ -61,10 +61,13 @@ public class UserController {
         if (userService.userExists(user.getEmail())) {
             bindingResult.rejectValue("name", "error.user",
                     "There is already a user registered with the email provided");
+            modelAndView.addObject("registerMessage", "That email is already in use!");
+            modelAndView.addObject("registerBoolean", "false");
         }
         if (!bindingResult.hasErrors()) {
             userService.register(user);
-            modelAndView.addObject("successMessage", "User has been registered successfully");
+            modelAndView.addObject("registerMessage", "User registered successfully!");
+            modelAndView.addObject("registerBoolean", "true");
         }
 
         modelAndView.addObject("registo", new RegisterForm());
