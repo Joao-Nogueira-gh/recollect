@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 
 import ua.tqs.ReCollect.model.Item;
 import ua.tqs.ReCollect.model.User;
-import ua.tqs.ReCollect.repository.OffsetBasedPageRequest;
+import ua.tqs.ReCollect.utils.OffsetBasedPageRequest;
 import ua.tqs.ReCollect.repository.UserRepository;
 
 @Service
@@ -75,7 +75,7 @@ import ua.tqs.ReCollect.repository.UserRepository;
 
     public List&lt;User&gt; getAll(OffsetBasedPageRequest offset) {
 
-<span class="nc" id="L78">        return this.userRepo.findAll(offset).toList();</span>
+<span class="fc" id="L78">        return this.userRepo.findAll(offset).toList();</span>
 
     }
 
@@ -93,13 +93,13 @@ import ua.tqs.ReCollect.repository.UserRepository;
 
         }
 
-<span class="pc bpc" id="L96" title="1 of 6 branches missed.">        if (!(distrito == null ^ concelho == null)) {</span>
+<span class="pc bpc" id="L96" title="1 of 4 branches missed.">        if (distrito == null &amp;&amp; concelho == null) {</span>
 
-<span class="fc" id="L98">            return new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L98">            ret = this.getAll(new OffsetBasedPageRequest(offset, limit));</span>
 
-<span class="nc bnc" id="L100" title="All 4 branches missed.">        } else if (distrito == null &amp;&amp; concelho == null) {</span>
+<span class="pc bpc" id="L100" title="3 of 6 branches missed.">        } else if (!(distrito == null ^ concelho == null)) {</span>
 
-<span class="nc" id="L102">            ret = this.getAll(new OffsetBasedPageRequest(offset, limit));</span>
+<span class="fc" id="L102">            return new ArrayList&lt;&gt;();</span>
 
         } else {
 
@@ -108,7 +108,7 @@ import ua.tqs.ReCollect.repository.UserRepository;
         }
 
 
-<span class="nc" id="L111">        return ret;</span>
+<span class="fc" id="L111">        return ret;</span>
 
     }
 
