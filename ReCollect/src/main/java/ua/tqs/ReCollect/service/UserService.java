@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 
 import ua.tqs.ReCollect.model.Item;
 import ua.tqs.ReCollect.model.User;
-import ua.tqs.ReCollect.repository.OffsetBasedPageRequest;
+import ua.tqs.ReCollect.utils.OffsetBasedPageRequest;
 import ua.tqs.ReCollect.repository.UserRepository;
 
 @Service
@@ -93,13 +93,13 @@ public class UserService {
 
         }
 
-        if (!(distrito == null ^ concelho == null)) {
-
-            return new ArrayList<>();
-
-        } else if (distrito == null && concelho == null) {
+        if (distrito == null && concelho == null) {
 
             ret = this.getAll(new OffsetBasedPageRequest(offset, limit));
+
+        } else if (!(distrito == null ^ concelho == null)) {
+
+            return new ArrayList<>();
 
         } else {
 

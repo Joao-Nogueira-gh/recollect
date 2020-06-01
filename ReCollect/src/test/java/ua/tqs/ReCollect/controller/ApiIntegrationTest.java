@@ -300,6 +300,17 @@ class ApiIntegrationTest {
     }
 
     @Test
+    void getAllUsers() {
+
+        ResponseEntity<List<User>> entity = restClient.exchange("/api/users/",
+                HttpMethod.GET, null, new ParameterizedTypeReference<List<User>>() {
+                });
+
+        assertEquals(2, entity.getBody().size());
+
+    }
+
+    @Test
     void noPwdsSent() {
 
         ResponseEntity<List<User>> entity = restClient.exchange("/api/users/", HttpMethod.GET, null,

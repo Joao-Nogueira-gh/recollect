@@ -24,14 +24,14 @@ import ua.tqs.ReCollect.repository.CommentRepository;
     }
 
     public List&lt;Comment&gt; getAll(){
-<span class="nc" id="L27">        return commentRepo.findAll();</span>
+<span class="fc" id="L27">        return commentRepo.findAll();</span>
     }
     public void save(Comment comment){
 <span class="nc" id="L30">        commentRepo.save(comment);</span>
 <span class="nc" id="L31">    }</span>
     public void deleteAll(){
-<span class="nc" id="L33">        commentRepo.deleteAll();</span>
-<span class="nc" id="L34">    }</span>
+<span class="fc" id="L33">        commentRepo.deleteAll();</span>
+<span class="fc" id="L34">    }</span>
     @Transactional
 	public void addNewComment(Comment comment) {
 <span class="nc" id="L37">        save(comment);</span>
