@@ -24,6 +24,7 @@ public class AddFavItemSeleniumTest extends FunctionalTest {
         MyAdsPage myAdsPage = loginPage.loginNormal();
         assertTrue(myAdsPage.isInitialized());
 
+        // just get the previous number of favourite items
         driver.get("http://localhost:8080/favourites");
         FavItemsPage favItemsPage = new FavItemsPage(driver);
         assertTrue(favItemsPage.isInitialized());
@@ -37,6 +38,7 @@ public class AddFavItemSeleniumTest extends FunctionalTest {
         assertTrue(productPage.isInitialized());
         assertTrue(productPage.favouriteButtonIsDisplayed());
         productPage.markItemAsFavourite();
+        assertTrue(productPage.unFavouriteButtonIsDisplayed());
 
         driver.get("http://localhost:8080/favourites");
         FavItemsPage favItemsPage2 = new FavItemsPage(driver);
