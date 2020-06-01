@@ -84,6 +84,17 @@
     </div>
 </div>
 
+<div style="margin: auto; text-align: center; clear: both;" th:if="${registerBoolean}">
+    
+    <h2 style="margin: auto; text-align: center;" th:text="${registerMessage}"></h2>
+    <h2 ><a href="/login">Login now</a></h2>
+
+ </div>
+ <!-- ELSE -->
+ <div style="margin: auto; text-align: center;" th:unless="${registerBoolean}">
+    <h2 style="margin: auto; text-align: center; color: red;" th:text="${registerMessage}"></h2>
+ </div>
+
 <section class="login py-5 border-top-1">
         <div class="container">
             <div class="row justify-content-center">

@@ -211,4 +211,8 @@ public class Item {
                 + ", name=" + name + ", owner=" + ownerst + ", price=" + price + ", quantity=" + quantity + ", seller="
                 + sellerst + "]";
     }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
 }
