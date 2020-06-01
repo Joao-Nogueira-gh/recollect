@@ -1,4 +1,4 @@
-package ua.tqs.ReCollect.repository;
+package ua.tqs.ReCollect.utils;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;

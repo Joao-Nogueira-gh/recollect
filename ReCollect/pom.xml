@@ -252,6 +252,7 @@
 					<excludes>
 						<exclude>**/model/*</exclude>
 						<exclude>**/utils/*</exclude>
+						<!-- <exclude>**/service/MyUserDetailsService.java</exclude> -->
 					</excludes>
 				</configuration>
 				<executions>

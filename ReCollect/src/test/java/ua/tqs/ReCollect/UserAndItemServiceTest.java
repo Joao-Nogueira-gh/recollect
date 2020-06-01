@@ -20,7 +20,7 @@ import ua.tqs.ReCollect.model.Categories;
 import ua.tqs.ReCollect.model.Item;
 import ua.tqs.ReCollect.model.User;
 import ua.tqs.ReCollect.repository.ItemRepository;
-import ua.tqs.ReCollect.repository.OffsetBasedPageRequest;
+import ua.tqs.ReCollect.utils.OffsetBasedPageRequest;
 import ua.tqs.ReCollect.repository.UserRepository;
 import ua.tqs.ReCollect.service.ItemService;
 import ua.tqs.ReCollect.service.UserService;
