@@ -76,7 +76,10 @@ public class User {
     private Set<Comment> comments=new HashSet<>();
 
     @ManyToMany(cascade = CascadeType.MERGE)
-    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @JoinTable(
+    name = "user_role",
+    joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+    inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "role_id"))
     private Set<Role> roles=new HashSet<>();
 
     @Column(name = "active")
