@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 
 import ua.tqs.ReCollect.model.Item;
 import ua.tqs.ReCollect.model.User;
-import ua.tqs.ReCollect.repository.OffsetBasedPageRequest;
+import ua.tqs.ReCollect.utils.OffsetBasedPageRequest;
 import ua.tqs.ReCollect.repository.UserRepository;
 
 @Service

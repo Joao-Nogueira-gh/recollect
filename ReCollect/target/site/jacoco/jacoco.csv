@@ -1,7 +1,6 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
 ReCollect,ua.tqs.ReCollect.service,CommentService,25,11,0,0,8,4,4,3,4,3
 ReCollect,ua.tqs.ReCollect.service,ItemService,62,253,14,34,13,57,19,34,7,22
-ReCollect,ua.tqs.ReCollect.service,MyUserDetailsService,63,7,4,0,11,2,5,2,3,2
 ReCollect,ua.tqs.ReCollect.service,UserService,57,190,17,19,8,46,15,17,2,12
 ReCollect,ua.tqs.ReCollect.service,LocationService,10,55,0,4,4,11,2,6,2,4
 ReCollect,ua.tqs.ReCollect,WebSecurityConfiguration,0,144,0,0,0,28,0,4,0,4
@@ -15,4 +14,3 @@ ReCollect,ua.tqs.ReCollect.controller,UserController,5,145,2,2,1,30,2,6,0,6
 ReCollect,ua.tqs.ReCollect.controller,UserRestController,5,11,0,0,1,2,1,2,1,2
 ReCollect,ua.tqs.ReCollect.controller,ItemController,234,7,0,0,41,2,4,2,4,2
 ReCollect,ua.tqs.ReCollect.controller,CommentController,112,7,0,0,20,2,2,2,2,2
-ReCollect,ua.tqs.ReCollect.repository,OffsetBasedPageRequest,114,75,10,4,18,22,15,7,8,7
