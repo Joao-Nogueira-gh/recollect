@@ -93,13 +93,13 @@ public class UserService {
 
         }
 
-        if (!(distrito == null ^ concelho == null)) {
-
-            return new ArrayList<>();
-
-        } else if (distrito == null && concelho == null) {
+        if (distrito == null && concelho == null) {
 
             ret = this.getAll(new OffsetBasedPageRequest(offset, limit));
+
+        } else if (!(distrito == null ^ concelho == null)) {
+
+            return new ArrayList<>();
 
         } else {
 

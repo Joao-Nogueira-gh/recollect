@@ -20,7 +20,6 @@ import javax.validation.constraints.Email;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-
 @Entity
 @Table(name = "user")
 public class User {
@@ -70,6 +69,7 @@ public class User {
     private Set<Item> soldItems=new HashSet<>();
 
     @OneToMany(mappedBy="user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private Set<Comment> comments=new HashSet<>();
 
     @ManyToMany(cascade = CascadeType.MERGE)
