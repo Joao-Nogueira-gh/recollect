@@ -1,4 +1,4 @@
-package ua.tqs.ReCollect.restcontroller;
+package ua.tqs.ReCollect.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
