@@ -37,8 +37,8 @@ public class AddFavItemSeleniumTest extends FunctionalTest {
         ProductPage productPage = homePage.viewItem();
         assertTrue(productPage.isInitialized());
         assertTrue(productPage.favouriteButtonIsDisplayed());
-        productPage.markItemAsFavourite();
-        assertTrue(productPage.unFavouriteButtonIsDisplayed());
+        ProductPage productPage2 = productPage.markItemAsFavourite();
+        assertTrue(productPage2.unFavouriteButtonIsDisplayed());
 
         driver.get("http://localhost:8080/favourites");
         FavItemsPage favItemsPage2 = new FavItemsPage(driver);

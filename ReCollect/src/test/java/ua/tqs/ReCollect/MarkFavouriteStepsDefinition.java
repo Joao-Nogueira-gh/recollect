@@ -18,6 +18,8 @@ public class MarkFavouriteStepsDefinition {
     private HomePage homePage;
     private ProductPage productPage;
     private int favCount;
+    private ProductPage productPage2;
+    private FavItemsPage favItemsPage2;
 
     @Given("that I’m a logged-in user")
     public void that_I_m_a_logged_in_user() {
@@ -51,18 +53,18 @@ public class MarkFavouriteStepsDefinition {
 
     @When("I click in add to favorites button")
     public void i_click_in_add_to_favorites_button() {
-        productPage.markItemAsFavourite();
+        productPage2 = productPage.markItemAsFavourite();
     }
 
     @Then("the button to remove from favourites appears")
     public void the_button_to_remove_from_favourites_appears() {
-        assertTrue(productPage.unFavouriteButtonIsDisplayed());
+        assertTrue(productPage2.unFavouriteButtonIsDisplayed());
     }
 
     @Then("I can see it on my favorites list")
     public void i_can_see_it_on_my_favorites_list() {
         driver.get("http://localhost:8080/favourites");
-        FavItemsPage favItemsPage2 = new FavItemsPage(driver);
+        favItemsPage2 = new FavItemsPage(driver);
         assertTrue(favItemsPage2.isInitialized());
         assertTrue(favItemsPage2.favCountIncremented(favCount));
     }
