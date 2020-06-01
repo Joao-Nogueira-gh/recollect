@@ -13,14 +13,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.PreRemove;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 @Table(name = "comment")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Comment {
 
     @Id
@@ -37,10 +35,12 @@ public class Comment {
 
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="userid", referencedColumnName = "id")
+    @JsonIgnore
     private User user;
 
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="item", referencedColumnName = "id")
+    @JsonIgnore
     private Item item;
 
     @PreRemove
