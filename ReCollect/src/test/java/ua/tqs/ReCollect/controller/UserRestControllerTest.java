@@ -25,11 +25,6 @@ class UserRestControllerTest {
     @Autowired
     private UserService service;
 
-    @BeforeEach
-    public void setUp() {
-        service.deleteAll();
-    }
-
 	@Test
 	void apiShouldReturnAccurateListOfUsers() throws Exception {
 
