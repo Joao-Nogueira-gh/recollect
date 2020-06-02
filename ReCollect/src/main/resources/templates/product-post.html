@@ -240,10 +240,21 @@
 					<div class="widget text-center">
 						<ul class="list-inline">
 							<li class="list-inline-item">
-								<div class="btn btn-contact d-inline-block  btn-primary px-lg-5 my-1 px-md-3">
-									<!-- TODO: alternate between solid and regular heart icon -->
-									<i class="far fa-heart"></i> Mark as favourite <span></span>
-									<!--<i class="fas fa-heart"></i> Remove from favourites <span></span> -->
+								<div th:unless="${loggedUser.favoriteItems.contains(item)}">
+									<a th:href="${'/product/favourite/' + item.id}" id="mark-favourite-button">
+										<div class="btn btn-contact d-inline-block  btn-primary px-lg-5 my-1 px-md-3" >
+											<i class="far fa-heart"></i> <span> Mark as favourite </span>
+											<!--<i class="fas fa-heart"></i> Remove from favourites <span></span> -->
+										</div>
+									</a>
+								</div>
+								<div th:if="${loggedUser.favoriteItems.contains(item)}">
+									<a th:href="${'/product/unfavourite/' + item.id}" id="unmark-favourite-button">
+										<div class="btn btn-contact d-inline-block  btn-primary px-lg-5 my-1 px-md-3"  >
+											<i class="fas fa-heart"></i> <span> Remove from favourites</span>
+											<!--<i class="fas fa-heart"></i> Remove from favourites <span></span> -->
+										</div>
+									</a>
 								</div>
 							</li>
 						</ul>

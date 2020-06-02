@@ -111,7 +111,7 @@ public class DataLoader implements ApplicationRunner {
                     locationService.getLocation("Porto", "Maia")));
         }
         
-        logger.debug(userService.getAll());
+        logger.debug("Loaded "+userService.getAll().size()+" users.");
 
         //loading items
 
@@ -188,7 +188,7 @@ public class DataLoader implements ApplicationRunner {
         i10.addImage(new URL("https://i.etsystatic.com/17352431/r/il/82a857/2379398821/il_794xN.2379398821_ey5n.jpg"));
         itemRepository.saveAndFlush(i10);
         i10.setCreationDate(Date.from(LocalDate.of(2020, 5, 20).atStartOfDay(ZoneId.of("Europe/London")).toInstant()));
-        //todo
+
         Item i11= new Item("Apple IIc Plus", 1, BigDecimal.valueOf(440.0), "Rare computer", Categories.TECHNOLOGY);
         i11.setOwner(miguel);
         i11.addImage(new URL("https://i.ebayimg.com/images/g/Hi0AAOSw0uZezTju/s-l1600.jpg"));
@@ -219,7 +219,7 @@ public class DataLoader implements ApplicationRunner {
         itemRepository.saveAndFlush(i15);
         i15.setCreationDate(Date.from(LocalDate.of(2020, 3, 30).atStartOfDay(ZoneId.of("Europe/London")).toInstant()));
 
-        logger.debug(itemService.getAll());
+        logger.debug("Loaded "+itemService.getAll().size()+" items.");
 
         //loading comments
 
@@ -269,7 +269,8 @@ public class DataLoader implements ApplicationRunner {
 
         Comment c15=new Comment("A transação correu muito bem", ana, i1);
         commentRepository.saveAndFlush(c15);
-        logger.debug(commentService.getAll());
+
+        logger.debug("Loaded "+commentService.getAll().size()+" comments.");
 
     }
 }

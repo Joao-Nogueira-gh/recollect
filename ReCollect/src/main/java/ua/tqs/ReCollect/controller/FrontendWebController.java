@@ -60,6 +60,7 @@ public class FrontendWebController {
     private static final String HAS_ERRORS = "hasErrors";
     private static final String SEARCH_RESULTS = "searchResults";
     private static final String COMMENT_HAS_ERROR = "commentHasError";
+    public static final String REDIRECT_FAVOURITES = "redirect:/favourites";
 
     @Autowired
     ItemService itemService;
@@ -126,8 +127,6 @@ public class FrontendWebController {
                                     @RequestParam(name = SEARCH_RESULTS) List<Item> searchResults,
                                     @RequestParam(name = CATEGORY, required = false) Categories category){
 
-        logger.debug("searchResults to recebidos -> " + searchResults.toString());
-
         model.addAttribute("hasErros", hasErrors);
         model.addAttribute(SEARCH_RESULTS, searchResults);
         model.addAttribute(CATEGORY, category);
@@ -159,7 +158,6 @@ public class FrontendWebController {
 
         CollectionUtils.filter(searchResults, i -> ((Item) i).getSeller()==null && ((Item) i).getOwner()!=userService.getCurrentUser());
 
-        logger.debug("searchResults to post -> " + searchResults.toString());
         ra.addAttribute(SEARCH_RESULTS, searchResults);
         ra.addAttribute(CATEGORY, category);
 
@@ -181,9 +179,6 @@ public class FrontendWebController {
 
         return REDIRECT_SEARCH_RESULTS;
     }
-
-
-
 
 
 
@@ -243,20 +238,29 @@ public class FrontendWebController {
             return "redirect:/login";
         }
 
-        logger.debug("ID para delete: " + id);
-
         Item deleted = itemService.getItemById(id);
         itemService.removeProduct(deleted);
 
         Set<Item> allItems = this.getLoggedUser().getSoldItems();
 
-        logger.debug(ATRIBATUAL);
         model.addAttribute("userSoldItems", allItems);
         model.addAttribute(LOGGEDUSER, this.getLoggedUser());
         logger.debug(USERITEMS+": " + model.getAttribute(USERITEMS));
         logger.debug(USERST+": " + model.getAttribute(LOGGEDUSER));
 
         return "redirect:/sold-items";
+    }
+
+    @GetMapping(value = "/favourites/unfavourite/{id}")
+    public String unfavItemProfile(@PathVariable(name = "id") Long id) {
+        if(this.getLoggedUser() == null){
+            return "redirect:/login";
+        }
+        logger.debug("ID para unfav: " + id);
+
+        Item unfaved = itemService.getItemById(id);
+        itemService.removeFavorite(unfaved, this.getLoggedUser());
+        return REDIRECT_FAVOURITES;
     }
 
 
@@ -274,7 +278,6 @@ public class FrontendWebController {
 
         Set<Item> allItems = this.getLoggedUser().getPublishedItems();
 
-        logger.debug(ATRIBATUAL);
         model.addAttribute(USERITEMS, allItems);
         model.addAttribute(LOGGEDUSER, this.getLoggedUser());
         logger.debug(USERITEMS+": " + model.getAttribute(USERITEMS));
@@ -297,7 +300,6 @@ public class FrontendWebController {
 
         Set<Item> allItems = this.getLoggedUser().getSoldItems();
 
-        logger.debug(ATRIBATUAL);
         model.addAttribute(USERITEMS, allItems);
         model.addAttribute(LOGGEDUSER, this.getLoggedUser());
         logger.debug(USERITEMS+": " + model.getAttribute(USERITEMS));
@@ -305,7 +307,6 @@ public class FrontendWebController {
 
         return "redirect:/sold-items";
     }
-
 
 
     @GetMapping(value = "/about")
@@ -385,7 +386,11 @@ public class FrontendWebController {
 
 
     @GetMapping(value = "/favourites")
-    public String favouritesAds() {
+    public String favouriteAds(Model model) {
+        Set<Item> allFavItems = this.getLoggedUser().getFavoriteItems();
+        logger.debug("userFavItems -> " + allFavItems.toString());
+        model.addAttribute("userFavItems", allFavItems);
+        model.addAttribute(LOGGEDUSER, getLoggedUser());
         return "dashboard-favourite-ads";
     }
 
@@ -429,15 +434,12 @@ public class FrontendWebController {
 
     @GetMapping(value = "/product/comment/delete/{id}")
     public String deleteComment(RedirectAttributes ra, @PathVariable(name = "id") Long id) {
-
         Comment deleted = commentService.getCommentById(id);
         Long itemId = deleted.getItem().getId();
         commentService.deleteComment(deleted);
 
         Item commentedItem = itemService.getItemById(itemId);
-
         ra.addAttribute("item", commentedItem);
-
         return REDIRECT_PRODUCT;
     }
 
@@ -474,6 +476,36 @@ public class FrontendWebController {
 
     }
 
+    @GetMapping(value = "/product/favourite/{id}")
+    public String favouriteItem(RedirectAttributes ra, @PathVariable(name = "id") Long id) {
+        if(this.getLoggedUser() == null){
+            return "redirect:/login";
+        }
+
+        logger.debug("ID para favourite: " + id);
+        Item item = itemService.getItemById(id);
+        itemService.addFavorite(item, this.getLoggedUser());
+        logger.debug("faved items -> " + this.getLoggedUser().getFavoriteItems().toString());
+        Item favedItem = itemService.getItemById(id);
+        ra.addAttribute("item", favedItem);
+
+        return REDIRECT_PRODUCT;
+    }
+
+    @GetMapping(value = "/product/unfavourite/{id}")
+    public String unfavouriteItem(RedirectAttributes ra, @PathVariable(name = "id") Long id) {
+        if(this.getLoggedUser() == null){
+            return "redirect:/login";
+        }
+
+        logger.debug("ID para favourite: " + id);
+        Item item = itemService.getItemById(id);
+        itemService.removeFavorite(item, this.getLoggedUser());
+        Item unfavedItem = itemService.getItemById(id);
+        ra.addAttribute("item", unfavedItem);
+
+        return REDIRECT_PRODUCT;
+    }
 
     private User getLoggedUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();

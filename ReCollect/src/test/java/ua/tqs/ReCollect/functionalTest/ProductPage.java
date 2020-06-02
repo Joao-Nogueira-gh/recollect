@@ -33,10 +33,34 @@ public class ProductPage extends PageObject {
     @FindBy(id = "comment-delete-commentDelete")
     private WebElement deleteCommentButton;
 
+    @FindBy(id = "mark-favourite-button")
+    private WebElement favouriteButton;
+
+    @FindBy(id = "unmark-favourite-button")
+    private WebElement unFavouriteButton;
+
+
     public boolean isInitialized(){
         return productTitleHeader.isDisplayed();
     }
 
+    public boolean favouriteButtonIsDisplayed(){
+        return favouriteButton.isDisplayed();
+    }
+
+    public boolean unFavouriteButtonIsDisplayed(){
+        return unFavouriteButton.isDisplayed();
+    }
+
+    public ProductPage markItemAsFavourite(){
+        favouriteButton.click();
+        return new ProductPage(driver);
+    }
+
+    public ProductPage unMarkItemAsFavourite(){
+        unFavouriteButton.click();
+        return new ProductPage(driver);
+    }
 
     public boolean existsErrorMessage(){
         return invalidCommentMessage.isDisplayed();

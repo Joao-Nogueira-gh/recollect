@@ -33,7 +33,7 @@ public class RemoveItemStepsDefinition {
         loginPage = new LoginPage(driver);
         assertTrue(loginPage.isInitialized());
 
-        loginPage.fillCredentials("alex@email.pt", "pass");
+        loginPage.fillCredentials("carlos@mail.com", "carlos");
         // logging in after trying to announce will redirect to announce
         myAdsPage = loginPage.loginNormal();
     }
@@ -85,7 +85,7 @@ public class RemoveItemStepsDefinition {
         loginPage = new LoginPage(driver);
         assertTrue(loginPage.isInitialized());
 
-        loginPage.fillCredentials("alex@email.pt", "pass");
+        loginPage.fillCredentials("carlos@mail.com", "carlos");
         // logging in after trying to announce will redirect to announce
         myAdsPage = loginPage.loginNormal();
     }
