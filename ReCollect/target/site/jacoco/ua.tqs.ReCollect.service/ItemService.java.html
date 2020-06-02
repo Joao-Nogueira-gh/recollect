@@ -237,7 +237,7 @@ import ua.tqs.ReCollect.utils.OffsetBasedPageRequest;
 <span class="fc" id="L237">            return all;</span>
         }
 
-<span class="fc bfc" id="L240" title="All 2 branches covered.">        if (sold) {</span>
+<span class="fc bfc" id="L240" title="All 2 branches covered.">        if (Boolean.TRUE.equals(sold)) {</span>
 
 <span class="pc bpc" id="L242" title="1 of 2 branches missed.">            return all.stream().filter(i -&gt; i.getSeller() != null).collect(Collectors.toList());</span>
 

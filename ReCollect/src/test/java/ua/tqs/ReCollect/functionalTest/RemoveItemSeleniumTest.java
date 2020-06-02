@@ -5,9 +5,8 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertEquals;
 
-public class RemoveItemSeleniumTest extends FunctionalTest {
+class RemoveItemSeleniumTest extends FunctionalTest {
 
     public RemoveItemSeleniumTest() {
         super();
@@ -33,7 +32,7 @@ public class RemoveItemSeleniumTest extends FunctionalTest {
         assertTrue(myAdsPage.isInitialized());
         int currentOnSaleCount = myAdsPage.getOnSaleCount();
 
-        assertTrue(currentOnSaleCount!=0);
+        assertNotEquals(currentOnSaleCount,0);
 
         myAdsPage.deleteItem();
         assertTrue(myAdsPage.onSaleCountDecremented(currentOnSaleCount));

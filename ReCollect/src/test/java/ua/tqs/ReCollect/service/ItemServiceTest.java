@@ -24,7 +24,7 @@ import ua.tqs.ReCollect.repository.ItemRepository;
 import ua.tqs.ReCollect.utils.OffsetBasedPageRequest;
 
 @ExtendWith(MockitoExtension.class)
-public class ItemServiceTest {
+class ItemServiceTest {
 
     @Mock
     private ItemRepository itemRepo;
@@ -47,7 +47,7 @@ public class ItemServiceTest {
     }
 
     @Test
-    public void dbInteractions() {
+    void dbInteractions() {
 
         given(itemRepo.findAll()).willReturn(new ArrayList<>());
 
@@ -60,7 +60,7 @@ public class ItemServiceTest {
     }
 
     @Test
-    public void whenItemIsSaved_itemCanBeRetrived() {
+    void whenItemIsSaved_itemCanBeRetrived() {
 
         Item item = new Item("Moeda", 3, new BigDecimal(3.0), "Moeda fixe", Categories.MISC);
         itemService.save(item);
@@ -75,7 +75,7 @@ public class ItemServiceTest {
     }
 
     @Test
-    public void whenUserAddsItem_itemIsAddedAndOwnedByUser() {
+    void whenUserAddsItem_itemIsAddedAndOwnedByUser() {
 
         Item item = new Item("Moeda", 3, new BigDecimal(3.0), "Moeda fixe", Categories.MISC);
         User owner=new User("user", "user@email.com", "x", "123456789");
@@ -89,12 +89,12 @@ public class ItemServiceTest {
 
         Item repItem=itemService.getAll().get(0);
 
-        assertEquals(repItem.getOwner().getName(), "user");
+        assertEquals("user",repItem.getOwner().getName());
 
     }
 
     @Test
-    public void whenUserRemovesItem_itemIsGone() {
+    void whenUserRemovesItem_itemIsGone() {
 
         //setup
 
@@ -111,11 +111,11 @@ public class ItemServiceTest {
 
         itemService.removeProduct(item);
 
-        assertEquals(itemService.getAll().size(), 0);
+        assertEquals(0,itemService.getAll().size());
 
     }
     @Test
-    public void whenUserMarksItemAsSold_itemChangesList() {
+    void whenUserMarksItemAsSold_itemChangesList() {
 
         //setup
 
@@ -135,7 +135,7 @@ public class ItemServiceTest {
 
     }
     @Test
-    public void whenUserRevertsSale_itemChangesList() {
+    void whenUserRevertsSale_itemChangesList() {
 
         //setup
 

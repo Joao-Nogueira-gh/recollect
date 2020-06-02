@@ -1,14 +1,14 @@
 package ua.tqs.ReCollect.functionalTest;
 
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class UnfavItemSeleniumTest extends FunctionalTest {
+class UnfavItemSeleniumTest extends FunctionalTest {
 
     public UnfavItemSeleniumTest(){
         super();
@@ -59,7 +59,7 @@ public class UnfavItemSeleniumTest extends FunctionalTest {
 
             assertTrue(favItemsPage2.favCountIncremented(favCount));
             favCount = favItemsPage2.getFavount();
-            assertTrue(favCount!=0);
+            assertNotEquals(favCount,0);
 
             favItemsPage2.unFavouriteItem();
             assertTrue(favItemsPage2.favCountDecremented(favCount));

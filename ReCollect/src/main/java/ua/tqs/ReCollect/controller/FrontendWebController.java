@@ -45,7 +45,6 @@ public class FrontendWebController {
     private static final String USERST = "user";
     private static final String SUBMITTED = "submitted";
     private static final String LOGGEDUSER = "loggedUser";
-    private static final String ATRIBATUAL = "-------- Atributos atualizados --------";
     private static final int MAX_ITEM_PICTURES = 5;
     // REDIRECTS AND PAGE NAMES
     private static final String PRODUCT_SEARCH_RESULTS = "product-search-results";
@@ -61,6 +60,7 @@ public class FrontendWebController {
     private static final String SEARCH_RESULTS = "searchResults";
     private static final String COMMENT_HAS_ERROR = "commentHasError";
     public static final String REDIRECT_FAVOURITES = "redirect:/favourites";
+    public static final String REDIRECT_LOGIN = "redirect:/login";
 
     @Autowired
     ItemService itemService;
@@ -197,7 +197,7 @@ public class FrontendWebController {
     public String userProfile(Model model) {
 
         if(this.getLoggedUser() == null){
-            return "redirect:/login";
+            return REDIRECT_LOGIN;
         }
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -215,7 +215,7 @@ public class FrontendWebController {
     public String deleteItem(Model model, @PathVariable(name = "id") Long id) {
 
         if(this.getLoggedUser() == null){
-            return "redirect:/login";
+            return REDIRECT_LOGIN;
         }
 
         User loggedUser = this.getLoggedUser();
@@ -235,7 +235,7 @@ public class FrontendWebController {
     public String deleteSoldItem(Model model, @PathVariable(name = "id") Long id) {
 
         if(this.getLoggedUser() == null){
-            return "redirect:/login";
+            return REDIRECT_LOGIN;
         }
 
         Item deleted = itemService.getItemById(id);
@@ -254,7 +254,7 @@ public class FrontendWebController {
     @GetMapping(value = "/favourites/unfavourite/{id}")
     public String unfavItemProfile(@PathVariable(name = "id") Long id) {
         if(this.getLoggedUser() == null){
-            return "redirect:/login";
+            return REDIRECT_LOGIN;
         }
         logger.debug("ID para unfav: " + id);
 
@@ -268,7 +268,7 @@ public class FrontendWebController {
     public String markAsSoldItem(Model model, @PathVariable(name = "id") Long id) {
 
         if(this.getLoggedUser() == null){
-            return "redirect:/login";
+            return REDIRECT_LOGIN;
         }
 
         logger.debug("ID para sold: " + id);
@@ -290,7 +290,7 @@ public class FrontendWebController {
     public String putItemBackOnSale(Model model, @PathVariable(name = "id") Long id) {
 
         if(this.getLoggedUser() == null){
-            return "redirect:/login";
+            return REDIRECT_LOGIN;
         }
 
         logger.debug("ID para sold: " + id);
@@ -319,7 +319,7 @@ public class FrontendWebController {
                           @RequestParam(name = "noImages", required = false) boolean noImages,
                           @RequestParam(name = HAS_ERRORS, required = false) boolean hasErrors) {
         if(this.getLoggedUser() == null){
-            return "redirect:/login";
+            return REDIRECT_LOGIN;
         }
 
         model.addAttribute(HAS_ERRORS, hasErrors);
@@ -479,7 +479,7 @@ public class FrontendWebController {
     @GetMapping(value = "/product/favourite/{id}")
     public String favouriteItem(RedirectAttributes ra, @PathVariable(name = "id") Long id) {
         if(this.getLoggedUser() == null){
-            return "redirect:/login";
+            return REDIRECT_LOGIN;
         }
 
         logger.debug("ID para favourite: " + id);
@@ -495,7 +495,7 @@ public class FrontendWebController {
     @GetMapping(value = "/product/unfavourite/{id}")
     public String unfavouriteItem(RedirectAttributes ra, @PathVariable(name = "id") Long id) {
         if(this.getLoggedUser() == null){
-            return "redirect:/login";
+            return REDIRECT_LOGIN;
         }
 
         logger.debug("ID para favourite: " + id);

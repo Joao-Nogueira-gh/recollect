@@ -13,7 +13,7 @@ import ua.tqs.ReCollect.model.Location;
 import ua.tqs.ReCollect.repository.LocationRepository;
 
 @ExtendWith(MockitoExtension.class)
-public class LocationServiceTest {
+class LocationServiceTest {
 
     @Mock
     private LocationRepository locRepo;
@@ -22,7 +22,7 @@ public class LocationServiceTest {
     private LocationService locService;
     
     @Test
-    public void getLocationForAveiro_returnsAveiro() {
+    void getLocationForAveiro_returnsAveiro() {
 
         given(locRepo.findByDistrictAndCounty("Aveiro", "Aveiro")).willReturn(new Location("Aveiro", "Aveiro"));
 

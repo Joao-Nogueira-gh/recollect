@@ -114,7 +114,7 @@ public class RemoveItemStepsDefinition {
         int currentOnSaleCount = myAdsPage.getOnSaleCount();
         int currentSoldCount = myAdsPage.getSoldCount();
 
-        assertTrue(currentOnSaleCount!=0);
+        assertNotEquals(currentOnSaleCount,0);
 
         assertNotEquals(0, currentOnSaleCount);
 

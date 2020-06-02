@@ -9,6 +9,7 @@ import ua.tqs.ReCollect.functionalTest.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class RemoveFavouriteStepsDefinition {
 
@@ -70,7 +71,7 @@ public class RemoveFavouriteStepsDefinition {
 
             assertTrue(favItemsPage2.favCountIncremented(favCount));
             favCount = favItemsPage2.getFavount();
-            assertTrue(favCount!=0);
+            assertNotEquals(favCount,0);
 
             favItemsPage2.unFavouriteItem();
             assertTrue(favItemsPage2.favCountDecremented(favCount));

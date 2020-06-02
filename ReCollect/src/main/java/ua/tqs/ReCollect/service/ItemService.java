@@ -237,7 +237,7 @@ public class ItemService {
             return all;
         }
 
-        if (sold) {
+        if (Boolean.TRUE.equals(sold)) {
 
             return all.stream().filter(i -> i.getSeller() != null).collect(Collectors.toList());
 

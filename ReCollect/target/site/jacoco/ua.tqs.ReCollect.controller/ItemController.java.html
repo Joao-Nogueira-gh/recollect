@@ -35,7 +35,7 @@ import ua.tqs.ReCollect.service.UserService;
 
 <span class="nc" id="L36">        logger.debug(currUser.toString());</span>
         //create item from forms
-<span class="nc" id="L38">        Item i1= new Item(&quot;Moeda&quot;, 3, new BigDecimal(&quot;3.0&quot;), &quot;Moeda fixe&quot;, Categories.MISC);</span>
+<span class="nc" id="L38">        Item i1= new Item(&quot;Moeda1&quot;, 3, new BigDecimal(&quot;3.0&quot;), &quot;Moeda fixe3&quot;, Categories.MISC);</span>
         //create item for that user
 <span class="nc" id="L40">        itemService.addNewProduct(i1, currUser);</span>
 
@@ -56,7 +56,7 @@ import ua.tqs.ReCollect.service.UserService;
 
 <span class="nc" id="L57">        logger.debug(currUser.toString());</span>
         //create item from forms
-<span class="nc" id="L59">        Item i1= new Item(&quot;Moeda&quot;, 3, new BigDecimal(&quot;3.0&quot;), &quot;Moeda fixe&quot;, Categories.MISC);</span>
+<span class="nc" id="L59">        Item i1= new Item(&quot;Moeda2&quot;, 3, new BigDecimal(&quot;3.0&quot;), &quot;Moeda fixe2&quot;, Categories.MISC);</span>
         //create item for that user
 <span class="nc" id="L61">        itemService.addNewProduct(i1, currUser);</span>
 
@@ -82,25 +82,24 @@ import ua.tqs.ReCollect.service.UserService;
 <span class="nc" id="L82">        User currUser = userService.getCurrentUser();</span>
         
 <span class="nc" id="L84">        logger.debug(itemService.getAll());</span>
-        //logger.debug(itemService.getAll().get(0).getFavedBy());
-<span class="nc" id="L86">        logger.debug(currUser.getFavoriteItems()+&quot;\n&quot;);</span>
-<span class="nc" id="L87">        return EMPTY_TEST_PAGE;</span>
+<span class="nc" id="L85">        logger.debug(currUser.getFavoriteItems()+&quot;\n&quot;);</span>
+<span class="nc" id="L86">        return EMPTY_TEST_PAGE;</span>
     }
     @GetMapping(path=&quot;/testic4/&quot;)
 	public String test4(Model model) {
-<span class="nc" id="L91">        itemService.deleteAll();</span>
-<span class="nc" id="L92">        User currUser = userService.getCurrentUser();</span>
+<span class="nc" id="L90">        itemService.deleteAll();</span>
+<span class="nc" id="L91">        User currUser = userService.getCurrentUser();</span>
 
-<span class="nc" id="L94">        Item i1= new Item(&quot;Moeda&quot;, 3, BigDecimal.valueOf(3.0), &quot;Moeda fixe&quot;, Categories.MISC);</span>
+<span class="nc" id="L93">        Item i1= new Item(&quot;Moeda3&quot;, 3, BigDecimal.valueOf(3.0), &quot;Moeda fixe1&quot;, Categories.MISC);</span>
 
-<span class="nc" id="L96">        itemService.addNewProduct(i1, currUser);</span>
+<span class="nc" id="L95">        itemService.addNewProduct(i1, currUser);</span>
         //add to favorite list
-<span class="nc" id="L98">        itemService.addFavorite(itemService.getAll().get(0),currUser);</span>
+<span class="nc" id="L97">        itemService.addFavorite(itemService.getAll().get(0),currUser);</span>
 
-<span class="nc" id="L100">        logger.debug(itemService.getAll());</span>
-<span class="nc" id="L101">        logger.debug(currUser.getPublishedItems());</span>
-<span class="nc" id="L102">        logger.debug(currUser.getSoldItems()+&quot;\n&quot;);</span>
-<span class="nc" id="L103">        return EMPTY_TEST_PAGE;</span>
+<span class="nc" id="L99">        logger.debug(itemService.getAll());</span>
+<span class="nc" id="L100">        logger.debug(currUser.getPublishedItems());</span>
+<span class="nc" id="L101">        logger.debug(currUser.getSoldItems()+&quot;\n&quot;);</span>
+<span class="nc" id="L102">        return EMPTY_TEST_PAGE;</span>
     }
     
 }

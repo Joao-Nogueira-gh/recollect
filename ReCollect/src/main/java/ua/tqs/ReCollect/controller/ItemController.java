@@ -35,7 +35,7 @@ public class ItemController {
 
         logger.debug(currUser.toString());
         //create item from forms
-        Item i1= new Item("Moeda", 3, new BigDecimal("3.0"), "Moeda fixe", Categories.MISC);
+        Item i1= new Item("Moeda1", 3, new BigDecimal("3.0"), "Moeda fixe3", Categories.MISC);
         //create item for that user
         itemService.addNewProduct(i1, currUser);
 
@@ -56,7 +56,7 @@ public class ItemController {
 
         logger.debug(currUser.toString());
         //create item from forms
-        Item i1= new Item("Moeda", 3, new BigDecimal("3.0"), "Moeda fixe", Categories.MISC);
+        Item i1= new Item("Moeda2", 3, new BigDecimal("3.0"), "Moeda fixe2", Categories.MISC);
         //create item for that user
         itemService.addNewProduct(i1, currUser);
 
@@ -82,7 +82,6 @@ public class ItemController {
         User currUser = userService.getCurrentUser();
         
         logger.debug(itemService.getAll());
-        //logger.debug(itemService.getAll().get(0).getFavedBy());
         logger.debug(currUser.getFavoriteItems()+"\n");
         return EMPTY_TEST_PAGE;
     }
@@ -91,7 +90,7 @@ public class ItemController {
         itemService.deleteAll();
         User currUser = userService.getCurrentUser();
 
-        Item i1= new Item("Moeda", 3, BigDecimal.valueOf(3.0), "Moeda fixe", Categories.MISC);
+        Item i1= new Item("Moeda3", 3, BigDecimal.valueOf(3.0), "Moeda fixe1", Categories.MISC);
 
         itemService.addNewProduct(i1, currUser);
         //add to favorite list
