@@ -1,8 +1,14 @@
 package ua.tqs.ReCollect.functionalTest;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.util.concurrent.TimeUnit;
 
 public class HomePage extends PageObject {
 
@@ -10,7 +16,7 @@ public class HomePage extends PageObject {
         super(driver);
     }
 
-    @FindBy(id = "product-card-title")
+    @FindBy(id = "product-card-title-2") // get the last visible element of carousel, initially
     private WebElement productCard;
 
     @FindBy(id = "search_button_home")
@@ -35,6 +41,11 @@ public class HomePage extends PageObject {
     }
 
     public ProductPage viewItem(){
+        //JavascriptExecutor jse2 = (JavascriptExecutor)driver;
+        //jse2.executeScript("arguments[0].scrollIntoView()", productCard);
+        //driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        //WebDriverWait wait = new WebDriverWait(driver, 10);
+        //productCard = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("product-card-title")));
         productCard.click();
         return new ProductPage(driver);
     }

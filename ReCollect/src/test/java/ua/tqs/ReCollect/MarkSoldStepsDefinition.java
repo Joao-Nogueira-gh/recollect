@@ -1,10 +1,12 @@
-package ua.tqs.ReCollect.functionalTest;
+package ua.tqs.ReCollect;
 
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import ua.tqs.ReCollect.functionalTest.LoginPage;
+import ua.tqs.ReCollect.functionalTest.MyAdsPage;
 
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
@@ -24,7 +26,7 @@ public class MarkSoldStepsDefinition {
         loginPage = new LoginPage(driver);
         assertTrue(loginPage.isInitialized());
 
-        loginPage.fillCredentials("alex@email.pt", "pass");
+        loginPage.fillCredentials("carlos@mail.com", "carlos");
         // logging in after trying to announce will redirect to announce
         myAdsPage = loginPage.loginNormal();
     }

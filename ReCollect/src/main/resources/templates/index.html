@@ -176,7 +176,7 @@
 										</a>
 									</div>
 									<div class="card-body">
-										<h4 class="card-title" id="product-card-title"><a th:href="${'/product/' + item.id}" th:text="${item.name}">...</a></h4>
+										<h4 class="card-title" th:id="${'product-card-title-' + recentItems.indexOf(item)}"><a th:href="${'/product/' + item.id}" th:text="${item.name}">...</a></h4>
 										<ul class="list-inline product-meta">
 											<li class="list-inline-item">
 												<div><i class="fa fa-folder-open-o"></i> <span th:text="${item.category.toString()}"></span> ...</div>

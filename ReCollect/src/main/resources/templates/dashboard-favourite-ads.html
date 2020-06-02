@@ -15,8 +15,9 @@
   <!-- Bootstrap -->
   <link rel="stylesheet" href="plugins/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="plugins/bootstrap/css/bootstrap-slider.css">
-  <!-- Font Awesome -->
-  <link href="plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+	<!-- Font Awesome -->
+	<link href="plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+	<script src="https://kit.fontawesome.com/f379375b47.js" crossorigin="anonymous"></script>
   <!-- Owl Carousel -->
   <link href="plugins/slick-carousel/slick/slick.css" rel="stylesheet">
   <link href="plugins/slick-carousel/slick/slick-theme.css" rel="stylesheet">
@@ -174,7 +175,7 @@
 								<td class="product-thumb">
 									<img width="80px" height="auto" th:src="${item.getImages().get(0)}" alt="image description"></td>
 								<td class="product-details">
-									<h3 class="title" th:text="${item.name}">....</h3>
+									<h3 class="title"><a th:text="${item.name}" th:href="${'/product/' + item.id}"></a></h3>
 									<span class="add-id"><strong>Ad ID: </strong><time th:text="${item.id}"></time> </span>
 									<span><strong>Posted on: </strong><span th:text="${item.creationDate}"></span> </span>
 								</td>
@@ -188,7 +189,7 @@
 												</a>
 											</li>
 											<li class="list-inline-item">
-												<a th:href="${'/favourites/unfavourite/' + item.id}" data-toggle="tooltip" data-placement="top" title="Delete" class="delete" id="delete-item-button">
+												<a th:href="${'/favourites/unfavourite/' + item.id}" data-toggle="tooltip" data-placement="top" title="Remove from favourites" class="delete" id="delete-item-button">
 													<i class="fas fa-heart-broken"></i>
 												</a>
 											</li>

@@ -1,15 +1,22 @@
 package ua.tqs.ReCollect.functionalTest;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 public class RemoveItemSeleniumTest extends FunctionalTest {
 
     public RemoveItemSeleniumTest() {
         super();
         setUp();
+    }
+
+    @AfterEach
+    void closeBrowser(){
+        driver.close();
     }
 
     @Test
@@ -19,7 +26,7 @@ public class RemoveItemSeleniumTest extends FunctionalTest {
         LoginPage loginPage = new LoginPage(driver);
         assertTrue(loginPage.isInitialized());
 
-        loginPage.fillCredentials("alex@email.pt", "pass");
+        loginPage.fillCredentials("carlos@mail.com", "carlos");
         // logging in after trying to announce will redirect to announce
         MyAdsPage myAdsPage = loginPage.loginNormal();
 
@@ -40,7 +47,7 @@ public class RemoveItemSeleniumTest extends FunctionalTest {
         LoginPage loginPage = new LoginPage(driver);
         assertTrue(loginPage.isInitialized());
 
-        loginPage.fillCredentials("alex@email.pt", "pass");
+        loginPage.fillCredentials("carlos@mail.com", "carlos");
         // logging in after trying to announce will redirect to announce
         MyAdsPage myAdsPage = loginPage.loginNormal();
 
@@ -51,8 +58,25 @@ public class RemoveItemSeleniumTest extends FunctionalTest {
 
         int soldCount = soldItemsPage.getSoldCount();
 
-        assertNotEquals(0, soldCount);
+        // add an item to sold list to delete it
+        if(soldCount==0){
+            driver.get("http://localhost:8080/profile");
+            MyAdsPage myAdsPage2 = new MyAdsPage(driver);
+            assertTrue(myAdsPage2.isInitialized());
+            int currentOnSaleCount = myAdsPage2.getOnSaleCount();
+            int currentSoldCount = myAdsPage2.getSoldCount();
+            assertNotEquals(0, currentOnSaleCount);
+            myAdsPage2.markItemAsSold();
+            soldCount = myAdsPage2.getSoldCount();
+            System.err.println("soldCount 2 -> " + soldCount);
+            assertTrue(myAdsPage.onSaleCountDecremented(currentOnSaleCount));
+            assertTrue(myAdsPage.soldCountIncremented(currentSoldCount));
+            // return to sold items list
+            driver.get("http://localhost:8080/sold-items");
+            soldItemsPage = new SoldItemsPage(driver);
+        }
 
+        assertNotEquals(0, soldCount);
         soldItemsPage.deleteItem();
         assertTrue(soldItemsPage.soldCountDecremented(soldCount));
 

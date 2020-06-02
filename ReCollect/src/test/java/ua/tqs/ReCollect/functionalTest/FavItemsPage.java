@@ -31,7 +31,7 @@ public class FavItemsPage extends PageObject {
         return bodyText.contains(itemTitle);
     }
 
-    public void deleteItem(){
+    public void unFavouriteItem(){
         deleteButton.click();
     }
 

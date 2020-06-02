@@ -28,7 +28,7 @@ public class MarkFavouriteStepsDefinition {
         loginPage = new LoginPage(driver);
         assertTrue(loginPage.isInitialized());
 
-        loginPage.fillCredentials("alex@email.pt", "pass");
+        loginPage.fillCredentials("carlos@mail.com", "carlos");
         // logging in after trying to announce will redirect to announce
         myAdsPage = loginPage.loginNormal();
         assertTrue(myAdsPage.isInitialized());
@@ -40,6 +40,15 @@ public class MarkFavouriteStepsDefinition {
         driver.get("http://localhost:8080/favourites");
         favItemsPage = new FavItemsPage(driver);
         assertTrue(favItemsPage.isInitialized());
+
+        favCount = favItemsPage.getFavount();
+
+        // remove all possible items in favourites
+        if(favCount>0){
+            for(int i=1; i==favCount; i++){
+                favItemsPage.unFavouriteItem();
+            }
+        }
 
         favCount = favItemsPage.getFavount();
 
@@ -67,6 +76,7 @@ public class MarkFavouriteStepsDefinition {
         favItemsPage2 = new FavItemsPage(driver);
         assertTrue(favItemsPage2.isInitialized());
         assertTrue(favItemsPage2.favCountIncremented(favCount));
+        driver.close();
     }
 
 

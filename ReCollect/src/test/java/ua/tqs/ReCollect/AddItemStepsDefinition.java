@@ -25,7 +25,7 @@ public class AddItemStepsDefinition {
         loginPage = new LoginPage(driver);
         assertTrue(loginPage.isInitialized());
 
-        loginPage.fillCredentials("alex@email.pt", "pass");
+        loginPage.fillCredentials("carlos@mail.com", "carlos");
         // loggin in after trying to announce will redirect to announce
         announcePage = loginPage.loginAfterAnnounce();
     }
@@ -67,7 +67,7 @@ public class AddItemStepsDefinition {
         loginPage = new LoginPage(driver);
         assertTrue(loginPage.isInitialized());
 
-        loginPage.fillCredentials("alex@email.pt", "pass");
+        loginPage.fillCredentials("carlos@mail.com", "carlos");
         // loggin in after trying to announce will redirect to announce
         announcePage = loginPage.loginAfterAnnounce();
     }

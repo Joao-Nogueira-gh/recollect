@@ -1,5 +1,6 @@
 package ua.tqs.ReCollect.functionalTest;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.assertNotEquals;
@@ -13,6 +14,11 @@ class PutBackOnSaleItemSeleniumTest extends FunctionalTest {
         setUp();
     }
 
+    @AfterEach
+    void closeBrowser(){
+        driver.close();
+    }
+
     @Test
     void putItemBackOnSale(){
         //Fazer o login
@@ -20,7 +26,7 @@ class PutBackOnSaleItemSeleniumTest extends FunctionalTest {
         LoginPage loginPage = new LoginPage(driver);
         assertTrue(loginPage.isInitialized());
 
-        loginPage.fillCredentials("alex@email.pt", "pass");
+        loginPage.fillCredentials("carlos@mail.com", "carlos");
         // logging in after trying to announce will redirect to announce
         MyAdsPage myAdsPage = loginPage.loginNormal();
 

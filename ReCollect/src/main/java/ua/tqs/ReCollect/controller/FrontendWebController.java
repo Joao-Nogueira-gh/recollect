@@ -127,8 +127,6 @@ public class FrontendWebController {
                                     @RequestParam(name = SEARCH_RESULTS) List<Item> searchResults,
                                     @RequestParam(name = CATEGORY, required = false) Categories category){
 
-        logger.debug("searchResults to recebidos -> " + searchResults.toString());
-
         model.addAttribute("hasErros", hasErrors);
         model.addAttribute(SEARCH_RESULTS, searchResults);
         model.addAttribute(CATEGORY, category);
@@ -160,7 +158,6 @@ public class FrontendWebController {
 
         CollectionUtils.filter(searchResults, i -> ((Item) i).getSeller()==null && ((Item) i).getOwner()!=userService.getCurrentUser());
 
-        logger.debug("searchResults to post -> " + searchResults.toString());
         ra.addAttribute(SEARCH_RESULTS, searchResults);
         ra.addAttribute(CATEGORY, category);
 
@@ -182,9 +179,6 @@ public class FrontendWebController {
 
         return REDIRECT_SEARCH_RESULTS;
     }
-
-
-
 
 
 
@@ -244,14 +238,11 @@ public class FrontendWebController {
             return "redirect:/login";
         }
 
-        logger.debug("ID para delete: " + id);
-
         Item deleted = itemService.getItemById(id);
         itemService.removeProduct(deleted);
 
         Set<Item> allItems = this.getLoggedUser().getSoldItems();
 
-        logger.debug(ATRIBATUAL);
         model.addAttribute("userSoldItems", allItems);
         model.addAttribute(LOGGEDUSER, this.getLoggedUser());
         logger.debug(USERITEMS+": " + model.getAttribute(USERITEMS));
@@ -287,7 +278,6 @@ public class FrontendWebController {
 
         Set<Item> allItems = this.getLoggedUser().getPublishedItems();
 
-        logger.debug(ATRIBATUAL);
         model.addAttribute(USERITEMS, allItems);
         model.addAttribute(LOGGEDUSER, this.getLoggedUser());
         logger.debug(USERITEMS+": " + model.getAttribute(USERITEMS));
@@ -310,7 +300,6 @@ public class FrontendWebController {
 
         Set<Item> allItems = this.getLoggedUser().getSoldItems();
 
-        logger.debug(ATRIBATUAL);
         model.addAttribute(USERITEMS, allItems);
         model.addAttribute(LOGGEDUSER, this.getLoggedUser());
         logger.debug(USERITEMS+": " + model.getAttribute(USERITEMS));
@@ -445,15 +434,12 @@ public class FrontendWebController {
 
     @GetMapping(value = "/product/comment/delete/{id}")
     public String deleteComment(RedirectAttributes ra, @PathVariable(name = "id") Long id) {
-
         Comment deleted = commentService.getCommentById(id);
         Long itemId = deleted.getItem().getId();
         commentService.deleteComment(deleted);
 
         Item commentedItem = itemService.getItemById(itemId);
-
         ra.addAttribute("item", commentedItem);
-
         return REDIRECT_PRODUCT;
     }
 
@@ -498,7 +484,7 @@ public class FrontendWebController {
 
         logger.debug("ID para favourite: " + id);
         Item item = itemService.getItemById(id);
-        itemService.addFavorite(item, this.getLoggedUser()); // TODO: fix this method
+        itemService.addFavorite(item, this.getLoggedUser());
         logger.debug("faved items -> " + this.getLoggedUser().getFavoriteItems().toString());
         Item favedItem = itemService.getItemById(id);
         ra.addAttribute("item", favedItem);

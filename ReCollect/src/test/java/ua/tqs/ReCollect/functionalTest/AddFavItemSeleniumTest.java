@@ -1,5 +1,6 @@
 package ua.tqs.ReCollect.functionalTest;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.assertTrue;
@@ -11,6 +12,11 @@ public class AddFavItemSeleniumTest extends FunctionalTest {
         setUp();
     }
 
+    @AfterEach
+    void closeBrowser(){
+        driver.close();
+    }
+
 
     @Test
     void addFavItem(){
@@ -19,7 +25,7 @@ public class AddFavItemSeleniumTest extends FunctionalTest {
         LoginPage loginPage = new LoginPage(driver);
         assertTrue(loginPage.isInitialized());
 
-        loginPage.fillCredentials("alex@email.pt", "pass");
+        loginPage.fillCredentials("carlos@mail.com", "carlos");
         // logging in after trying to announce will redirect to announce
         MyAdsPage myAdsPage = loginPage.loginNormal();
         assertTrue(myAdsPage.isInitialized());
@@ -30,6 +36,15 @@ public class AddFavItemSeleniumTest extends FunctionalTest {
         assertTrue(favItemsPage.isInitialized());
 
         int favCount = favItemsPage.getFavount();
+
+        // remove all possible items in favourites
+        if(favCount>0){
+            for(int i=1; i==favCount; i++){
+                favItemsPage.unFavouriteItem();
+            }
+        }
+
+        favCount = favItemsPage.getFavount();
 
         driver.get("http://localhost:8080/");
         HomePage homePage = new HomePage(driver);
@@ -45,6 +60,7 @@ public class AddFavItemSeleniumTest extends FunctionalTest {
         assertTrue(favItemsPage2.isInitialized());
 
         assertTrue(favItemsPage2.favCountIncremented(favCount));
+
 
     }
 
