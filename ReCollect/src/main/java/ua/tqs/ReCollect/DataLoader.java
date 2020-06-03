@@ -71,6 +71,7 @@ public class DataLoader implements ApplicationRunner {
             InputStream inputStream = rl.getResource("classpath:static/" + fileName).getInputStream();
             String cdpt = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
             ObjectMapper mapper = new ObjectMapper();
+            @SuppressWarnings("unchecked")
             Map<String, ArrayList<String>> map = mapper.readValue(cdpt, Map.class);
 
             Iterator<String> keys = map.keySet().iterator();

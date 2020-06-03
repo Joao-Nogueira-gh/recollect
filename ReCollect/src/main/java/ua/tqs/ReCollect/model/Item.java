@@ -22,6 +22,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.PreRemove;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+
 import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
@@ -58,6 +60,7 @@ public class Item {
 
     @ManyToOne
     @JoinColumn(name="ownerid", referencedColumnName = "id")
+    @JsonIdentityReference(alwaysAsId = true)
     private User owner;
 
     @ManyToOne

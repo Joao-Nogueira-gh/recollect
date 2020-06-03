@@ -80,6 +80,7 @@ public class User {
     name = "user_role",
     joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
     inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "role_id"))
+    @JsonIgnore
     private Set<Role> roles=new HashSet<>();
 
     @Column(name = "active")
