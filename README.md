@@ -16,26 +16,18 @@ DevOps Master -> João Nogueira 89262 ; Tiago Melo 89005
 
 ## Relevant Links
 
-Trello Backlog Management -> https://trello.com/b/5TPZlqim
+Trello Backlog Management -> <https://trello.com/b/5TPZlqim>
 
-SonarCloud Analysis -> https://sonarcloud.io/dashboard?id=Joao-Nogueira-gh_recollect
+SonarCloud Analysis -> <https://sonarcloud.io/dashboard?id=Joao-Nogueira-gh_recollect>
 
-## To run
-```bash
-$ ./start.sh
-```
-
-For development and testing the same is ran, to have the DB and Admin containers running and then testing can be done normally. Change
+Swagger API Documentation -> <http://192.168.160.59:8080/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config#/> (Deployed in VM)
 
 ## Unit Tests
+
 ```bash
-$ mvn test
+mvn clean verify -Dtest=\!\*SeleniumTest
 ```
 
-## Integration tests using cucumber (checking Step Definitions)
-```bash
-$ mvn clean verify -Pacceptance-tests
-```
+## Homepage
 
-## Docs
-http://localhost:8080/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config#/
+<http://192.168.160.59:8080/>
