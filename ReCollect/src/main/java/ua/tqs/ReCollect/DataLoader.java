@@ -328,7 +328,7 @@ public class DataLoader implements ApplicationRunner {
         Comment c18=new Comment("Enviei pm", ana, i18);
         commentRepository.saveAndFlush(c18);
 
-        Comment c19=new Comment("Mandei msg!", carlos, i19);
+        Comment c19=new Comment("Mandei msg!", sofia, i19);
         commentRepository.saveAndFlush(c19);
 
         Comment c20=new Comment("Quero!!", pedro, i20);
@@ -342,6 +342,12 @@ public class DataLoader implements ApplicationRunner {
 
         Comment c23=new Comment("Como arranjou?", ana, i23);
         commentRepository.saveAndFlush(c23);
+
+        Comment c24=new Comment("Ando há anos à procura", carlos, i22);
+        commentRepository.saveAndFlush(c24);
+
+        Comment c25=new Comment("Responda por favor", pedro, i23);
+        commentRepository.saveAndFlush(c25);
 
         logger.debug("Loaded "+commentService.getAll().size()+" comments.");
 
