@@ -9,4 +9,4 @@ COPY ${JAR_FILE} app.jar
 
 #"./wait-for-mysql.sh","3306",
 
-ENTRYPOINT ["java","-jar","/app.jar"]
+ENTRYPOINT ["java","-jar","/app.jar", "--load=Yes"]
