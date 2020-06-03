@@ -64,6 +64,11 @@ public class DataLoader implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
+
+        System.out.println(args.getOptionNames());
+
+        // if !loadArgument return;
+
         //loading locations
         if (locationService.getAll().size() != 308) {
             locationService.deleteAll();
