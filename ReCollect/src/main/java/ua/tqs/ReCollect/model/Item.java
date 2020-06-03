@@ -22,6 +22,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.PreRemove;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
@@ -58,10 +61,12 @@ public class Item {
 
     @ManyToOne
     @JoinColumn(name="ownerid", referencedColumnName = "id")
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     private User owner;
 
     @ManyToOne
     @JoinColumn(name="sellerid", referencedColumnName = "id")
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     private User seller;
 
     @OneToMany(mappedBy="item", cascade = CascadeType.ALL, orphanRemoval = true)

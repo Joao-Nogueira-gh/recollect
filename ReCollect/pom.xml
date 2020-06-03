@@ -227,6 +227,21 @@
 			<artifactId>commons-io</artifactId>
 			<version>2.6</version>
 		</dependency>
+		<dependency>
+			<groupId>com.mysema.querydsl</groupId>
+			<artifactId>querydsl-core</artifactId>
+			<version>3.6.3</version>
+		</dependency>
+		<dependency>
+			<groupId>com.mysema.querydsl</groupId>
+			<artifactId>querydsl-apt</artifactId>
+			<version>3.6.3</version>
+		</dependency>    
+		<dependency>
+			<groupId>com.mysema.querydsl</groupId>
+			<artifactId>querydsl-jpa</artifactId>
+			<version>3.6.3</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -253,6 +268,7 @@
 						<exclude>**/model/*</exclude>
 						<exclude>**/utils/*</exclude>
 						<exclude>**/service/MyUserDetailsService.class</exclude>
+						<exclude>**/DataLoader.class</exclude>
 					</excludes>
 				</configuration>
 				<executions>
@@ -283,7 +299,7 @@
 						</goals>
 						<configuration>
 							<outputDirectory>target/generated-sources</outputDirectory>
-							<processor>com.querydsl.apt.jpa.JPAAnnotationProcessor</processor>
+							<processor>com.mysema.query.apt.jpa.JPAAnnotationProcessor</processor>
 						</configuration>
 					</execution>
 				</executions>

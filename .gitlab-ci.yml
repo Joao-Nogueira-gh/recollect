@@ -121,7 +121,7 @@ package:
   except:
     - master
   script:
-    - mvn clean package -Dtest=\!\*SeleniumTest
+    - mvn clean package -Dmaven.test.skip=true
 
 packageVM:
   image: maven
@@ -133,9 +133,7 @@ packageVM:
   only:
     - master
   script:
-    - mvn clean package -Dtest=\!\*SeleniumTest
-    - ls 
-    - ls target
+    - mvn clean package -Dmaven.test.skip=true
   artifacts:
     paths:
       - ReCollect/target/*.jar
