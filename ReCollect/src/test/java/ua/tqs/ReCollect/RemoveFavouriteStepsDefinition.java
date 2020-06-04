@@ -71,7 +71,7 @@ public class RemoveFavouriteStepsDefinition {
 
             assertTrue(favItemsPage2.favCountIncremented(favCount));
             favCount = favItemsPage2.getFavount();
-            assertNotEquals(favCount,0);
+            assertNotEquals(0,favCount);
 
             favItemsPage2.unFavouriteItem();
             assertTrue(favItemsPage2.favCountDecremented(favCount));

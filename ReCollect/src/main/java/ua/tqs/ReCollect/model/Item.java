@@ -92,6 +92,7 @@ public class Item {
         this.favedBy=new HashSet<>();
         this.images=new ArrayList<>();
         this.comments= new HashSet<>();
+        this.creationDate= new Date();
     }
 
     public Item(String name, int quantity, BigDecimal price, String description, Categories category) {
@@ -104,6 +105,7 @@ public class Item {
         this.favedBy=new HashSet<>();
         this.images=new ArrayList<>();
         this.comments= new HashSet<>();
+        this.creationDate= new Date();
     }
 
     public Long getId() {
