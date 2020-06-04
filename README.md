@@ -22,6 +22,8 @@ SonarCloud Analysis -> <https://sonarcloud.io/dashboard?id=Joao-Nogueira-gh_reco
 
 Swagger API Documentation -> <http://192.168.160.59:8080/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config#/> (Deployed in VM)
 
+External client (Android app) Repository -> https://github.com/AndreAmarante/RecollectBookstore
+
 ## Unit Tests
 
 ```bash
